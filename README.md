@@ -33,3 +33,11 @@ TORCH_BACKEND=cu128 ./setup.sh
 以上记录中的绝对路径和进程信息对应原部署服务器。`route-b-v170-cloud/runtime/jobs/` 中保留了该服务器的调度脚本与固定配置；清单包含本机路径和旧评测结果的复用关系，不能直接在新机器上续跑。新评测可使用上面的标准入口。
 
 本仓库保留已部署源码及 `run.sh` 的服务器兼容调整。`SHA256SUMS` 是原上传包的历史校验清单；核对当前源码请使用 `SHA256SUMS.deployed`。来源与差异记录位于 [`provenance/`](route-b-v170-cloud/provenance/)。
+
+## ICRA 2027 论文
+
+英文匿名初稿、LaTeX 源码、PDF、图表和可复核的实验统计位于 [paper/](paper/)。
+
+- [阅读论文 PDF](paper/main.pdf)
+- [LaTeX 源码](paper/main.tex)
+- [构建方法与证据范围](paper/README.md)

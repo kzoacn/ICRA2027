@@ -1,0 +1,16 @@
+{
+  "passed": true,
+  "pages": 7,
+  "episodes": 400,
+  "successes": 347,
+  "tasks": 40,
+  "references": 12,
+  "author_metadata": "Anonymous",
+  "letter_paper": true,
+  "all_fonts_embedded": true,
+  "type3_fonts": false,
+  "overfull_boxes": false,
+  "undefined_references": false,
+  "pdf_sha256": "04421fdcec49ac9049b98939b73b00fe63e8c186bf0b4408fa0bb31123967f99",
+  "scope": "Local build, format and data checks; not PaperPlaza compliance certification or human scientific review."
+}

@@ -1,0 +1,28 @@
+\begin{tikzpicture}[
+    node distance=5mm and 8mm,
+    box/.style={draw=blue!55!black, fill=blue!5, rounded corners=1.5pt,
+      align=center, font=\footnotesize, minimum height=10mm, text width=31mm},
+    smallbox/.style={box,text width=30mm,fill=white},
+    flow/.style={-{Latex[length=1.8mm]}, thick, draw=blue!55!black},
+    every node/.style={outer sep=1pt}
+]
+\node[box] (lang) at (0,1.55) {Language instruction};
+\node[box] (compile) at (4.0,1.55) {Grammar + capability check\\Ordered skill program};
+\node[box] (sensors) at (0,0) {Two RGB-D views\\Calibration + robot state};
+\node[box] (perception) at (4.0,0) {Frozen detector + gallery\\3-D objects and fixtures};
+\node[box] (control) at (8.0,.77) {Sequential dispatcher\\Grasp/place or contact};
+\node[box] (robot) at (12.0,.77) {Clipped pose increments\\Robot + environment};
+\node[smallbox,draw=gray] (prior) at (4.0,-1.55) {Offline asset priors\\Textures, dimensions};
+\node[smallbox,draw=gray,fill=gray!7] (eval) at (12.0,-1.55) {External success latch\\Analysis records};
+\draw[flow] (lang) -- (compile);
+\draw[flow] (compile.east) -| (control.north);
+\draw[flow] (sensors) -- (perception);
+\draw[flow] (perception.east) -| (control.south);
+\draw[flow] (prior) -- (perception);
+\draw[flow] (control) -- (robot);
+\draw[flow] (robot.north) -- (12,2.6) -- (-2.0,2.6) -- (-2.0,0) -- (sensors.west);
+\node[font=\scriptsize,fill=white] at (8.0,2.6) {new observations};
+\draw[-{Latex[length=1.8mm]},dashed,gray,thick] (robot) -- (eval);
+\node[font=\scriptsize,align=center,text=gray!80!black] at (8.1,-1.55)
+  {Geometric completion guards\\No score feedback to policy};
+\end{tikzpicture}
