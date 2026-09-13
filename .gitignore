@@ -1,0 +1,28 @@
+# Local environments and downloaded resources.
+.venv/
+venv/
+resources/
+.cache/
+
+# Generated evaluation state, logs, and artifacts.
+# Selected server job scripts/configurations are explicitly tracked.
+runtime/
+outputs/
+logs/
+__pycache__/
+*.py[cod]
+*.log
+*.mp4
+*.tar.gz
+*.tar.gz.sha256
+
+# Local credentials and editor state.
+.env
+.env.*
+!.env.example
+.ssh/
+auth.json
+*.pem
+*.key
+.ipynb_checkpoints/
+.DS_Store

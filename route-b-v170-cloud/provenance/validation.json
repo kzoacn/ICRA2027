@@ -1,0 +1,69 @@
+{
+  "passed": true,
+  "validated_at": "2026-09-13T13:56:32.397622+00:00",
+  "source_tree_sha256": "67c93be1df7da7572ecbb8faff53d01a47aea42ec36affb07ac54ba36e59edba",
+  "checks": {
+    "python_syntax": "passed",
+    "shell_syntax": "passed",
+    "resource_files_sha256_verified": 593,
+    "pinned_remote_resource_samples": "model config and serving-region asset match fixed revisions",
+    "all_40_task_instructions_compiled": true,
+    "dual_camera_render": "256x256 RGB per view",
+    "campaign_dry_run": {
+      "suites": 4,
+      "tasks": 40,
+      "episodes": 2000,
+      "seed": 7,
+      "step_caps": [
+        220,
+        280,
+        300,
+        520
+      ]
+    },
+    "local_full_episode": {
+      "suite": "libero_object",
+      "task": 0,
+      "init": 0,
+      "elapsed_s": 131.49,
+      "episodes": 1,
+      "steps": 127,
+      "success_rate": 1.0,
+      "successes": 1
+    },
+    "fresh_ubuntu_container_full_episode": {
+      "network": "disabled",
+      "original_workspace_mounted": false,
+      "suite": "libero_object",
+      "task": 0,
+      "init": 0,
+      "elapsed_s": 136.606,
+      "episodes": 1,
+      "steps": 127,
+      "success_rate": 1.0,
+      "successes": 1
+    },
+    "container_video": {
+      "frames": 64,
+      "shapes": [
+        [
+          256,
+          512,
+          3
+        ]
+      ],
+      "fps": 20.0
+    },
+    "non_root_output_ownership_and_readback": "passed with one-action integration run"
+  },
+  "container_runtime": {
+    "python": "3.12.3",
+    "torch": "2.11.0+cpu",
+    "numpy": "2.2.6",
+    "mujoco": "3.3.2",
+    "opencv": "5.0.0"
+  },
+  "full_2000_episode_campaign_rerun": false,
+  "gpu_docker_variant_tested": false,
+  "notes": "Only deployment validation summaries are included; videos, weights and experiment logs are excluded."
+}

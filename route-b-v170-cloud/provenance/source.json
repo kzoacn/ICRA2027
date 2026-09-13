@@ -1,0 +1,479 @@
+{
+  "base_version": "v170",
+  "base_source_tree_sha256": "377d7923d4b55a245975bf71b00be60683b4630a39027731da5ee7c4ee6ed0d9",
+  "deployment_source_tree_sha256": "67c93be1df7da7572ecbb8faff53d01a47aea42ec36affb07ac54ba36e59edba",
+  "python_files": 90,
+  "modified_source_files": [
+    "libero_system/perception/gallery.py",
+    "libero_system/perception/grounding_dino.py"
+  ],
+  "all_controller_and_perception_functions_unchanged": true,
+  "changes": [
+    "Two module-level resource defaults now use configurable portable paths",
+    "Historical package README files and bytecode caches omitted",
+    "Deployment CLI added outside the controller package"
+  ],
+  "historical_score": {
+    "episodes": 2000,
+    "successes": 1718,
+    "success_rate": 0.859,
+    "per_suite": {
+      "spatial": 0.91,
+      "object": 0.962,
+      "goal": 0.878,
+      "long": 0.686
+    }
+  },
+  "files": [
+    {
+      "path": "libero_system/__init__.py",
+      "original_sha256": "4b746af5b4dd045006a9fc6f4fe058d1201c1fa48bf3d97da14dbd5dae4882c8",
+      "deployment_sha256": "4b746af5b4dd045006a9fc6f4fe058d1201c1fa48bf3d97da14dbd5dae4882c8"
+    },
+    {
+      "path": "libero_system/common/__init__.py",
+      "original_sha256": "a874fb60b9365c588e754bc4851e97bd1d241ac720ec3cdb8095f923d17db120",
+      "deployment_sha256": "a874fb60b9365c588e754bc4851e97bd1d241ac720ec3cdb8095f923d17db120"
+    },
+    {
+      "path": "libero_system/common/camera_geometry.py",
+      "original_sha256": "55629bbdb66c11d49d48202c9638915779f10b9ebf1d102b411b1d2d5d98a1b1",
+      "deployment_sha256": "55629bbdb66c11d49d48202c9638915779f10b9ebf1d102b411b1d2d5d98a1b1"
+    },
+    {
+      "path": "libero_system/common/env_adapter.py",
+      "original_sha256": "733ada1847f7620a1be29f8466e978ef54a4101868cf937ac4fc53ef40f77a55",
+      "deployment_sha256": "733ada1847f7620a1be29f8466e978ef54a4101868cf937ac4fc53ef40f77a55"
+    },
+    {
+      "path": "libero_system/common/grasp_journal.py",
+      "original_sha256": "f0934be443de103c07382c6bd38a8ca626ba8dadd8bc4d371993228df167d876",
+      "deployment_sha256": "f0934be443de103c07382c6bd38a8ca626ba8dadd8bc4d371993228df167d876"
+    },
+    {
+      "path": "libero_system/common/observation.py",
+      "original_sha256": "a6f84fa50dbc62fb44d71aed7a88bfdfae52123c91f672c1714ea1a69531e356",
+      "deployment_sha256": "a6f84fa50dbc62fb44d71aed7a88bfdfae52123c91f672c1714ea1a69531e356"
+    },
+    {
+      "path": "libero_system/common/pan_affordance.py",
+      "original_sha256": "cea7fa89c6f0dc3b79a9e22ccd1a5f53e043e2618b5c53ac36db98f2eeaefcb1",
+      "deployment_sha256": "cea7fa89c6f0dc3b79a9e22ccd1a5f53e043e2618b5c53ac36db98f2eeaefcb1"
+    },
+    {
+      "path": "libero_system/common/panda_kinematics.py",
+      "original_sha256": "eadf4c41c9f5a9336a25be586378a5e8b287d35420d19a555754742fb9a98512",
+      "deployment_sha256": "eadf4c41c9f5a9336a25be586378a5e8b287d35420d19a555754742fb9a98512"
+    },
+    {
+      "path": "libero_system/common/policy.py",
+      "original_sha256": "be216dd81a98ced4aee87855711879de894e99a52490efbff9e479503e533d45",
+      "deployment_sha256": "be216dd81a98ced4aee87855711879de894e99a52490efbff9e479503e533d45"
+    },
+    {
+      "path": "libero_system/common/runner.py",
+      "original_sha256": "fd5f1bf1671ef1034f87108b39f4cf4354c9ca0d82103e0bfefdb5f43c6829a5",
+      "deployment_sha256": "fd5f1bf1671ef1034f87108b39f4cf4354c9ca0d82103e0bfefdb5f43c6829a5"
+    },
+    {
+      "path": "libero_system/common/smoke.py",
+      "original_sha256": "27ebe1e611ee5d061f3d11f957ab56d944c431d736d512dc6f4264e58c177ee6",
+      "deployment_sha256": "27ebe1e611ee5d061f3d11f957ab56d944c431d736d512dc6f4264e58c177ee6"
+    },
+    {
+      "path": "libero_system/goal_skills/__init__.py",
+      "original_sha256": "b2d5cadb3072399da643aef9fb715a904fdab33108816092649b5f9be12e04da",
+      "deployment_sha256": "b2d5cadb3072399da643aef9fb715a904fdab33108816092649b5f9be12e04da"
+    },
+    {
+      "path": "libero_system/goal_skills/compiler.py",
+      "original_sha256": "8d304fafb74e33128353598efeb8c23966402f8869f47447323c2afebea8232f",
+      "deployment_sha256": "8d304fafb74e33128353598efeb8c23966402f8869f47447323c2afebea8232f"
+    },
+    {
+      "path": "libero_system/goal_skills/controller.py",
+      "original_sha256": "3fb773711fec6f1f67673b863562a65c5db9b378616c1f96f1b56a9a2d62e18e",
+      "deployment_sha256": "3fb773711fec6f1f67673b863562a65c5db9b378616c1f96f1b56a9a2d62e18e"
+    },
+    {
+      "path": "libero_system/goal_skills/detectors.py",
+      "original_sha256": "755f4f08ae8412606d228892e00c8c7e8327dc0782696e887f1a899a0a5e227f",
+      "deployment_sha256": "755f4f08ae8412606d228892e00c8c7e8327dc0782696e887f1a899a0a5e227f"
+    },
+    {
+      "path": "libero_system/goal_skills/schema.py",
+      "original_sha256": "84ee06e61691fd7b3db5fa7302e1e1096faf4eead7de80a3af0bc78ff96c5f30",
+      "deployment_sha256": "84ee06e61691fd7b3db5fa7302e1e1096faf4eead7de80a3af0bc78ff96c5f30"
+    },
+    {
+      "path": "libero_system/goal_skills/smoke.py",
+      "original_sha256": "111d96e4670c530efd7aaed1409fd87d7aee42bebee9a73eec1258e1ad809446",
+      "deployment_sha256": "111d96e4670c530efd7aaed1409fd87d7aee42bebee9a73eec1258e1ad809446"
+    },
+    {
+      "path": "libero_system/integration/__init__.py",
+      "original_sha256": "08d69c86b3df760a0c530201dd009491ac1c8201ca1c1fc1ee2843da6ab9dfba",
+      "deployment_sha256": "08d69c86b3df760a0c530201dd009491ac1c8201ca1c1fc1ee2843da6ab9dfba"
+    },
+    {
+      "path": "libero_system/integration/__main__.py",
+      "original_sha256": "e014c07c71c5daede3fe8520fd696eaaed07cb19d77c01c14147273d0f9ed71b",
+      "deployment_sha256": "e014c07c71c5daede3fe8520fd696eaaed07cb19d77c01c14147273d0f9ed71b"
+    },
+    {
+      "path": "libero_system/integration/adapters.py",
+      "original_sha256": "8ef1335138eb05440e5996c264f63ebd1e320f0325deb4d429e34e6f44b29174",
+      "deployment_sha256": "8ef1335138eb05440e5996c264f63ebd1e320f0325deb4d429e34e6f44b29174"
+    },
+    {
+      "path": "libero_system/integration/campaign_manifest.py",
+      "original_sha256": "af9e6a74b283d202cb3c3a73e8da2bad6b193a6c22533a5d18442416a074b973",
+      "deployment_sha256": "af9e6a74b283d202cb3c3a73e8da2bad6b193a6c22533a5d18442416a074b973"
+    },
+    {
+      "path": "libero_system/integration/campaign_plan.py",
+      "original_sha256": "fcb72d800821a13689de2b9015df1af95679a2135ff250c1bf793675613d845b",
+      "deployment_sha256": "fcb72d800821a13689de2b9015df1af95679a2135ff250c1bf793675613d845b"
+    },
+    {
+      "path": "libero_system/integration/cavity.py",
+      "original_sha256": "c20ec45b56cb9a935f6bb68372997c0d1cb0726f10b9e69f9bbfc476ed6ab025",
+      "deployment_sha256": "c20ec45b56cb9a935f6bb68372997c0d1cb0726f10b9e69f9bbfc476ed6ab025"
+    },
+    {
+      "path": "libero_system/integration/cli.py",
+      "original_sha256": "983a3ac54659565372eec3f602f6513810a0ca93dfd75312845c508bfb5eb1d7",
+      "deployment_sha256": "983a3ac54659565372eec3f602f6513810a0ca93dfd75312845c508bfb5eb1d7"
+    },
+    {
+      "path": "libero_system/integration/components.py",
+      "original_sha256": "04fad198e9eb2bab80b349f73d61f34f3edff26514c8145af20343bc5712480e",
+      "deployment_sha256": "04fad198e9eb2bab80b349f73d61f34f3edff26514c8145af20343bc5712480e"
+    },
+    {
+      "path": "libero_system/integration/config.py",
+      "original_sha256": "160997b81be1043fa1e353d05927715de83c9ce5584a6bf9645da4165faaeea8",
+      "deployment_sha256": "160997b81be1043fa1e353d05927715de83c9ce5584a6bf9645da4165faaeea8"
+    },
+    {
+      "path": "libero_system/integration/evaluator.py",
+      "original_sha256": "b94c67a15d3b56e1c3673c2fb16cfc391d7fb693c452b98ae9fff6c532250797",
+      "deployment_sha256": "b94c67a15d3b56e1c3673c2fb16cfc391d7fb693c452b98ae9fff6c532250797"
+    },
+    {
+      "path": "libero_system/integration/formal_process_sandbox.py",
+      "original_sha256": "7903fb84336e57ea09e5a63c41e9e8a8c7ad9f21c98034b7f100a52b71bb93da",
+      "deployment_sha256": "7903fb84336e57ea09e5a63c41e9e8a8c7ad9f21c98034b7f100a52b71bb93da"
+    },
+    {
+      "path": "libero_system/integration/formal_process_transport.py",
+      "original_sha256": "3146d1d06c6dfbc1e6998be1d160818099d99879a7208d64f04d3e5b0477fb8d",
+      "deployment_sha256": "3146d1d06c6dfbc1e6998be1d160818099d99879a7208d64f04d3e5b0477fb8d"
+    },
+    {
+      "path": "libero_system/integration/formal_provenance.py",
+      "original_sha256": "b8d4f513c6e4506c2e75973b56c726e87402bc2331cc9b394b093ec7b42495fe",
+      "deployment_sha256": "b8d4f513c6e4506c2e75973b56c726e87402bc2331cc9b394b093ec7b42495fe"
+    },
+    {
+      "path": "libero_system/integration/formal_route_c_process.py",
+      "original_sha256": "3078744ff159c93311733c6f26f1b1dc2dd236ecb5041d4cafbb68cc20b962f6",
+      "deployment_sha256": "3078744ff159c93311733c6f26f1b1dc2dd236ecb5041d4cafbb68cc20b962f6"
+    },
+    {
+      "path": "libero_system/integration/grasp_audit.py",
+      "original_sha256": "2c802e557345d54fa8e669835fdeee93cb8cfd220004d624bd3b8ff2605cda82",
+      "deployment_sha256": "2c802e557345d54fa8e669835fdeee93cb8cfd220004d624bd3b8ff2605cda82"
+    },
+    {
+      "path": "libero_system/integration/grasp_cloud.py",
+      "original_sha256": "d8829c3d81209c3714d0d27e7036d659ba92a30f609845485127bbb36e81311c",
+      "deployment_sha256": "d8829c3d81209c3714d0d27e7036d659ba92a30f609845485127bbb36e81311c"
+    },
+    {
+      "path": "libero_system/integration/policy_boundary_audit.py",
+      "original_sha256": "586d3ba3df43dd09c1a4189212d84ec775d6225cd266dff1ff158c3938cd9464",
+      "deployment_sha256": "586d3ba3df43dd09c1a4189212d84ec775d6225cd266dff1ff158c3938cd9464"
+    },
+    {
+      "path": "libero_system/integration/policy_ipc.py",
+      "original_sha256": "b9194e0003145501948536a304f1dd4552e1f62c71215ffdf661b37ba3e6ce3d",
+      "deployment_sha256": "b9194e0003145501948536a304f1dd4552e1f62c71215ffdf661b37ba3e6ce3d"
+    },
+    {
+      "path": "libero_system/integration/policy_result.py",
+      "original_sha256": "2dbcd9da0e4b2964d56808b997c9e9f54906bc4bf2e0bc2ec6ccd8ed96bff867",
+      "deployment_sha256": "2dbcd9da0e4b2964d56808b997c9e9f54906bc4bf2e0bc2ec6ccd8ed96bff867"
+    },
+    {
+      "path": "libero_system/integration/results.py",
+      "original_sha256": "f666da3f5f4a53344cca817f1bbba870163fcbb0f9477eb87fcab109e071da16",
+      "deployment_sha256": "f666da3f5f4a53344cca817f1bbba870163fcbb0f9477eb87fcab109e071da16"
+    },
+    {
+      "path": "libero_system/integration/route_b_policy_runtime.py",
+      "original_sha256": "63e8a810b6e571fb6d7f634fda7421c75e4378fae8fbe6e8f24ee433e1cfe8a3",
+      "deployment_sha256": "63e8a810b6e571fb6d7f634fda7421c75e4378fae8fbe6e8f24ee433e1cfe8a3"
+    },
+    {
+      "path": "libero_system/integration/route_c_policy_runtime.py",
+      "original_sha256": "1eeb8998e7a37a0fd712c7471b6a1793c3e830ca80d4fa82fc7f079cb2311726",
+      "deployment_sha256": "1eeb8998e7a37a0fd712c7471b6a1793c3e830ca80d4fa82fc7f079cb2311726"
+    },
+    {
+      "path": "libero_system/integration/video.py",
+      "original_sha256": "1e40ea981a49c42d362a6afa73ff30934dc3a31b46b101ce01371ca6a6551ab1",
+      "deployment_sha256": "1e40ea981a49c42d362a6afa73ff30934dc3a31b46b101ce01371ca6a6551ab1"
+    },
+    {
+      "path": "libero_system/integration/video_audit.py",
+      "original_sha256": "a2503b2b01e72c0399b890bbef796aec7e0b200529e6f529223602e241e5c9da",
+      "deployment_sha256": "a2503b2b01e72c0399b890bbef796aec7e0b200529e6f529223602e241e5c9da"
+    },
+    {
+      "path": "libero_system/perception/__init__.py",
+      "original_sha256": "a6ebfaf148762257dec1eb4d89569e6dfa6cea9e2b334bcf557114b682f496fe",
+      "deployment_sha256": "a6ebfaf148762257dec1eb4d89569e6dfa6cea9e2b334bcf557114b682f496fe"
+    },
+    {
+      "path": "libero_system/perception/adapters.py",
+      "original_sha256": "5fcfea4e4ded286d405e9ed1a214d13654fb51e84bdec321733466954bde6ceb",
+      "deployment_sha256": "5fcfea4e4ded286d405e9ed1a214d13654fb51e84bdec321733466954bde6ceb"
+    },
+    {
+      "path": "libero_system/perception/carried_flat.py",
+      "original_sha256": "2be08551ecffa206ebf7d34829bfb039355be79e5d82228dfc9053e4cf925ed7",
+      "deployment_sha256": "2be08551ecffa206ebf7d34829bfb039355be79e5d82228dfc9053e4cf925ed7"
+    },
+    {
+      "path": "libero_system/perception/carried_mug.py",
+      "original_sha256": "ce5dfc23e583a5c56a70ecee2aa05f20d327d2bc65489b1bb14b0024e4afceb5",
+      "deployment_sha256": "ce5dfc23e583a5c56a70ecee2aa05f20d327d2bc65489b1bb14b0024e4afceb5"
+    },
+    {
+      "path": "libero_system/perception/flat_mesh.py",
+      "original_sha256": "fd883a52342fccd9ea886df854bf091e697e22798d8e5f27a63aff469af6611d",
+      "deployment_sha256": "fd883a52342fccd9ea886df854bf091e697e22798d8e5f27a63aff469af6611d"
+    },
+    {
+      "path": "libero_system/perception/fusion.py",
+      "original_sha256": "d1ef60f0ff7b73a742927f9ccba12855825929b95cf3bbca3349ae486072ff11",
+      "deployment_sha256": "d1ef60f0ff7b73a742927f9ccba12855825929b95cf3bbca3349ae486072ff11"
+    },
+    {
+      "path": "libero_system/perception/gallery.py",
+      "original_sha256": "84667da52d4a05f75d42bbcafcb2a8d468a6b76cbffa5510ed25f82e96517ee5",
+      "deployment_sha256": "ae0b82b87f8352e6a092461fd6d395411b907ba9e41d4b90582ef1a2e45289ad"
+    },
+    {
+      "path": "libero_system/perception/geometry.py",
+      "original_sha256": "b173f78134fc115287c7bc938acdcf50d490bcf0c6d4b82a61f3290df2b545f5",
+      "deployment_sha256": "b173f78134fc115287c7bc938acdcf50d490bcf0c6d4b82a61f3290df2b545f5"
+    },
+    {
+      "path": "libero_system/perception/grounding_dino.py",
+      "original_sha256": "225e1164a105470113d84d7585273b1095954bcdee0d6967ad758f778ceab83c",
+      "deployment_sha256": "086f684e63a0b6bae2a32eb31b410af337d49a33f78390cd028ea5f44879dff8"
+    },
+    {
+      "path": "libero_system/perception/mesh_depth.py",
+      "original_sha256": "134bcf26e9a106d6161b505e4ae3fb34f1d8fdb9376fb2d2e7be63c57c837138",
+      "deployment_sha256": "134bcf26e9a106d6161b505e4ae3fb34f1d8fdb9376fb2d2e7be63c57c837138"
+    },
+    {
+      "path": "libero_system/perception/mug_mesh.py",
+      "original_sha256": "4fb4eb03e353f998eaaf06db2e200856fc0672934f261e1008fe4ff08b4fd538",
+      "deployment_sha256": "4fb4eb03e353f998eaaf06db2e200856fc0672934f261e1008fe4ff08b4fd538"
+    },
+    {
+      "path": "libero_system/perception/object_identity.py",
+      "original_sha256": "f50abfba24cf1830cb5293b9a9e0492330a4920100fff5cc9ea3e6456985224c",
+      "deployment_sha256": "f50abfba24cf1830cb5293b9a9e0492330a4920100fff5cc9ea3e6456985224c"
+    },
+    {
+      "path": "libero_system/perception/object_top_completion.py",
+      "original_sha256": "0f81173d409d4c337465583d289fd4de60b947739952a9b193a9322c8a1e32a9",
+      "deployment_sha256": "0f81173d409d4c337465583d289fd4de60b947739952a9b193a9322c8a1e32a9"
+    },
+    {
+      "path": "libero_system/perception/panda_visual_mask.py",
+      "original_sha256": "526576eb9b6e7d67808f545de4512da709949edecca0165a0bf0d0c3d1b13eb3",
+      "deployment_sha256": "526576eb9b6e7d67808f545de4512da709949edecca0165a0bf0d0c3d1b13eb3"
+    },
+    {
+      "path": "libero_system/perception/pipeline.py",
+      "original_sha256": "9493d45bbe29fc853a0510a57811e6d3db1993b767230c319b0d3eef18bc1d6c",
+      "deployment_sha256": "9493d45bbe29fc853a0510a57811e6d3db1993b767230c319b0d3eef18bc1d6c"
+    },
+    {
+      "path": "libero_system/perception/prior_consistency.py",
+      "original_sha256": "c60b62a34d222098a02092f45c558363bb7d8a7b3832926df88d3dd5aedd6e27",
+      "deployment_sha256": "c60b62a34d222098a02092f45c558363bb7d8a7b3832926df88d3dd5aedd6e27"
+    },
+    {
+      "path": "libero_system/perception/schema.py",
+      "original_sha256": "75a36b59af1b0a85f2fa5e33cd83942d9147f34f5d93cc9ea4229c315ced8d18",
+      "deployment_sha256": "75a36b59af1b0a85f2fa5e33cd83942d9147f34f5d93cc9ea4229c315ced8d18"
+    },
+    {
+      "path": "libero_system/route_b/__init__.py",
+      "original_sha256": "126d0b0f196625a180f67520811278c8cc9a9e1ce582250c755f8ca33529c49c",
+      "deployment_sha256": "126d0b0f196625a180f67520811278c8cc9a9e1ce582250c755f8ca33529c49c"
+    },
+    {
+      "path": "libero_system/route_b/anchored_rim.py",
+      "original_sha256": "f8ccab5b8996718f9e6f0ca99ac008f3375fee4f7b2f9bb90061f57bbb7ef6f7",
+      "deployment_sha256": "f8ccab5b8996718f9e6f0ca99ac008f3375fee4f7b2f9bb90061f57bbb7ef6f7"
+    },
+    {
+      "path": "libero_system/route_b/carried_rim.py",
+      "original_sha256": "dc657c9600c62b0d18be0ca7ae5916c8652897fa3c8d4a3ef67ae4c344b1a972",
+      "deployment_sha256": "dc657c9600c62b0d18be0ca7ae5916c8652897fa3c8d4a3ef67ae4c344b1a972"
+    },
+    {
+      "path": "libero_system/route_b/controller.py",
+      "original_sha256": "c05c3d6a260d544152dd0c241f7eb0b47f3a1e8bbf6fc4aca60054ddc3218795",
+      "deployment_sha256": "c05c3d6a260d544152dd0c241f7eb0b47f3a1e8bbf6fc4aca60054ddc3218795"
+    },
+    {
+      "path": "libero_system/route_b/drawer_floor.py",
+      "original_sha256": "107566b3875c9fde8f4422093ca5e6d1c94472af2b43f3d7b24e02f14b28d1cc",
+      "deployment_sha256": "107566b3875c9fde8f4422093ca5e6d1c94472af2b43f3d7b24e02f14b28d1cc"
+    },
+    {
+      "path": "libero_system/route_b/drawer_interior.py",
+      "original_sha256": "dfc51215ef03d29972dc6736c4b1006b188bdedca6f06882bcd47cf65c9bbb42",
+      "deployment_sha256": "dfc51215ef03d29972dc6736c4b1006b188bdedca6f06882bcd47cf65c9bbb42"
+    },
+    {
+      "path": "libero_system/route_b/drawer_landing.py",
+      "original_sha256": "fa3e8b67cbe667533f4aadd1dd02a22d2b08cb4690f3094ef580e64075d837fe",
+      "deployment_sha256": "fa3e8b67cbe667533f4aadd1dd02a22d2b08cb4690f3094ef580e64075d837fe"
+    },
+    {
+      "path": "libero_system/route_b/fitting_orientation.py",
+      "original_sha256": "aba50c1d69e7d92702233458649c53d4da175652d188b6310624f79da5ec8f0a",
+      "deployment_sha256": "aba50c1d69e7d92702233458649c53d4da175652d188b6310624f79da5ec8f0a"
+    },
+    {
+      "path": "libero_system/route_b/fixture_surfaces.py",
+      "original_sha256": "e5ff9040269bd841a33b733d55436683958b20c385661da987b228c7f0b8bffe",
+      "deployment_sha256": "e5ff9040269bd841a33b733d55436683958b20c385661da987b228c7f0b8bffe"
+    },
+    {
+      "path": "libero_system/route_b/flat_transfer.py",
+      "original_sha256": "ef3ebb6833c9f85cfb5062a5b0038dc9a16be62cb93f32fb1622309cb72696c3",
+      "deployment_sha256": "ef3ebb6833c9f85cfb5062a5b0038dc9a16be62cb93f32fb1622309cb72696c3"
+    },
+    {
+      "path": "libero_system/route_b/gripper_clearance.py",
+      "original_sha256": "b92b7b297b65c2ea544dc157b2de94d212bb71f34a8d42429dbf24b89bdc40f8",
+      "deployment_sha256": "b92b7b297b65c2ea544dc157b2de94d212bb71f34a8d42429dbf24b89bdc40f8"
+    },
+    {
+      "path": "libero_system/route_b/models.py",
+      "original_sha256": "873d9c2db8922c0f7c8d8bef444537b647317d128d38aea0375df6997cf49546",
+      "deployment_sha256": "873d9c2db8922c0f7c8d8bef444537b647317d128d38aea0375df6997cf49546"
+    },
+    {
+      "path": "libero_system/route_b/partial_shelf.py",
+      "original_sha256": "15ba75cae34815e9a3f37b35e2ac1beea731c15f07ef0a755decd73a0760c2fc",
+      "deployment_sha256": "15ba75cae34815e9a3f37b35e2ac1beea731c15f07ef0a755decd73a0760c2fc"
+    },
+    {
+      "path": "libero_system/route_b/perception.py",
+      "original_sha256": "003eac56f56b71c85793ace939d5cc7643f46942ee06fff1956d1b25949418cd",
+      "deployment_sha256": "003eac56f56b71c85793ace939d5cc7643f46942ee06fff1956d1b25949418cd"
+    },
+    {
+      "path": "libero_system/route_b/release_geometry.py",
+      "original_sha256": "f1a939e24e7e86a194c1d45768eb4abceff5c985f54a134ecf007dd5ba11254e",
+      "deployment_sha256": "f1a939e24e7e86a194c1d45768eb4abceff5c985f54a134ecf007dd5ba11254e"
+    },
+    {
+      "path": "libero_system/route_b/rigid_shape.py",
+      "original_sha256": "144ebd0b47e464f423667fb2f7f7a72822408f0cc309e969f39d3bacf3b01b77",
+      "deployment_sha256": "144ebd0b47e464f423667fb2f7f7a72822408f0cc309e969f39d3bacf3b01b77"
+    },
+    {
+      "path": "libero_system/route_b/rim_geometry.py",
+      "original_sha256": "d923ead3c13141e477432bf73527e300db7fe3b611b551c027def1b90d113221",
+      "deployment_sha256": "d923ead3c13141e477432bf73527e300db7fe3b611b551c027def1b90d113221"
+    },
+    {
+      "path": "libero_system/route_b/rim_transfer_frame.py",
+      "original_sha256": "15131f5325a6b2a2465a9db2721baacc3aac47f40332da0aca7fead88be0eedb",
+      "deployment_sha256": "15131f5325a6b2a2465a9db2721baacc3aac47f40332da0aca7fead88be0eedb"
+    },
+    {
+      "path": "libero_system/route_b/slatted_rack.py",
+      "original_sha256": "5c7418013322ada0745882791d1c98a5ce44a87651a51eebd0811f6c7e27c948",
+      "deployment_sha256": "5c7418013322ada0745882791d1c98a5ce44a87651a51eebd0811f6c7e27c948"
+    },
+    {
+      "path": "libero_system/route_b/stove_support.py",
+      "original_sha256": "e752702f2bc61527e65abe80592bda8efa0c65249f6c4767974f82c4fe4bdd39",
+      "deployment_sha256": "e752702f2bc61527e65abe80592bda8efa0c65249f6c4767974f82c4fe4bdd39"
+    },
+    {
+      "path": "libero_system/route_b/task_compiler.py",
+      "original_sha256": "1dc4c246c54cb5ddeaa8b3e72c407cd5cad43ba7e79dd8f34cd6b042dbf99ae1",
+      "deployment_sha256": "1dc4c246c54cb5ddeaa8b3e72c407cd5cad43ba7e79dd8f34cd6b042dbf99ae1"
+    },
+    {
+      "path": "libero_system/route_c/__init__.py",
+      "original_sha256": "b81f037f962f76bd14a77c64ffd475c6442d27b7e54d6a00d7d4da1b9125936b",
+      "deployment_sha256": "b81f037f962f76bd14a77c64ffd475c6442d27b7e54d6a00d7d4da1b9125936b"
+    },
+    {
+      "path": "libero_system/route_c/compiler.py",
+      "original_sha256": "20d46af850d017f7156fea101ad7912b76bb1c1ce89f8f1a5db07a9b9d2c6d22",
+      "deployment_sha256": "20d46af850d017f7156fea101ad7912b76bb1c1ce89f8f1a5db07a9b9d2c6d22"
+    },
+    {
+      "path": "libero_system/route_c/controller.py",
+      "original_sha256": "869e1d951b0e2b31f7a390ca548c486ccd2cb28e089ef34a74b88c01914c75e7",
+      "deployment_sha256": "869e1d951b0e2b31f7a390ca548c486ccd2cb28e089ef34a74b88c01914c75e7"
+    },
+    {
+      "path": "libero_system/route_c/demo.py",
+      "original_sha256": "29e12c5bd4bdd034df01f005125a2b79b3a02edc2fa49e29640abafbcb000422",
+      "deployment_sha256": "29e12c5bd4bdd034df01f005125a2b79b3a02edc2fa49e29640abafbcb000422"
+    },
+    {
+      "path": "libero_system/route_c/grasp.py",
+      "original_sha256": "e9b7a27ccaf861fb05e5def3c8fea7f06454352f2902fa33925dc72ed67b914e",
+      "deployment_sha256": "e9b7a27ccaf861fb05e5def3c8fea7f06454352f2902fa33925dc72ed67b914e"
+    },
+    {
+      "path": "libero_system/route_c/optimizer.py",
+      "original_sha256": "93df50cd7153638143f4879dcba5b91bd5ae392d4833961ec16954c70fa6d949",
+      "deployment_sha256": "93df50cd7153638143f4879dcba5b91bd5ae392d4833961ec16954c70fa6d949"
+    },
+    {
+      "path": "libero_system/route_c/perception.py",
+      "original_sha256": "8287b2a1f1d2f7c436e0d88ef4dc7740c5142d9973d56b9a32f8d53dd26e5953",
+      "deployment_sha256": "8287b2a1f1d2f7c436e0d88ef4dc7740c5142d9973d56b9a32f8d53dd26e5953"
+    },
+    {
+      "path": "libero_system/route_c/schema.py",
+      "original_sha256": "6cc5a156c816d2d98e62bcfe78dd59427a3d77b718e31943c2ee255b33def5ea",
+      "deployment_sha256": "6cc5a156c816d2d98e62bcfe78dd59427a3d77b718e31943c2ee255b33def5ea"
+    },
+    {
+      "path": "libero_system/route_c/sdf.py",
+      "original_sha256": "977cfff23030e80ee3bfec6d37d5833a653a8c6dfe74aa8a317d1d375fc65e3f",
+      "deployment_sha256": "977cfff23030e80ee3bfec6d37d5833a653a8c6dfe74aa8a317d1d375fc65e3f"
+    },
+    {
+      "path": "libero_system/route_c/sequential.py",
+      "original_sha256": "b647951a64fd9008bf2042cf06806687579dada14b8001ca0cf69ce6b79cd7c9",
+      "deployment_sha256": "b647951a64fd9008bf2042cf06806687579dada14b8001ca0cf69ce6b79cd7c9"
+    },
+    {
+      "path": "libero_system/route_c/task_planner.py",
+      "original_sha256": "4a5fe8d4f8b4ae5455911880378781619c2d7b7339f64b2e396e95ac5084e1ec",
+      "deployment_sha256": "4a5fe8d4f8b4ae5455911880378781619c2d7b7339f64b2e396e95ac5084e1ec"
+    }
+  ]
+}

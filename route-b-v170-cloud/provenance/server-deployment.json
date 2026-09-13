@@ -1,0 +1,80 @@
+{
+  "status": "deployed_and_verified",
+  "completed_at": "2026-09-13T14:40:41.349062+00:00",
+  "deployment_directory": "/root/autodl-tmp/route-b-v170-cloud",
+  "upload_directory_entry": "/root/route-b-upload/route-b-v170-cloud",
+  "operating_system": "Ubuntu 22.04.5 LTS",
+  "cuda": {
+    "torch": "2.11.0+cu128",
+    "cuda_build": "12.8",
+    "device": "NVIDIA GeForce RTX 5090",
+    "capability": [
+      12,
+      0
+    ],
+    "cuda_compute": "passed"
+  },
+  "doctor": {
+    "python": "3.12.3",
+    "torch": "2.11.0+cu128",
+    "torch_cuda_build": "12.8",
+    "cuda_available": true,
+    "numpy": "2.2.6",
+    "mujoco": "3.3.2",
+    "opencv": "5.0.0",
+    "compiled_tasks": {
+      "libero_spatial": 10,
+      "libero_object": 10,
+      "libero_goal": 10,
+      "libero_10": 10
+    },
+    "source_tree_sha256": "67c93be1df7da7572ecbb8faff53d01a47aea42ec36affb07ac54ba36e59edba",
+    "resource_hashes": "all verified",
+    "render_checked": true,
+    "camera_shapes": {
+      "agentview": [
+        256,
+        256,
+        3
+      ],
+      "wrist": [
+        256,
+        256,
+        3
+      ]
+    }
+  },
+  "source_integrity": {
+    "uploaded_files_checked": 104,
+    "changed_from_upload": [
+      "run.sh"
+    ],
+    "controller_source_unchanged": true
+  },
+  "smoke_summary": {
+    "elapsed_s": 39.571,
+    "episodes": 1,
+    "steps": 127,
+    "success_rate": 1.0,
+    "successes": 1
+  },
+  "smoke_output_directory": "/root/autodl-tmp/route-b-v170-cloud/outputs/deployment_smoke_20260913",
+  "video": [
+    {
+      "path": "/root/autodl-tmp/route-b-v170-cloud/outputs/deployment_smoke_20260913/videos/route-b_libero_object_task-00_ep-0000.mp4",
+      "frames": 64,
+      "fps": 20.0,
+      "width": 512,
+      "height": 256,
+      "bytes": 325780
+    }
+  ],
+  "full_2000_episode_campaign_run": false,
+  "server_adjustments": {
+    "cpp_runtime": "/root/autodl-tmp/route-b-v170-cloud/.venv/lib/libstdc++.so.6",
+    "cpp_runtime_target": "/usr/lib/x86_64-linux-gnu/libstdc++.so.6",
+    "startup_patch": "provenance/SERVER_RUNTIME.patch",
+    "supplemental_dependency": "socksio==1.0.0",
+    "pip_index": "https://pypi.org/simple"
+  }
+}

@@ -1,0 +1,11 @@
+--- run.sh.uploaded
++++ run.sh
+@@ -23,4 +23,8 @@
+ export LIBERO_CONFIG_PATH="${LIBERO_CONFIG_PATH:-${route_root}/runtime/libero}"
+ route_prefix_lib="$("${route_python}" -c 'import sys; print(sys.prefix + "/lib")')"
+ export LD_LIBRARY_PATH="${route_prefix_lib}${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}"
++# Prefer the environment's C++ runtime over a base Conda Python's DT_RPATH.
++if [[ -r "${route_prefix_lib}/libstdc++.so.6" ]]; then
++    export LD_PRELOAD="${route_prefix_lib}/libstdc++.so.6${LD_PRELOAD:+:${LD_PRELOAD}}"
++fi
+ exec "${route_python}" "${route_root}/cloud.py" "$@"

@@ -1,0 +1,25 @@
+# Runtime only. PyTorch is installed separately for the selected accelerator.
+numpy==2.2.6
+scipy==1.18.1
+mujoco==3.3.2
+transformers==5.5.4
+huggingface-hub==1.29.0
+tokenizers==0.22.2
+safetensors==0.8.0
+opencv-python-headless==5.0.0.93
+Pillow==12.3.0
+PyYAML==6.0.3
+numba==0.67.0
+matplotlib==3.11.1
+cloudpickle==3.1.2
+future==1.0.0
+h5py==3.16.0
+gymnasium==1.3.0
+easydict==1.13
+networkx==3.6.1
+imageio==2.37.4
+imageio-ffmpeg==0.6.0
+termcolor==3.3.0
+PyOpenGL==3.1.10
+glfw==2.10.2
+absl-py==2.5.0

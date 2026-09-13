@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+set -euo pipefail
+route_root="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+route_default_python="${route_root}/.venv/bin/python"
+if [[ ! -x "${route_default_python}" ]]; then route_default_python=python3; fi
+route_python="${ROUTE_B_PYTHON:-${route_default_python}}"
+export PYTHONPATH="${route_root}"
+export PYTHONDONTWRITEBYTECODE=1
+export PYTHONNOUSERSITE=1
+export PYTHONUNBUFFERED=1
+export OMP_NUM_THREADS="${OMP_NUM_THREADS:-1}"
+export OPENBLAS_NUM_THREADS="${OPENBLAS_NUM_THREADS:-1}"
+export MKL_NUM_THREADS="${MKL_NUM_THREADS:-1}"
+export NUMEXPR_NUM_THREADS="${NUMEXPR_NUM_THREADS:-1}"
+export NUMBA_DISABLE_JIT=1
+export TOKENIZERS_PARALLELISM=false
+export MUJOCO_GL=osmesa
+export PYOPENGL_PLATFORM=osmesa
+export MPLCONFIGDIR="${MPLCONFIGDIR:-/tmp/route-b-matplotlib}"
+export NUMBA_CACHE_DIR="${NUMBA_CACHE_DIR:-/tmp/route-b-numba}"
+export LIBERO_ASSET_ROOT="${LIBERO_ASSET_ROOT:-${route_root}/resources/assets}"
+export ROUTE_B_MODEL_PATH="${ROUTE_B_MODEL_PATH:-${route_root}/resources/grounding-dino-tiny}"
+export LIBERO_CONFIG_PATH="${LIBERO_CONFIG_PATH:-${route_root}/runtime/libero}"
+route_prefix_lib="$("${route_python}" -c 'import sys; print(sys.prefix + "/lib")')"
+export LD_LIBRARY_PATH="${route_prefix_lib}${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}"
+exec "${route_python}" "${route_root}/cloud.py" "$@"

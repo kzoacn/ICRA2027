@@ -1,0 +1,5 @@
+# Install with --no-deps. requirements.txt lists the simulation runtime;
+# hf-libero's training, logging and notebook dependencies are not used here.
+hf-libero==0.1.4
+robosuite==1.4.0
+bddl==1.0.1

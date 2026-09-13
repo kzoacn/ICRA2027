@@ -1,0 +1,42 @@
+--- v170/libero_system/perception/gallery.py
++++ cloud/libero_system/perception/gallery.py
+@@ -8,6 +8,7 @@
+ 
+ from dataclasses import dataclass
+ from itertools import permutations
++import os
+ from pathlib import Path
+ from types import MappingProxyType
+ from typing import Iterable, Mapping, Sequence
+@@ -21,7 +22,10 @@
+ 
+ FloatArray = NDArray[np.float64]
+ 
+-DEFAULT_ASSET_ROOT = Path("/home/kzoacn/.cache/libero/assets")
++DEFAULT_ASSET_ROOT = Path(os.environ.get(
++    "LIBERO_ASSET_ROOT",
++    str(Path(__file__).resolve().parents[2] / "resources" / "assets"),
++)).expanduser()
+ 
+ LIBERO_OBJECT_LABELS = frozenset(
+     {
+--- v170/libero_system/perception/grounding_dino.py
++++ cloud/libero_system/perception/grounding_dino.py
+@@ -26,11 +26,12 @@
+ from .schema import BoxDetection, ObjectInstance, ObservedGeometry, PointCloud, RGBDFrame, normalize_label
+ 
+ 
+-DEFAULT_GROUNDING_DINO_TINY = Path(
+-    "/home/kzoacn/.cache/huggingface/hub/"
+-    "models--IDEA-Research--grounding-dino-tiny/snapshots/"
+-    "a2bb814dd30d776dcf7e30523b00659f4f141c71"
+-)
++import os
++
++DEFAULT_GROUNDING_DINO_TINY = Path(os.environ.get(
++    "ROUTE_B_MODEL_PATH",
++    str(Path(__file__).resolve().parents[2] / "resources" / "grounding-dino-tiny"),
++)).expanduser()
+ 
+ 
+ def rectangular_fixture_geometry(points: np.ndarray, observed: ObservedGeometry) -> ObservedGeometry:

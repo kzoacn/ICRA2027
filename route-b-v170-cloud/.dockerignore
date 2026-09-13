@@ -1,0 +1,8 @@
+.venv
+resources
+runtime
+outputs
+__pycache__
+**/__pycache__
+*.tar.gz
+.git

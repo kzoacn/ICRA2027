@@ -1,0 +1,5 @@
+{
+  "workers": 8,
+  "changed_at": "2026-09-13T15:11:06.281067+00:00",
+  "reason": "Four processes are stable; observed GPU memory 8054/32607 MiB and CPU below 8 of the 25 allocated cores. Expand to eight isolated task workers."
+}
