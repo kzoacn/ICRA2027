@@ -5,8 +5,12 @@ all: main.pdf
 
 figures:
 	$(PYTHON) scripts/analyze_results.py
+	$(PYTHON) scripts/build_comparison_table.py
 
-main.pdf: main.tex references.bib ieeeconf.cls IEEEtran.bst generated/numbers.tex generated/suite_table.tex generated/status_table.tex generated/failure_table.tex figures/architecture.tex figures/per_task.pdf figures/rollouts.pdf
+generated/comparison_table.tex: data/published_comparisons.json data/episodes.jsonl data/provenance.json scripts/build_comparison_table.py
+	$(PYTHON) scripts/build_comparison_table.py
+
+main.pdf: main.tex references.bib ieeeconf.cls IEEEtran.bst generated/numbers.tex generated/suite_table.tex generated/status_table.tex generated/failure_table.tex generated/comparison_table.tex figures/architecture.tex figures/per_task.pdf figures/rollouts.pdf
 	latexmk -pdf -interaction=nonstopmode -halt-on-error main.tex
 
 check: main.pdf

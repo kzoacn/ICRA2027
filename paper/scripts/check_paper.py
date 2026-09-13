@@ -36,6 +36,11 @@ def main():
     assert sum("sensor verification rejected place_in" in s for s in microwave_failures) == 3
     assert sum("timed out" in s for s in microwave_failures) == 3
     tex = (PAPER / "main.tex").read_text()
+    subprocess.run(["python3", str(PAPER / "scripts/build_comparison_table.py"), "--check"],
+                   check=True)
+    published_data = (PAPER / "data/published_comparisons.json").read_bytes()
+    published = json.loads(published_data)
+    tex += "\n" + (PAPER / "generated/comparison_table.tex").read_text()
     bib = (PAPER / "references.bib").read_text()
     keys = set(re.findall(r"@\w+\{([^,]+),", bib))
     cited = {key.strip() for group in re.findall(r"\\cite\{([^}]+)\}",tex) for key in group.split(",")}
@@ -64,6 +69,8 @@ def main():
     report = {"passed": True, "pages": pages, "episodes":len(rows),
         "successes":sum(r["success"] for r in rows), "tasks":len(groups),
         "references":len(cited), "author_metadata":"Anonymous",
+        "published_comparison_rows":len(published["rows"]),
+        "published_comparisons_sha256":hashlib.sha256(published_data).hexdigest(),
         "letter_paper":True, "all_fonts_embedded":True,"type3_fonts":False,
         "overfull_boxes":False,"undefined_references":False,
         "pdf_sha256":hashlib.sha256((PAPER/"main.pdf").read_bytes()).hexdigest(),

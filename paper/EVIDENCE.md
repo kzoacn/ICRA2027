@@ -22,6 +22,7 @@ The manuscript is a system study of the existing implementation, not a claim of 
 | Software-boundary counters | _ExternalStickyScore.audit | Several zero counters are constructed by implementation; not independent process attestation |
 | 400 episodes and ten reused records | runtime/jobs/smolvla_scale_400_parallel_20260913/manifest.json; paper/data/provenance.json | Reuse selected by official IDs and compatible configuration before this campaign |
 | Success, runtime and status tables | paper/data/episodes.jsonl; paper/scripts/analyze_results.py | Derived directly from frozen record fields; elapsed times exclude reused records |
+| Published policy comparison | paper/data/published_comparisons.json; paper/scripts/build_comparison_table.py | Five externally reported mean rows with source versions, table numbers and PDF hashes; the Route B row is computed from its own episode records |
 | Failure groups | failure_group in paper/scripts/analyze_results.py | Message-based terminal categories, not independently verified physical causes |
 | Per-task examples in text | Goal 03: 3/10; Spatial 04: 5/10; Long 03: 6/10; Long 08: 4/10; Long 09: 0/10 | Counts and Long 09 stopping-reason breakdown checked by paper/scripts/check_paper.py |
 | Qualitative rollouts | paper/data/figure_provenance.json | Selected recorded episodes, with video hashes and exact frame indices |
@@ -32,8 +33,9 @@ The manuscript is a system study of the existing implementation, not a claim of 
 | BibTeX key | Primary source | Use in manuscript |
 |---|---|---|
 | libero | [LIBERO paper](https://arxiv.org/abs/2306.03310) | Benchmark origin and research setting |
-| openvla | [OpenVLA paper](https://arxiv.org/abs/2406.09246) | Learned action-policy context |
-| smolvla | [SmolVLA paper, Section 4.1](https://arxiv.org/html/2506.01844v1) | Compact VLA context and 10 trials per task |
+| openvla | [OpenVLA v3, Appendix E, Table 12](https://arxiv.org/html/2406.09246v3) | Learned action-policy context; the authors' measured Diffusion Policy, Octo and OpenVLA results |
+| smolvla | [SmolVLA v1, Sections 4.1/4.3 and Table 2](https://arxiv.org/html/2506.01844v1) | Compact VLA context, 10 trials per task, and the 0.45B simulation result |
+| openvlaoft | [OpenVLA-OFT v2, Section V and Table I](https://arxiv.org/html/2502.19645v2) | Full OpenVLA-OFT result with extra inputs and filtered training demonstrations |
 | tamp | [Integrated Task and Motion Planning](https://arxiv.org/abs/2010.01083) | Discrete/continuous planning context |
 | saycan | [SayCan paper](https://arxiv.org/abs/2204.01691) | Language and skill affordances |
 | codepolicies | [Code as Policies paper](https://arxiv.org/abs/2209.07753) | Language-generated policy programs |
@@ -44,5 +46,7 @@ The manuscript is a system study of the existing implementation, not a claim of 
 | mujoco | [MuJoCo paper](https://homes.cs.washington.edu/~todorov/papers/TodorovIROS12.pdf) | Physics engine |
 | openvlacode | [Evaluation loop](https://github.com/openvla/openvla/blob/main/experiments/robot/libero/run_libero_eval.py), [environment helper](https://github.com/openvla/openvla/blob/main/experiments/robot/libero/libero_utils.py) | Numerical horizons and distinct environment seed |
 
-No results from these methods were reproduced in this task, and no cross-method numerical ranking is presented.
-The reference descriptions summarize the cited primary sources; figures and text from those works are not copied.
+The comparison table transcribes published numerical means; these policies were not rerun in this task.
+Source-reported averages are preserved, and available standard errors remain in the source-data JSON.
+Protocol differences are described next to the comparison and in its caption.
+The reference descriptions summarize the cited primary sources; figures and prose from those works are not copied.

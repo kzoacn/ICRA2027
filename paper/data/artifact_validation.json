@@ -4,13 +4,15 @@
   "episodes": 400,
   "successes": 347,
   "tasks": 40,
-  "references": 12,
+  "references": 13,
   "author_metadata": "Anonymous",
+  "published_comparison_rows": 5,
+  "published_comparisons_sha256": "85a4c48a8c6b8df0efdc08ec991abc410e9647aae17b9518416b37553b9a0881",
   "letter_paper": true,
   "all_fonts_embedded": true,
   "type3_fonts": false,
   "overfull_boxes": false,
   "undefined_references": false,
-  "pdf_sha256": "04421fdcec49ac9049b98939b73b00fe63e8c186bf0b4408fa0bb31123967f99",
+  "pdf_sha256": "035bd24537c02038846df5143b1079d951b01a328d935e69d9c791c0da2ecc83",
   "scope": "Local build, format and data checks; not PaperPlaza compliance certification or human scientific review."
 }

@@ -1,0 +1,16 @@
+% Generated from published_comparisons.json and episodes.jsonl; do not edit.
+\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}lp{.36\textwidth}rrrrr@{}}
+\toprule
+Method & Sensing and action-policy setup & Spatial & Object & Goal & Long & Average \\
+\midrule
+\multicolumn{7}{@{}l}{\emph{Published results (reported means)}} \\
+Diffusion Policy~\cite{openvla} & Single RGB; policy trained from scratch per suite & 78.3 & 92.5 & 68.3 & 50.5 & 72.4 \\
+Octo~\cite{openvla} & Single RGB; pretrained policy fine-tuned per suite & 78.9 & 85.7 & 84.6 & 51.1 & 75.1 \\
+OpenVLA~\cite{openvla} & Single RGB; pretrained policy fine-tuned per suite & 84.7 & 88.4 & 79.2 & 53.7 & 76.5 \\
+SmolVLA (0.45B)~\cite{smolvla} & RGB/state; VLM-initialized policy trained across suites & 90.0 & 96.0 & 92.0 & 71.0 & 87.3 \\
+OpenVLA-OFT~\cite{openvlaoft} & Two RGB views + state; policy fine-tuned per suite & 97.6 & 98.4 & 97.9 & 94.5 & 97.1 \\
+\midrule
+\multicolumn{7}{@{}l}{\emph{Measured in this work}} \\
+\method{} & Two RGB-D views + state; asset priors, fixed controller & 91.0 & 96.0 & 88.0 & 72.0 & 86.8 \\
+\bottomrule
+\end{tabular*}

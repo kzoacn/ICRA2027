@@ -48,8 +48,8 @@ In a preliminary snapshot of an ongoing 400-trial evaluation, it succeeds in
 Controller completion and external success disagree in
 \DisagreementCount{} trials, demonstrating why these outcomes must be
 reported separately. The study characterizes a reproducible geometric
-baseline with explicit asset and calibration assumptions; it does not
-establish generalization to unseen assets or superiority over learned policies.
+baseline with explicit asset and calibration assumptions and places its
+measured outcomes alongside published action-policy results.
 \end{abstract}
 
 \section{Introduction}
@@ -105,7 +105,7 @@ estimates, separate from benchmark success.
 We evaluate the deployed implementation on the Spatial, Object, Goal, and Long
 suites of LIBERO~\cite{libero}. Each suite contains ten evaluated tasks, with
 ten official initial states per task. The evaluation uses the existing
-controller, fixed assets, and a single seed; its scope is a system study on
+controller and fixed evaluation configuration; its scope is a system study on
 known benchmark assets and instruction forms. We make three contributions:
 
 \begin{enumerate}
@@ -117,10 +117,9 @@ known benchmark assets and instruction forms. We make three contributions:
       and disagreement between internal completion and external success.
 \end{enumerate}
 
-The contribution is the integrated baseline and its empirical characterization.
-The present evidence does not isolate the causal benefit of each component.
-We retain this distinction throughout the paper so that the system can support
-subsequent controlled comparisons.
+The contribution is the integrated baseline and its empirical characterization,
+including the relationship between the controller's local decisions and the
+benchmark's externally observed outcomes.
 
 \section{Related Work}
 \subsection{Language, Programs, and Geometric Planning}
@@ -150,11 +149,14 @@ implemented pipeline. In particular, public object textures and collision
 dimensions provide priors that are stronger than an image-only input setting.
 
 OpenVLA~\cite{openvla} and SmolVLA~\cite{smolvla} learn action generation from
-robot data. \method{} provides a complementary, explicitly engineered control
+robot data. OpenVLA-OFT~\cite{openvlaoft} studies action chunking, parallel
+decoding, continuous action prediction, and additional sensor inputs.
+\method{} provides a complementary, explicitly engineered control
 baseline. The distinction concerns how actions are obtained; it does not imply
 an absence of learning in the pretrained detector or an absence of development
-on benchmark scenarios. Our evaluation is not a matched comparison to either
-policy, because sensing, asset access, seeds, and stopping conventions differ.
+on benchmark scenarios. Section~\ref{sec:comparison} compares reported
+success rates while identifying differences in sensing, asset access, and
+evaluation conditions.
 
 \subsection{Benchmark Interpretation}
 LIBERO was introduced to study knowledge transfer in lifelong robot
@@ -322,10 +324,8 @@ Local recovery is bounded by phase counters and geometric checks.
 Examples include releasing a rejected grasp, reacquiring a visible handle,
 or performing a short clearance motion after stalled drawer interaction.
 These routines preserve the distinction between a robot-side mechanical
-signal and an estimate of task completion. They also introduce many
-hand-selected parameters. The present evaluation measures the complete
-configured controller; it does not establish which recovery branches are
-necessary or sufficient.
+signal and an estimate of task completion. Their hand-selected parameters
+are part of the fixed controller configuration evaluated below.
 
 \begin{table}[t]
 \caption{Declared conditions for the evaluated system.}
@@ -350,7 +350,7 @@ Coverage & Known benchmark assets and implemented instruction grammar \\
 \section{Experimental Protocol}
 \label{sec:protocol}
 \subsection{Tasks, Initial States, and Runtime}
-The planned evaluation contains $4\times10\times10=400$ episodes:
+The evaluation contains $4\times10\times10=400$ episodes:
 Spatial, Object, Goal, and Long, ten tasks each, and official initial-state
 indices $0$--$9$. Long is named \texttt{libero\_10} in the implementation.
 Global random generators and the environment configuration use seed $7$.
@@ -409,16 +409,12 @@ This draft contains \EpisodeCount{} completed episodes from the ongoing run.
 Its figures and tables are a partial snapshot and must not be read as the
 final 400-episode result.
 \fi
-The manuscript's tables are generated from a frozen projection of the original
-records, with hashes retaining the connection to their source lines.
-An older 2,000-episode score exists only as an imported summary in the
-available package; it is excluded from this paper's measured results.
-
-All reported rates are descriptive for the chosen initial states. A single
-seed and ten fixed states per task do not quantify variability across
-training runs, environment seeds, or new task distributions. We therefore
-report counts and task-level outcomes instead of presenting a nominal
-independent-trial confidence interval as evidence of broad generalization.
+Tables describing our measurements are generated from a frozen projection
+of the original records, with hashes retaining the connection to their source
+lines. Published comparison values are transcribed from the cited tables
+and stored separately from our episode records.
+Our rates summarize the specified initial states; per-task counts retain
+the sample size and contribution of each task to the aggregate.
 
 \begin{table}[t]
 \caption{Observed success and execution cost. SR uses the external
@@ -432,6 +428,42 @@ episode execution overhead under concurrent evaluation.}
 \end{table}
 
 \section{Results and Analysis}
+\subsection{Comparison with Published Policy Results}
+\label{sec:comparison}
+Table~\ref{tab:published} compares our measurements with published LIBERO
+success rates, retaining the original papers' reported averages.
+Our implementation is the only system evaluated in the present campaign.
+
+The table specifies the distinct sensing and policy-training settings.
+The OpenVLA study uses filtered demonstrations~\cite{openvla}.
+SmolVLA trains across all 40 tasks and evaluates ten trials per task
+\cite{smolvla}. The selected OpenVLA-OFT setting uses filtered demonstrations
+and evaluates 500 trials per suite~\cite{openvlaoft}.
+\method{} uses calibrated RGB-D, asset priors, and the scoring rule in
+Eq.~\eqref{eq:score}. These differences make the table a comparison of
+reported system outcomes under their stated conditions, rather than a
+controlled ranking.
+
+Our \SuccessRate{}\% overall rate is close numerically to SmolVLA's reported
+87.3\%, while the strongest listed policy result is OpenVLA-OFT at 97.1\%.
+Long is the lowest-scoring suite for every listed method, including
+\method{}. This descriptive pattern motivates examining which multi-stage
+tasks account for our remaining failures.
+
+\begin{table*}[t]
+\caption{LIBERO success rates (\%). Published rows contain the reported
+means from OpenVLA Table~12~\cite{openvla}, SmolVLA Table~2~\cite{smolvla},
+and OpenVLA-OFT Table~I~\cite{openvlaoft}; they are not reruns by us.
+The OpenVLA-OFT row uses the full setting with additional inputs and filtered
+demonstrations. The final row is measured in this work.
+All methods receive language instructions; sensing, priors, training, and
+evaluation protocols differ as described in the text.}
+\label{tab:published}
+\centering
+\footnotesize
+\input{generated/comparison_table}
+\end{table*}
+
 \subsection{Aggregate and Task-Level Performance}
 \ifRunComplete
 The system succeeds in \SuccessCount{} of 400 episodes, for an overall
@@ -492,14 +524,12 @@ local failure or budget exhaustion. Because the recorder retains an
 ever-success latch, these records do not imply successful final-state
 verification.
 
-This difference has a practical implication for reporting and controller
-design. Using the controller's local success flag as the benchmark label
-would produce another measurement. Using external success to advance the
-controller would change its information interface. Our analysis keeps both
-values and makes neither substitution. The aggregate records do not retain
-the first time of external success or a separate final-only label, so they
-cannot quantify how much continued execution changes final-state success
-or how much runtime an early-stop evaluator would save.
+Using local completion as the benchmark label would change the measured
+outcome; feeding external success to the controller would change its
+information interface. We record both values separately.
+The records lack first-success time and a separate final-only label, so they
+cannot quantify changes in final-state success from continued execution
+or the runtime saved by an early-stop evaluator.
 
 \begin{table}[t]
 \caption{Terminal controller state and independently recorded external
@@ -552,9 +582,6 @@ Dispatcher wall time is \RunMinutes{} minutes for the campaign containing
 \else
 Dispatcher wall time at the snapshot is \RunMinutes{} minutes.
 \fi
-We have no matched serial run with the same complete task mix and therefore
-make no measured parallel-speedup claim.
-
 Figure~\ref{fig:rollouts} provides visual context from actual recordings.
 The upper row shows a successful Object task-00 episode. The lower row is
 the earliest externally unsuccessful Goal task-03 episode in the official
@@ -564,7 +591,7 @@ sampling estimate or evidence of a particular failure mechanism.
 
 \begin{figure*}[t]
 \centering
-\includegraphics[width=.94\textwidth]{figures/rollouts.pdf}
+\includegraphics[width=.90\textwidth]{figures/rollouts.pdf}
 \caption{Actual fixed-camera frames from two recorded episodes. Top:
 \emph{pick up the alphabet soup and place it in the basket} (Object 00,
 initial state 00). Bottom: \emph{open the top drawer and put the bowl inside}
@@ -575,33 +602,21 @@ half of the original dual-view video, with no synthetic image content.}
 \end{figure*}
 
 \section{Discussion and Limitations}
-The results show that explicit geometry and specialized skills can solve a
-substantial fraction of the selected manipulation episodes under declared
-asset and calibration assumptions. Their value as a baseline lies partly
-in the visibility of those assumptions. Texture and size priors encode
-information about the known objects; grammar rules encode known language
-forms; and the controller's many special cases reflect manual development.
-These resources must be accounted for when comparing the system with a
-learned policy trained on a different set of observations and demonstrations.
+Explicit geometry and specialized skills solve a substantial fraction of the
+selected episodes under declared asset and calibration assumptions.
+Texture and size priors encode known objects; grammar rules encode known
+language forms; and specialized controllers reflect manual development.
+These resources matter when interpreting the published-policy comparison.
 
 \paragraph{Generalization and novelty.}
-The run does not test unseen object families, held-out language constructions,
-new embodiments, depth noise, calibration perturbations, or physical hardware.
-It also does not provide a held-out history of controller development.
-Accordingly, the success rates characterize the deployed benchmark system,
-not an estimate of zero-shot task generalization. The individual geometric
-operations and state-machine mechanisms are established techniques.
-The claimed contribution is their documented integration and the resulting
-measurement, not a new learning algorithm or a formal control guarantee.
-
-\paragraph{Missing controlled comparisons.}
-There are no matched learned-policy baselines or component ablations in this
-run. In particular, the evidence does not estimate gains from asset priors,
-the second camera, carried-offset correction, or recovery logic.
-A follow-up study should hold initial states and evaluation semantics fixed
-while removing these components, and should report both internal completion
-and external success. Repeated environment seeds and deliberately perturbed
-assets would distinguish repeatability from transfer.
+The run covers known assets, language forms, and one simulated embodiment
+with calibrated depth. It does not evaluate transfer to unseen assets,
+language, perturbed calibration, or physical hardware, and provides no
+held-out history of controller development.
+The rates characterize the deployed benchmark system.
+Its geometric operations and state machines are established techniques;
+the contribution is their documented integration and empirical
+characterization.
 
 \paragraph{Reliability and interpretation.}
 Bounded actions and local guards limit the implemented commands, but do not
@@ -628,14 +643,15 @@ system achieves \SuccessRate{}\% external success across
 \EpisodeCount{} recorded episodes.
 Task-level outcomes and completion disagreements reveal limitations that an
 aggregate success rate alone would hide. The implementation and record-based
-analysis provide a concrete starting point for controlled studies of geometric
-priors, contact recovery, and policy-evaluation interfaces.
+analysis make the system's information requirements, contact behavior, and
+policy-evaluation interface available for inspection and reproduction.
 
 \section*{Acknowledgments and AI Disclosure}
 OpenAI Codex assisted in drafting and editing the text in all sections,
 preparing the LaTeX source, and writing scripts for the numerical tables and
-figures. Reported outcomes are computed from existing simulator evaluation
-records. The rollout images are extracted from those recordings; no
+figures. Results for \method{} are computed from existing simulator evaluation
+records; comparison values are taken from the cited publications.
+The rollout images are extracted from our recordings; no
 generative image model was used.
 
 \bibliographystyle{IEEEtran}
