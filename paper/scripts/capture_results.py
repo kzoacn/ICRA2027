@@ -20,12 +20,25 @@ def dump(path, payload):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--source-root", type=Path, required=True)
+    source = parser.add_mutually_exclusive_group(required=True)
+    source.add_argument("--source-root", type=Path, help="Original deployed campaign root")
+    source.add_argument("--batch-dir", type=Path, help="Immutable fresh full_400 campaign")
+    parser.add_argument("--output-dir", type=Path, default=PAPER / "data")
     parser.add_argument("--allow-partial", action="store_true")
     args = parser.parse_args()
-    root = args.source_root.resolve()
-    job = root / "runtime/jobs" / RUN
+    root = args.source_root.resolve() if args.source_root else args.batch_dir.resolve()
+    job = root / "runtime/jobs" / RUN if args.source_root else root
     manifest = json.loads((job / "manifest.json").read_text())
+    if args.batch_dir:
+        assert manifest.get("kind") == "full_400", "Development batches cannot update the paper result."
+        assert manifest["protocol"]["new_episodes"] == 400
+        assert manifest["protocol"]["reused_episodes"] == 0
+        snapshot = Path(manifest["source_snapshot"]) / "libero_system"
+        frozen = json.loads((job / "source_files.json").read_text())
+        current = {str(p.relative_to(snapshot)): sha(p.read_bytes())
+                   for p in sorted(snapshot.rglob("*"))
+                   if p.is_file() and "__pycache__" not in p.parts}
+        assert current == frozen, "Frozen controller source changed after evaluation."
     status = json.loads((job / "status.json").read_text())
     complete = status["state"] == "completed"
     validation_path = job / "final-validation.json"
@@ -33,16 +46,21 @@ def main():
     if not args.allow_partial:
         assert complete, f"Campaign is still {status['state']}; no final results claimed."
         assert validation and validation["coverage_passed"] and not validation["issues"]
-    subprocess.run(["sha256sum", "--quiet", "-c", "SHA256SUMS.deployed"],
-                   cwd=root, check=True)
+    if args.source_root:
+        subprocess.run(["sha256sum", "--quiet", "-c", "SHA256SUMS.deployed"],
+                       cwd=root, check=True)
     rows, sources, seen = [], [], set()
     expected = set()
     for task in manifest["tasks"]:
+        assert task["config"]["source_tree_sha256"] == manifest["source_tree_sha256"]
         expected.update(task["episodes"])
         path = Path(task["jsonl"])
         if not path.exists():
             continue
         raw = path.read_bytes()
+        if args.batch_dir:
+            summary = json.loads(Path(task["summary"]).read_text())
+            assert summary["run_config"] == task["config"]
         sources.append({"path": str(path.relative_to(root)), "sha256": sha(raw),
                         "task": task["id"], "reused": task["reused"]})
         for line in raw.splitlines():
@@ -78,14 +96,14 @@ def main():
     if complete:
         assert seen == expected and len(rows) == 400
         assert sum(r["success"] for r in rows) == status["overall"]["successes"]
-        assert sum(r["reused"] for r in rows) == 10
+        assert sum(r["reused"] for r in rows) == manifest["protocol"]["reused_episodes"]
     rows.sort(key=lambda r: (r["suite"], r["task_id"], r["init_id"]))
-    out = PAPER / "data"
-    out.mkdir(exist_ok=True)
+    out = args.output_dir.resolve()
+    out.mkdir(parents=True, exist_ok=True)
     payload = "".join(json.dumps(r, ensure_ascii=False, sort_keys=True) + "\n" for r in rows)
     (out / "episodes.jsonl").write_text(payload)
     dump(out / "provenance.json", {
-        "run_name": RUN, "state": status["state"], "complete": complete,
+        "run_name": manifest.get("run_name", RUN), "state": status["state"], "complete": complete,
         "status_updated_at": status["updated_at"],
         "recorded_episodes": len(rows), "expected_episodes": 400,
         "protocol": manifest["protocol"],

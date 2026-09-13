@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-13T17:35:03.747526+00:00",
+  "updated_at": "2026-09-13T18:10:06.679859+00:00",
   "baseline": {
     "successes": 347,
     "episodes": 400
@@ -7,6 +7,214 @@
   "acceptance": "one frozen source, 400 fresh episodes, at least 360 external successes",
   "full_400_accepted": false,
   "development_runs": [
+    {
+      "label": "basket_palm_debug_02",
+      "state": "running",
+      "source_tree_sha256": "01fc51645c207d789d4fa86ace7c9e5e3a232639a96155eb7c8860ba4b1e5c79",
+      "protocol": {
+        "tasks": 1,
+        "episodes_per_task": 3,
+        "official_init_ids": [
+          0,
+          1,
+          2
+        ],
+        "seed": 7,
+        "step_caps": {
+          "spatial": 220,
+          "object": 280,
+          "goal": 300,
+          "long": 520
+        },
+        "scoring": "external_sticky_any_success",
+        "expected_episodes": 3,
+        "new_episodes": 3,
+        "reused_episodes": 0
+      },
+      "outcomes": [],
+      "validated": null,
+      "stop_reason": null
+    },
+    {
+      "label": "basket_release_01",
+      "state": "running",
+      "source_tree_sha256": "24b1840ce66f0264654cc576573ec2b4c334ea8cd108ea14784ffee7a481d5b5",
+      "protocol": {
+        "tasks": 4,
+        "episodes_per_task": 10,
+        "official_init_ids": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ],
+        "seed": 7,
+        "step_caps": {
+          "spatial": 220,
+          "object": 280,
+          "goal": 300,
+          "long": 520
+        },
+        "scoring": "external_sticky_any_success",
+        "expected_episodes": 40,
+        "new_episodes": 40,
+        "reused_episodes": 0
+      },
+      "outcomes": [
+        {
+          "episode_id": "b:libero_goal:task06:ep0000",
+          "success": true,
+          "steps": 281,
+          "failure": "phase 'open' timed out"
+        },
+        {
+          "episode_id": "b:libero_goal:task06:ep0001",
+          "success": true,
+          "steps": 269,
+          "failure": "phase 'open' timed out"
+        },
+        {
+          "episode_id": "b:libero_goal:task06:ep0002",
+          "success": true,
+          "steps": 272,
+          "failure": "phase 'open' timed out"
+        },
+        {
+          "episode_id": "b:libero_10:task00:ep0000",
+          "success": true,
+          "steps": 250,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_10:task00:ep0001",
+          "success": true,
+          "steps": 251,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_10:task00:ep0002",
+          "success": true,
+          "steps": 243,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_10:task00:ep0003",
+          "success": true,
+          "steps": 252,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_10:task01:ep0000",
+          "success": true,
+          "steps": 344,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_10:task01:ep0001",
+          "success": true,
+          "steps": 353,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_10:task01:ep0002",
+          "success": true,
+          "steps": 343,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_object:task07:ep0000",
+          "success": true,
+          "steps": 135,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_object:task07:ep0001",
+          "success": true,
+          "steps": 166,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_object:task07:ep0002",
+          "success": false,
+          "steps": 135,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_object:task07:ep0003",
+          "success": true,
+          "steps": 210,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_object:task07:ep0004",
+          "success": true,
+          "steps": 131,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_object:task07:ep0005",
+          "success": true,
+          "steps": 136,
+          "failure": null
+        }
+      ],
+      "validated": null,
+      "stop_reason": null
+    },
+    {
+      "label": "bottom_drawer_carry_03",
+      "state": "running",
+      "source_tree_sha256": "441a04f4a187f26632062ed1bea7756a447bfdf5691c2ff102b424bf9b3b66ab",
+      "protocol": {
+        "tasks": 1,
+        "episodes_per_task": 10,
+        "official_init_ids": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ],
+        "seed": 7,
+        "step_caps": {
+          "spatial": 220,
+          "object": 280,
+          "goal": 300,
+          "long": 520
+        },
+        "scoring": "external_sticky_any_success",
+        "expected_episodes": 10,
+        "new_episodes": 10,
+        "reused_episodes": 0
+      },
+      "outcomes": [
+        {
+          "episode_id": "b:libero_10:task03:ep0000",
+          "success": true,
+          "steps": 475,
+          "failure": "phase 'close_release' timed out (position_error=0.0140 m; rotation_error=0.0075 rad; current=[0.0856, 0.2014, 0.9532]; target=[0.0805, 0.2144, 0.9532])"
+        },
+        {
+          "episode_id": "b:libero_10:task03:ep0001",
+          "success": true,
+          "steps": 381,
+          "failure": "phase 'close_release' timed out (position_error=0.0141 m; rotation_error=0.0040 rad; current=[-0.075, 0.2153, 0.9537]; target=[-0.0714, 0.229, 0.9546])"
+        }
+      ],
+      "validated": null,
+      "stop_reason": null
+    },
     {
       "label": "cavity_near_01",
       "state": "stopped_candidate_rejected",
@@ -357,6 +565,114 @@
       "stop_reason": "Active-view near approach remains stalled; retain the completed 7/10 cavity_near_02 policy."
     },
     {
+      "label": "drawer_carry_frame_01",
+      "state": "interrupted",
+      "source_tree_sha256": "9b9ceaeb9960a831b6796242050625f4f563ebfd3798b6f611e524e551cf0eb2",
+      "protocol": {
+        "tasks": 2,
+        "episodes_per_task": 10,
+        "official_init_ids": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ],
+        "seed": 7,
+        "step_caps": {
+          "spatial": 220,
+          "object": 280,
+          "goal": 300,
+          "long": 520
+        },
+        "scoring": "external_sticky_any_success",
+        "expected_episodes": 20,
+        "new_episodes": 20,
+        "reused_episodes": 0
+      },
+      "outcomes": [
+        {
+          "episode_id": "b:libero_goal:task03:ep0000",
+          "success": true,
+          "steps": 266,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_goal:task03:ep0001",
+          "success": true,
+          "steps": 300,
+          "failure": "policy remained running at the 300-step limit"
+        },
+        {
+          "episode_id": "b:libero_goal:task03:ep0002",
+          "success": false,
+          "steps": 300,
+          "failure": "policy remained running at the 300-step limit"
+        },
+        {
+          "episode_id": "b:libero_goal:task03:ep0003",
+          "success": false,
+          "steps": 300,
+          "failure": "policy remained running at the 300-step limit"
+        },
+        {
+          "episode_id": "b:libero_goal:task03:ep0004",
+          "success": false,
+          "steps": 279,
+          "failure": "phase 'move_pregrasp' timed out"
+        },
+        {
+          "episode_id": "b:libero_goal:task03:ep0005",
+          "success": false,
+          "steps": 300,
+          "failure": "policy remained running at the 300-step limit"
+        },
+        {
+          "episode_id": "b:libero_10:task03:ep0000",
+          "success": true,
+          "steps": 475,
+          "failure": "phase 'close_release' timed out (position_error=0.0140 m; rotation_error=0.0075 rad; current=[0.0856, 0.2014, 0.9532]; target=[0.0805, 0.2144, 0.9532])"
+        },
+        {
+          "episode_id": "b:libero_10:task03:ep0001",
+          "success": true,
+          "steps": 381,
+          "failure": "phase 'close_release' timed out (position_error=0.0141 m; rotation_error=0.0040 rad; current=[-0.075, 0.2153, 0.9537]; target=[-0.0714, 0.229, 0.9546])"
+        },
+        {
+          "episode_id": "b:libero_10:task03:ep0002",
+          "success": false,
+          "steps": 309,
+          "failure": "phase 'descend' timed out"
+        },
+        {
+          "episode_id": "b:libero_10:task03:ep0003",
+          "success": false,
+          "steps": 257,
+          "failure": "phase 'descend' timed out"
+        },
+        {
+          "episode_id": "b:libero_10:task03:ep0004",
+          "success": true,
+          "steps": 371,
+          "failure": "phase 'close_release' timed out (position_error=0.0106 m; rotation_error=0.0042 rad; current=[0.0845, 0.2046, 0.9573]; target=[0.0803, 0.2141, 0.9548])"
+        },
+        {
+          "episode_id": "b:libero_10:task03:ep0005",
+          "success": false,
+          "steps": 255,
+          "failure": "phase 'descend' timed out"
+        }
+      ],
+      "validated": null,
+      "stop_reason": null
+    },
+    {
       "label": "drawer_contact_01",
       "state": "completed",
       "source_tree_sha256": "3adba977d0f47af8b3134f57d28bc6cdd95b28cd059c470542c670c7736833d3",
@@ -461,7 +777,7 @@
     },
     {
       "label": "drawer_placement_01",
-      "state": "running",
+      "state": "completed",
       "source_tree_sha256": "fb907ed9710a932144cde7cdae9c3d08090a39fc15cc7b70f51673c90c5e8c3b",
       "protocol": {
         "tasks": 1,
@@ -502,9 +818,227 @@
           "success": true,
           "steps": 387,
           "failure": "phase 'close_release' timed out (position_error=0.0139 m; rotation_error=0.0070 rad; current=[-0.0745, 0.2152, 0.9528]; target=[-0.071, 0.2285, 0.9551])"
+        },
+        {
+          "episode_id": "b:libero_10:task03:ep0002",
+          "success": false,
+          "steps": 309,
+          "failure": "phase 'descend' timed out"
+        },
+        {
+          "episode_id": "b:libero_10:task03:ep0003",
+          "success": false,
+          "steps": 256,
+          "failure": "phase 'descend' timed out"
+        },
+        {
+          "episode_id": "b:libero_10:task03:ep0004",
+          "success": true,
+          "steps": 378,
+          "failure": "phase 'close_release' timed out (position_error=0.0126 m; rotation_error=0.0033 rad; current=[0.0816, 0.2038, 0.9533]; target=[0.0782, 0.2159, 0.9533])"
+        },
+        {
+          "episode_id": "b:libero_10:task03:ep0005",
+          "success": false,
+          "steps": 255,
+          "failure": "phase 'descend' timed out"
+        },
+        {
+          "episode_id": "b:libero_10:task03:ep0006",
+          "success": true,
+          "steps": 211,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_10:task03:ep0007",
+          "success": true,
+          "steps": 389,
+          "failure": "phase 'close_release' timed out (position_error=0.0178 m; rotation_error=0.0028 rad; current=[0.0742, 0.2063, 0.9535]; target=[0.0649, 0.2214, 0.9527])"
+        },
+        {
+          "episode_id": "b:libero_10:task03:ep0008",
+          "success": false,
+          "steps": 219,
+          "failure": "sensor verification rejected place_in(black bowl, bottom drawer)"
+        },
+        {
+          "episode_id": "b:libero_10:task03:ep0009",
+          "success": true,
+          "steps": 344,
+          "failure": "phase 'close_release' timed out (position_error=0.0120 m; rotation_error=0.0027 rad; current=[0.0686, 0.2203, 0.9533]; target=[0.0652, 0.2317, 0.9544])"
         }
       ],
-      "validated": null,
+      "validated": {
+        "coverage_passed": true,
+        "issues": [],
+        "episodes": 10,
+        "source_tree_sha256": "fb907ed9710a932144cde7cdae9c3d08090a39fc15cc7b70f51673c90c5e8c3b",
+        "episodes_jsonl_sha256": "31b80652071aeff9790b9b0391daa02d869d61424ee8af01acf1584ea7a0d09d",
+        "validated_at": "2026-09-13T17:45:42+00:00"
+      },
+      "stop_reason": null
+    },
+    {
+      "label": "drawer_placement_02",
+      "state": "completed",
+      "source_tree_sha256": "0f9dec374227f16525b4de3e950e7c67a10cf89b3521d12e4266fa50aefc6237",
+      "protocol": {
+        "tasks": 2,
+        "episodes_per_task": 10,
+        "official_init_ids": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ],
+        "seed": 7,
+        "step_caps": {
+          "spatial": 220,
+          "object": 280,
+          "goal": 300,
+          "long": 520
+        },
+        "scoring": "external_sticky_any_success",
+        "expected_episodes": 20,
+        "new_episodes": 20,
+        "reused_episodes": 0
+      },
+      "outcomes": [
+        {
+          "episode_id": "b:libero_goal:task03:ep0000",
+          "success": true,
+          "steps": 266,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_goal:task03:ep0001",
+          "success": true,
+          "steps": 300,
+          "failure": "policy remained running at the 300-step limit"
+        },
+        {
+          "episode_id": "b:libero_goal:task03:ep0002",
+          "success": false,
+          "steps": 300,
+          "failure": "policy remained running at the 300-step limit"
+        },
+        {
+          "episode_id": "b:libero_goal:task03:ep0003",
+          "success": false,
+          "steps": 300,
+          "failure": "policy remained running at the 300-step limit"
+        },
+        {
+          "episode_id": "b:libero_goal:task03:ep0004",
+          "success": false,
+          "steps": 279,
+          "failure": "phase 'move_pregrasp' timed out"
+        },
+        {
+          "episode_id": "b:libero_goal:task03:ep0005",
+          "success": false,
+          "steps": 300,
+          "failure": "policy remained running at the 300-step limit"
+        },
+        {
+          "episode_id": "b:libero_goal:task03:ep0006",
+          "success": false,
+          "steps": 300,
+          "failure": "policy remained running at the 300-step limit"
+        },
+        {
+          "episode_id": "b:libero_goal:task03:ep0007",
+          "success": false,
+          "steps": 273,
+          "failure": "phase 'move_pregrasp' timed out"
+        },
+        {
+          "episode_id": "b:libero_goal:task03:ep0008",
+          "success": false,
+          "steps": 252,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_goal:task03:ep0009",
+          "success": false,
+          "steps": 282,
+          "failure": "phase 'move_pregrasp' timed out"
+        },
+        {
+          "episode_id": "b:libero_10:task03:ep0000",
+          "success": true,
+          "steps": 475,
+          "failure": "phase 'close_release' timed out (position_error=0.0140 m; rotation_error=0.0075 rad; current=[0.0856, 0.2014, 0.9532]; target=[0.0805, 0.2144, 0.9532])"
+        },
+        {
+          "episode_id": "b:libero_10:task03:ep0001",
+          "success": true,
+          "steps": 381,
+          "failure": "phase 'close_release' timed out (position_error=0.0141 m; rotation_error=0.0040 rad; current=[-0.075, 0.2153, 0.9537]; target=[-0.0714, 0.229, 0.9546])"
+        },
+        {
+          "episode_id": "b:libero_10:task03:ep0002",
+          "success": false,
+          "steps": 309,
+          "failure": "phase 'descend' timed out"
+        },
+        {
+          "episode_id": "b:libero_10:task03:ep0003",
+          "success": false,
+          "steps": 257,
+          "failure": "phase 'descend' timed out"
+        },
+        {
+          "episode_id": "b:libero_10:task03:ep0004",
+          "success": true,
+          "steps": 371,
+          "failure": "phase 'close_release' timed out (position_error=0.0106 m; rotation_error=0.0042 rad; current=[0.0845, 0.2046, 0.9573]; target=[0.0803, 0.2141, 0.9548])"
+        },
+        {
+          "episode_id": "b:libero_10:task03:ep0005",
+          "success": false,
+          "steps": 255,
+          "failure": "phase 'descend' timed out"
+        },
+        {
+          "episode_id": "b:libero_10:task03:ep0006",
+          "success": true,
+          "steps": 211,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_10:task03:ep0007",
+          "success": true,
+          "steps": 347,
+          "failure": "phase 'close_release' timed out (position_error=0.0222 m; rotation_error=0.0059 rad; current=[0.0732, 0.2048, 0.9526]; target=[0.0604, 0.223, 0.9525])"
+        },
+        {
+          "episode_id": "b:libero_10:task03:ep0008",
+          "success": true,
+          "steps": 461,
+          "failure": "phase 'close_release' timed out (position_error=0.0110 m; rotation_error=0.0029 rad; current=[0.0866, 0.2021, 0.9527]; target=[0.0843, 0.2129, 0.9529])"
+        },
+        {
+          "episode_id": "b:libero_10:task03:ep0009",
+          "success": true,
+          "steps": 383,
+          "failure": "phase 'close_release' timed out (position_error=0.0118 m; rotation_error=0.0029 rad; current=[0.0685, 0.2201, 0.9537]; target=[0.0659, 0.2314, 0.9552])"
+        }
+      ],
+      "validated": {
+        "coverage_passed": true,
+        "issues": [],
+        "episodes": 20,
+        "source_tree_sha256": "0f9dec374227f16525b4de3e950e7c67a10cf89b3521d12e4266fa50aefc6237",
+        "episodes_jsonl_sha256": "fa09f4475b431f90f6e7ac051168ae1e792f84e55aa7343e23d28c97e3f8cad3",
+        "validated_at": "2026-09-13T17:54:14+00:00"
+      },
       "stop_reason": null
     },
     {
@@ -1177,7 +1711,7 @@
     },
     {
       "label": "microwave_cavity_06",
-      "state": "running",
+      "state": "interrupted",
       "source_tree_sha256": "14296e04851a1270a09ef3237b5d39abfb24d420cc0237242d718191d0c4216f",
       "protocol": {
         "tasks": 1,
@@ -1214,6 +1748,335 @@
           "failure": "cannot place 'yellow and white mug': current held object is None"
         }
       ],
+      "validated": null,
+      "stop_reason": null
+    },
+    {
+      "label": "microwave_cavity_07",
+      "state": "interrupted",
+      "source_tree_sha256": "fa83e6b6c9862f8dcc8825a71d442429465a678abc1bd327158865b97a81d07c",
+      "protocol": {
+        "tasks": 1,
+        "episodes_per_task": 10,
+        "official_init_ids": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ],
+        "seed": 7,
+        "step_caps": {
+          "spatial": 220,
+          "object": 280,
+          "goal": 300,
+          "long": 520
+        },
+        "scoring": "external_sticky_any_success",
+        "expected_episodes": 10,
+        "new_episodes": 10,
+        "reused_episodes": 0
+      },
+      "outcomes": [
+        {
+          "episode_id": "b:libero_10:task09:ep0000",
+          "success": false,
+          "steps": 424,
+          "failure": "phase 'microwave_close_align_outer_safe' timed out (position_error=0.0689 m; rotation_error=0.3340 rad; current=[-0.0993, 0.128, 1.2615]; target=[-0.0316, 0.1407, 1.2595])"
+        },
+        {
+          "episode_id": "b:libero_10:task09:ep0001",
+          "success": false,
+          "steps": 280,
+          "failure": "sensor verification rejected place_in(yellow and white mug, microwave)"
+        }
+      ],
+      "validated": null,
+      "stop_reason": null
+    },
+    {
+      "label": "microwave_cavity_08",
+      "state": "interrupted",
+      "source_tree_sha256": "e9d22824d492e0edae4e80b495e8760a2a8aa1feaf8e1cc1c57508e0bca25377",
+      "protocol": {
+        "tasks": 1,
+        "episodes_per_task": 10,
+        "official_init_ids": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ],
+        "seed": 7,
+        "step_caps": {
+          "spatial": 220,
+          "object": 280,
+          "goal": 300,
+          "long": 520
+        },
+        "scoring": "external_sticky_any_success",
+        "expected_episodes": 10,
+        "new_episodes": 10,
+        "reused_episodes": 0
+      },
+      "outcomes": [
+        {
+          "episode_id": "b:libero_10:task09:ep0000",
+          "success": false,
+          "steps": 413,
+          "failure": "phase 'microwave_close_descend_outer' timed out (position_error=0.0321 m; rotation_error=0.0865 rad; current=[-0.1029, 0.0982, 1.1349]; target=[-0.0961, 0.0979, 1.1036])"
+        },
+        {
+          "episode_id": "b:libero_10:task09:ep0001",
+          "success": false,
+          "steps": 221,
+          "failure": "no reliable open microwave door edge was visible in either RGB-D view"
+        }
+      ],
+      "validated": null,
+      "stop_reason": null
+    },
+    {
+      "label": "microwave_cavity_09",
+      "state": "interrupted",
+      "source_tree_sha256": "453b3a90baa6bf9d06b8d76e852abc5d12e7cb51da8f1e35041fc268c61cb210",
+      "protocol": {
+        "tasks": 1,
+        "episodes_per_task": 10,
+        "official_init_ids": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ],
+        "seed": 7,
+        "step_caps": {
+          "spatial": 220,
+          "object": 280,
+          "goal": 300,
+          "long": 520
+        },
+        "scoring": "external_sticky_any_success",
+        "expected_episodes": 10,
+        "new_episodes": 10,
+        "reused_episodes": 0
+      },
+      "outcomes": [],
+      "validated": null,
+      "stop_reason": null
+    },
+    {
+      "label": "microwave_cavity_10",
+      "state": "interrupted",
+      "source_tree_sha256": "447e9e5f71c52093cf6e607fdc4db899f0ddc2ea3fde9867feedc90bb4ccf559",
+      "protocol": {
+        "tasks": 1,
+        "episodes_per_task": 10,
+        "official_init_ids": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ],
+        "seed": 7,
+        "step_caps": {
+          "spatial": 220,
+          "object": 280,
+          "goal": 300,
+          "long": 520
+        },
+        "scoring": "external_sticky_any_success",
+        "expected_episodes": 10,
+        "new_episodes": 10,
+        "reused_episodes": 0
+      },
+      "outcomes": [
+        {
+          "episode_id": "b:libero_10:task09:ep0000",
+          "success": false,
+          "steps": 384,
+          "failure": "phase 'microwave_close_align_outer_safe' timed out (position_error=0.0755 m; rotation_error=0.3647 rad; current=[-0.1037, 0.0324, 1.179]; target=[-0.0292, 0.0367, 1.167])"
+        },
+        {
+          "episode_id": "b:libero_10:task09:ep0001",
+          "success": false,
+          "steps": 221,
+          "failure": "no reliable open microwave door edge was visible in either RGB-D view"
+        }
+      ],
+      "validated": null,
+      "stop_reason": null
+    },
+    {
+      "label": "microwave_cavity_11",
+      "state": "interrupted",
+      "source_tree_sha256": "37828b1df5b77118f39bd3a2aa24e1d34adf5ff4ba9d182b9130716614e2726b",
+      "protocol": {
+        "tasks": 1,
+        "episodes_per_task": 10,
+        "official_init_ids": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ],
+        "seed": 7,
+        "step_caps": {
+          "spatial": 220,
+          "object": 280,
+          "goal": 300,
+          "long": 520
+        },
+        "scoring": "external_sticky_any_success",
+        "expected_episodes": 10,
+        "new_episodes": 10,
+        "reused_episodes": 0
+      },
+      "outcomes": [
+        {
+          "episode_id": "b:libero_10:task09:ep0000",
+          "success": false,
+          "steps": 384,
+          "failure": "phase 'microwave_close_align_outer_safe' timed out (position_error=0.0675 m; rotation_error=0.3957 rad; current=[-0.0946, 0.0257, 1.1798]; target=[-0.0292, 0.0367, 1.167])"
+        },
+        {
+          "episode_id": "b:libero_10:task09:ep0001",
+          "success": false,
+          "steps": 221,
+          "failure": "no reliable open microwave door edge was visible in either RGB-D view"
+        },
+        {
+          "episode_id": "b:libero_10:task09:ep0002",
+          "success": false,
+          "steps": 226,
+          "failure": "no reliable open microwave door edge was visible in either RGB-D view"
+        },
+        {
+          "episode_id": "b:libero_10:task09:ep0003",
+          "success": false,
+          "steps": 187,
+          "failure": "phase 'approach' timed out"
+        },
+        {
+          "episode_id": "b:libero_10:task09:ep0004",
+          "success": false,
+          "steps": 316,
+          "failure": "microwave handle grasp was lost during the RGB-D hinge arc (width=0.0041 m; waypoint=4/38; measured_open_angle=0.0764 rad)"
+        },
+        {
+          "episode_id": "b:libero_10:task09:ep0005",
+          "success": false,
+          "steps": 222,
+          "failure": "no reliable open microwave door edge was visible in either RGB-D view"
+        },
+        {
+          "episode_id": "b:libero_10:task09:ep0006",
+          "success": false,
+          "steps": 390,
+          "failure": "phase 'microwave_close_align_outer_safe' timed out (position_error=0.0643 m; rotation_error=0.4408 rad; current=[-0.0949, 0.0187, 1.192]; target=[-0.0379, 0.0368, 1.1684])"
+        },
+        {
+          "episode_id": "b:libero_10:task09:ep0007",
+          "success": false,
+          "steps": 222,
+          "failure": "no reliable open microwave door edge was visible in either RGB-D view"
+        }
+      ],
+      "validated": null,
+      "stop_reason": null
+    },
+    {
+      "label": "microwave_frame_debug_12",
+      "state": "completed",
+      "source_tree_sha256": "d0a2a0f14c61203d23b6e96e216493e666bdffccbf50d627fd210b4e93868207",
+      "protocol": {
+        "tasks": 1,
+        "episodes_per_task": 1,
+        "official_init_ids": [
+          0
+        ],
+        "seed": 7,
+        "step_caps": {
+          "spatial": 220,
+          "object": 280,
+          "goal": 300,
+          "long": 520
+        },
+        "scoring": "external_sticky_any_success",
+        "expected_episodes": 1,
+        "new_episodes": 1,
+        "reused_episodes": 0
+      },
+      "outcomes": [
+        {
+          "episode_id": "b:libero_10:task09:ep0000",
+          "success": false,
+          "steps": 412,
+          "failure": "phase 'microwave_close_descend_outer' timed out (position_error=0.0485 m; rotation_error=0.1246 rad; current=[-0.1016, 0.0943, 1.127]; target=[-0.0903, 0.0998, 1.0801])"
+        }
+      ],
+      "validated": {
+        "coverage_passed": true,
+        "issues": [],
+        "episodes": 1,
+        "source_tree_sha256": "d0a2a0f14c61203d23b6e96e216493e666bdffccbf50d627fd210b4e93868207",
+        "episodes_jsonl_sha256": "e9226ffbc1466222538003a106b203f0b5745947c87a8823005e0f8d68f23345",
+        "validated_at": "2026-09-13T18:07:11+00:00"
+      },
+      "stop_reason": null
+    },
+    {
+      "label": "microwave_frame_debug_13",
+      "state": "running",
+      "source_tree_sha256": "2987b7a53fdca153d15652330ae2ed77e7c57a0c283e8b75f03810b7dc464657",
+      "protocol": {
+        "tasks": 1,
+        "episodes_per_task": 1,
+        "official_init_ids": [
+          0
+        ],
+        "seed": 7,
+        "step_caps": {
+          "spatial": 220,
+          "object": 280,
+          "goal": 300,
+          "long": 520
+        },
+        "scoring": "external_sticky_any_success",
+        "expected_episodes": 1,
+        "new_episodes": 1,
+        "reused_episodes": 0
+      },
+      "outcomes": [],
       "validated": null,
       "stop_reason": null
     },
@@ -1258,8 +2121,102 @@
       "stop_reason": null
     },
     {
+      "label": "moka_body_retry_01",
+      "state": "interrupted",
+      "source_tree_sha256": "7974da908ca2690a6998bda37164c65cd7e60888a43b9eb2584f3bfa462b764f",
+      "protocol": {
+        "tasks": 1,
+        "episodes_per_task": 10,
+        "official_init_ids": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ],
+        "seed": 7,
+        "step_caps": {
+          "spatial": 220,
+          "object": 280,
+          "goal": 300,
+          "long": 520
+        },
+        "scoring": "external_sticky_any_success",
+        "expected_episodes": 10,
+        "new_episodes": 10,
+        "reused_episodes": 0
+      },
+      "outcomes": [
+        {
+          "episode_id": "b:libero_10:task08:ep0000",
+          "success": true,
+          "steps": 504,
+          "failure": "sensor verification rejected place_on(moka pot, stove)"
+        },
+        {
+          "episode_id": "b:libero_10:task08:ep0001",
+          "success": true,
+          "steps": 457,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_10:task08:ep0002",
+          "success": true,
+          "steps": 463,
+          "failure": null
+        }
+      ],
+      "validated": null,
+      "stop_reason": null
+    },
+    {
+      "label": "moka_body_retry_debug_01",
+      "state": "completed",
+      "source_tree_sha256": "7974da908ca2690a6998bda37164c65cd7e60888a43b9eb2584f3bfa462b764f",
+      "protocol": {
+        "tasks": 1,
+        "episodes_per_task": 1,
+        "official_init_ids": [
+          6
+        ],
+        "seed": 7,
+        "step_caps": {
+          "spatial": 220,
+          "object": 280,
+          "goal": 300,
+          "long": 520
+        },
+        "scoring": "external_sticky_any_success",
+        "expected_episodes": 1,
+        "new_episodes": 1,
+        "reused_episodes": 0
+      },
+      "outcomes": [
+        {
+          "episode_id": "b:libero_10:task08:ep0006",
+          "success": false,
+          "steps": 474,
+          "failure": "phase 'approach' timed out"
+        }
+      ],
+      "validated": {
+        "coverage_passed": true,
+        "issues": [],
+        "episodes": 1,
+        "source_tree_sha256": "7974da908ca2690a6998bda37164c65cd7e60888a43b9eb2584f3bfa462b764f",
+        "episodes_jsonl_sha256": "41109fea6dc866acb83eea5bca6e70b03b985b200f1ad67fce8976e0bb2e7941",
+        "validated_at": "2026-09-13T17:57:53+00:00"
+      },
+      "stop_reason": null
+    },
+    {
       "label": "stove_disk_01",
-      "state": "running",
+      "state": "completed",
       "source_tree_sha256": "afd0334fb4e3d8637216b4d1488ceb0b9150dcfe7ace000f205015975b96529c",
       "protocol": {
         "tasks": 1,
@@ -1330,14 +2287,39 @@
           "success": false,
           "steps": 440,
           "failure": "sensor verification rejected grasp of 'moka pot'"
+        },
+        {
+          "episode_id": "b:libero_10:task08:ep0007",
+          "success": true,
+          "steps": 462,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_10:task08:ep0008",
+          "success": true,
+          "steps": 485,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_10:task08:ep0009",
+          "success": false,
+          "steps": 452,
+          "failure": null
         }
       ],
-      "validated": null,
+      "validated": {
+        "coverage_passed": true,
+        "issues": [],
+        "episodes": 10,
+        "source_tree_sha256": "afd0334fb4e3d8637216b4d1488ceb0b9150dcfe7ace000f205015975b96529c",
+        "episodes_jsonl_sha256": "dff2f6850b01e9b3f18c5703d73da852efe7e44241e603aad36d28ec88e17b08",
+        "validated_at": "2026-09-13T17:41:55+00:00"
+      },
       "stop_reason": null
     },
     {
       "label": "stove_disk_02",
-      "state": "running",
+      "state": "completed",
       "source_tree_sha256": "b8489cec3a76f1c52266a257764805b94e7ae59d0ed23907789011048da09429",
       "protocol": {
         "tasks": 1,
@@ -1396,9 +2378,46 @@
           "success": true,
           "steps": 473,
           "failure": null
+        },
+        {
+          "episode_id": "b:libero_10:task08:ep0005",
+          "success": true,
+          "steps": 477,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_10:task08:ep0006",
+          "success": false,
+          "steps": 440,
+          "failure": "sensor verification rejected grasp of 'moka pot'"
+        },
+        {
+          "episode_id": "b:libero_10:task08:ep0007",
+          "success": true,
+          "steps": 463,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_10:task08:ep0008",
+          "success": true,
+          "steps": 485,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_10:task08:ep0009",
+          "success": false,
+          "steps": 458,
+          "failure": null
         }
       ],
-      "validated": null,
+      "validated": {
+        "coverage_passed": true,
+        "issues": [],
+        "episodes": 10,
+        "source_tree_sha256": "b8489cec3a76f1c52266a257764805b94e7ae59d0ed23907789011048da09429",
+        "episodes_jsonl_sha256": "502f84d97eb137342118bbe09182ce2162ea8a0c93897db4700e099734d02a6a",
+        "validated_at": "2026-09-13T17:48:33+00:00"
+      },
       "stop_reason": null
     }
   ]

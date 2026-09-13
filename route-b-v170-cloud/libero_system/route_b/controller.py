@@ -5205,7 +5205,7 @@ class RouteBController:
         self._update_rim_transfer_offset(observation)
         # Releasing is intentional: after the OPEN phase, retreat and visual
         # verification must continue even though the symbolic held slot is empty.
-        if self._phase not in {"retreat", "verify_place", "settle_after_release", "recenter_release", "peel_release"} and self._held_subject != step.subject:
+        if self._phase not in {"retreat", "shelf_retreat_up", "verify_place", "settle_after_release", "recenter_release", "peel_release", "release_clearance"} and self._held_subject != step.subject:
             return self._fail(
                 f"cannot place {step.subject!r}: current held object is {self._held_subject!r}"
             )
@@ -5295,10 +5295,11 @@ class RouteBController:
 
         if self._phase == "move_preplace":
             assert self._secondary_pose is not None
-            drawer_staging = (self._place_destination_grounding == "sensor-local open drawer floor"
-                              and self._phase_ticks >= 35)
+            bottom_drawer_staging = (step.target == "bottom drawer"
+                and self._place_destination_grounding == "sensor-local open drawer floor"
+                and self._phase_ticks >= 35)
             if self._pose_reached(observation.robot.ee_pose, self._secondary_pose,
-                                  position_tolerance_m=.012 if drawer_staging else None):
+                    position_tolerance_m=.012 if bottom_drawer_staging else None):
                 if (
                     self._grasp_mode is GraspMode.RIM_PINCH
                     and not self._rim_preplace_visual_refreshed
@@ -5351,8 +5352,8 @@ class RouteBController:
             pose_reached = self._pose_reached(
                 observation.robot.ee_pose,
                 self._motion_pose,
-                position_tolerance_m=(.010 if self._place_destination_grounding
-                                      == "sensor-local open drawer floor" else None),
+                position_tolerance_m=(.010 if step.target == "bottom drawer"
+                    and self._place_destination_grounding == "sensor-local open drawer floor" else None),
             )
             generic_contact_reached = self._contact_reached(
                 observation.robot.ee_pose,
@@ -5364,17 +5365,6 @@ class RouteBController:
                 self._motion_pose,
                 observation.robot.gripper_width_m,
             )
-            if (self._grasp_mode is GraspMode.RIM_PINCH and self._placement_target_attempts
-                    and self._phase_ticks >= 30):
-                self._placement_target_attempts[-1]["last_rim_contact_gate"] = {
-                    "accepted": bool(rim_place_contact_reached),
-                    "window_stalled": self._contact_window_stalled(),
-                    "cartesian_span_m": self._contact_cartesian_span_m(),
-                    "held_subject": self._held_subject,
-                    "gripper_width_m": float(observation.robot.gripper_width_m),
-                    "phase_tick": self._phase_ticks,
-                    "shelf_entry_active": self._shelf_entry_pose is not None,
-                }
             # Exact pose convergence remains a valid release condition.  A
             # stalled RIM_PINCH descent, however, must pass the directional
             # thin-wall gate rather than the legacy 75-mm all-direction gate.
@@ -5426,6 +5416,13 @@ class RouteBController:
                     if self._grasp_mode is GraspMode.PINCH
                     and self._shelf_entry_pose is None else None
                 )
+                if (self._grasp_mode is GraspMode.PINCH
+                        and step.kind is SkillKind.PLACE_IN
+                        and step.target in {"basket", "bowl"}):
+                    # Clear the solid payload before withdrawing. Ten mm
+                    # beyond the engaged width can leave a tilted package
+                    # supported on a finger even after an internal check.
+                    self._release_width_target_m = .078
                 self._set_phase("open")
             else:
                 return self._motion(
@@ -5440,6 +5437,8 @@ class RouteBController:
             )
             shelf_released = (self._shelf_entry_pose is None
                               or observation.robot.gripper_width_m >= 0.038)
+            if self._release_width_target_m == .078:
+                release_hold_ticks = max(release_hold_ticks, 15)
             jaw_released = (self._release_width_target_m is None
                             or observation.robot.gripper_width_m >= self._release_width_target_m)
             if self._placement_target_attempts and self._release_width_target_m is not None:
@@ -5449,16 +5448,31 @@ class RouteBController:
                     "ready": bool(jaw_released),
                 }
             if self._phase_ticks >= release_hold_ticks and shelf_released and jaw_released:
+                peel = None
+                if step.kind is SkillKind.PLACE_IN and step.target == "basket":
+                    from .release_geometry import open_jaw_peel_pose
+
+                    peel = open_jaw_peel_pose(self._tracked_held_source(observation), observation.robot)
                 self._held_subject = None
                 self._held_from_cavity_rim = False
                 invalidate = getattr(self.perception, "invalidate_dynamic", None)
                 if callable(invalidate):
                     invalidate(step.subject)
                 self._set_phase("retreat")
+                if peel is not None:
+                    self._release_peel_pose = peel
+                    self._placement_target_attempts[-1]["open_palm_clearance_rotation_world"] = peel.rotation.tolist()
+                    self._set_phase("release_clearance")
             else:
                 command = (self._shelf_release_command(observation)
                            if self._shelf_entry_pose is not None else self._released_gripper_command())
                 return self._tick_decision(self._hold_action(command))
+
+        if self._phase == "release_clearance":
+            if self._phase_ticks >= 30 or self._pose_reached(observation.robot.ee_pose, self._release_peel_pose):
+                self._set_phase("retreat")
+            else:
+                return self._motion(self._release_peel_pose, observation, self._released_gripper_command())
 
         if self._phase == "retreat" and self._shelf_entry_pose is not None:
             if self._pose_reached(observation.robot.ee_pose, self._shelf_entry_pose):
@@ -7571,6 +7585,12 @@ class RouteBController:
             self._place_rotation_world = None
             self._place_rotation_delta_world = None
             self._shelf_entry_pose = None
+            if (step.target == "bottom drawer"
+                    and destination_grounding == "sensor-local open drawer floor"
+                    and self._grasp_mode is GraspMode.RIM_PINCH):
+                # Keep the carry wrist fixed in the lower cabinet opening;
+                # refreshed contact poses can otherwise accumulate tilt.
+                self._place_rotation_world = observation.robot.ee_pose.rotation.copy()
             if side_cavity:
                 vertical = int(np.argmax(abs(placement_source.axes_world[2])))
                 planar = [i for i in range(3) if i != vertical]
@@ -7766,6 +7786,8 @@ class RouteBController:
             self._shelf_entry_pose = Pose(entry, motion_pose.rotation)
             high_entry = entry.copy()
             high_entry[2] = max(planned_preplace.position[2], destination.bounds_max_world[2] + 0.080)
+            if side_cavity:
+                high_entry[2] = max(entry[2] + .080, destination.bounds_max_world[2] + .080)
             planned_preplace = Pose(high_entry, motion_pose.rotation)
             if side_cavity:
                 self._side_cavity_payload_half = (
@@ -7864,6 +7886,7 @@ class RouteBController:
                 and self._held_subject is not None
                 and observation.robot.gripper_width_m <= 0.040
                 and placement_source.height_m >= 0.10
+                and not side_cavity
             ):
                 # Upright thin objects can pivot below their occluded RGB-D
                 # centre during transport. Keep their lower edge clear of
@@ -7890,6 +7913,21 @@ class RouteBController:
         frame for every placement and space the bodies along its longer side.
         """
         zero = np.zeros(3)
+        if (self._spec is not None and step.kind is SkillKind.PLACE_IN
+                and step.target == "basket" and step.target_selector is None):
+            slots = [i for i, other in enumerate(self._spec.steps)
+                     if other.kind is SkillKind.PLACE_IN and other.target == "basket"
+                     and other.target_selector is None]
+            if len(slots) == 2 and self._skill_index in slots:
+                vertical = int(np.argmax(abs(destination.axes_world[2])))
+                planar = [i for i in range(3) if i != vertical]
+                direction = destination.axes_world[:, planar].sum(axis=1)
+                direction[2] = 0.
+                if np.linalg.norm(direction) > 1.:
+                    direction /= np.linalg.norm(direction)
+                    # Two cans fit on opposite diagonals of the square
+                    # basket floor. Keep both landing centres inside it.
+                    return direction * .035 * (-1 if slots.index(self._skill_index) == 0 else 1)
         if self._spec is None or step.kind is not SkillKind.PLACE_ON or step.target_selector is not None:
             return zero
         slots = []

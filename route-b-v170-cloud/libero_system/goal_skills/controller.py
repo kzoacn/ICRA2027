@@ -2603,6 +2603,7 @@ class GoalContactPolicy:
                 self._target,
                 self._base_rotation,
             )
+            self._microwave_contact_wrist_recovery_used = False
             self._microwave_precontact_position = (
                 self._target.point_world
                 + outward * self.config.precontact_clearance_m
@@ -2620,10 +2621,10 @@ class GoalContactPolicy:
                     + outward * self.config.microwave_close_outer_clearance_m
                 )
                 safe = self._microwave_outer_position.copy()
-                safe[2] = max(
-                    observation.proprio.ee_position_world[2],
-                    safe[2] + self.config.microwave_safe_height_m,
-                )
+                # The exterior normal keeps this staging point away from
+                # the open panel. Align below the arm's high-wrist reach
+                # limit, with 80 mm clearance above the handle midpoint.
+                safe[2] += .080
                 self._start_staged_translation(
                     observation,
                     safe,
@@ -2675,11 +2676,26 @@ class GoalContactPolicy:
                     "microwave_close_descend_outer",
                 )
             else:
+                if (self._phase_ticks >= 45
+                        and not self._microwave_contact_wrist_recovery_used):
+                    # Swap the two pads around the same vertical feature at
+                    # the exterior staging point. The contact line and tool
+                    # approach direction remain unchanged, while the arm can
+                    # reach a different redundant wrist solution.
+                    self._microwave_contact_wrist_recovery_used = True
+                    self._microwave_contact_rotation = (
+                        self._microwave_contact_rotation @ np.diag((-1., -1., 1.))
+                    )
+                    self._motion_rotation = self._microwave_contact_rotation.copy()
                 return self._move(observation, -1.0)
         if self._phase == "microwave_close_descend_outer":
             if self._staged_translation_reached(
                 observation,
+                # This descent is outside the door by the configured 155-mm
+                # clearance. Carry a small remaining waypoint error into the
+                # next 55-mm segment; handle contact still uses its own gates.
                 tolerance_m=self.config.microwave_waypoint_tolerance_m,
+                intermediate_tolerance_m=.040,
             ):
                 self._start_staged_translation(
                     observation,

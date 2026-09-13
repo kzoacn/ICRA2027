@@ -158,6 +158,7 @@ class RouteBMicrowaveDoorDetector:
         self._fixture_surface_points_world: np.ndarray | None = None
         self._reference_ee_position_world: np.ndarray | None = None
         self._selected_closed_slot_world: np.ndarray | None = None
+        self._wall_articulation = None
         self.last_body_selection: dict[str, Any] | None = None
         self.last_contact_detection: dict[str, Any] | None = None
         self.last_contact_track: dict[str, Any] | None = None
@@ -170,6 +171,7 @@ class RouteBMicrowaveDoorDetector:
         self._fixture_surface_points_world = None
         self._reference_ee_position_world = None
         self._selected_closed_slot_world = None
+        self._wall_articulation = None
         self.last_body_selection = None
         self.last_contact_detection = None
         self.last_contact_track = None
@@ -195,6 +197,7 @@ class RouteBMicrowaveDoorDetector:
         # Never let a prior episode's verified slot enter this detection.
         self._fixture_surface_points_world = None
         self._selected_closed_slot_world = None
+        self._wall_articulation = None
         center, axes, half_extents = self._select_fixture_geometry(converted)
         self._fixture_geometry = (
             center.copy(),
@@ -204,6 +207,35 @@ class RouteBMicrowaveDoorDetector:
         self._reference_ee_position_world = (
             observation.proprio.ee_position_world.copy()
         )
+        local_kwargs = {}
+        if kind is GoalSkillKind.CLOSE_MICROWAVE and self._fixture_surface_points_world is not None:
+            from ..route_b.microwave_interior import microwave_cavity_from_walls
+
+            try:
+                frame = MicrowaveDoorHandleDetector._fixture_frame(
+                    self._reference_ee_position_world, center, axes, half_extents)
+                cavity, fit = microwave_cavity_from_walls(self._fixture_surface_points_world, frame)
+            except (LookupError, ValueError):
+                pass
+            else:
+                control_side = np.asarray(fit["control_side_world"])
+                outward = np.asarray(fit["outward_world"])
+                hinge = cavity.centroid_world - .1325*control_side + .084*outward
+                closed_slot = hinge + .2375*control_side + .054*outward
+                axis = np.array((0., 0., 1.))
+                self._wall_articulation = (hinge, axis, closed_slot)
+                # Use the measured wall frame for image-edge gating too.
+                # A completed OBB from the partly visible roof may be tilted
+                # or centred above the physical handle's vertical extent.
+                center = cavity.centroid_world + .040*control_side - .004*outward
+                center[2] -= .0025
+                axes = np.column_stack((control_side, -outward, axis))
+                half_extents = np.array((.1725, .1105, .0935))
+                self._fixture_geometry = (center.copy(), axes.copy(), half_extents.copy())
+                local_kwargs = dict(local_anchor_world=hinge, local_anchor_radius_m=.285,
+                                    frozen_hinge_world=hinge, frozen_rotation_axis_world=axis,
+                                    frozen_radius_m=float(np.hypot(.2375, .054)),
+                                    frozen_radius_tolerance_m=.030)
         target = self.handle_detector.detect(
             observation,
             center,
@@ -211,7 +243,25 @@ class RouteBMicrowaveDoorDetector:
             half_extents,
             kind is GoalSkillKind.CLOSE_MICROWAVE,
             reference_ee_position_world=self._reference_ee_position_world,
+            **local_kwargs,
         )
+        if self._wall_articulation is not None:
+            hinge, axis, closed_slot = self._wall_articulation
+            radial = target.point_world - hinge
+            radial -= axis * float(radial @ axis)
+            # The detected vertical feature provides angle. Centre the pads
+            # on the public handle capsule's height and radius, avoiding a
+            # grasp on the lower attachment or door contour.
+            point = hinge + radial / np.linalg.norm(radial) * np.hypot(.2375, .054)
+            from scipy.spatial.transform import Rotation
+
+            closed_radial = closed_slot - hinge
+            angle = np.arctan2(float(axis @ np.cross(closed_radial, radial)),
+                               float(closed_radial @ radial))
+            normal = Rotation.from_rotvec(axis * angle).apply(outward)
+            if normal @ (observation.proprio.ee_position_world - point) < 0:
+                normal *= -1
+            target = replace(target, point_world=point, axis_world=normal, outward_world=normal)
         self.last_contact_detection = self._contact_trace(
             "route_b_microwave_contact_detection",
             target,
@@ -250,7 +300,10 @@ class RouteBMicrowaveDoorDetector:
 
         selection: dict[str, Any] | None = None
         surface_points = self._fixture_surface_points_world
-        if (
+        if self._wall_articulation is not None and initial_is_open is True:
+            values = tuple(value.copy() for value in self._wall_articulation)
+            selection = {"selection_mode": "rgbd_control_corner_public_hinge_and_handle_offsets"}
+        elif (
             initial_is_open is True
             and surface_points is not None
             and observed_handle_world is not None

@@ -48,11 +48,21 @@ come from different immutable candidates and must not be presented as a new
 - drawer_contact_01: Goal 00 improved from 7/10 to 10/10. A single equivalent
   wrist recovery also handles low-force translation plateaus.
 - Goal 01 remained 10/10 with the new visible-burner localizer.
+- stove_disk_01 and stove_disk_02: Long 08 improved from 4/10 to 7/10.
+  The complete visible burner disk supplies the support centre and height;
+  the second version caches that unoccluded geometry across placements.
+- drawer_placement_02: Long 03 improved from 6/10 to 7/10, while Goal 03
+  fell from 3/10 to 2/10. The subsequent candidate confines carry-frame and
+  convergence changes to the bottom drawer; its replay is still pending.
 - Post-drawer detours, initial wrist-frame changes, and direct active-view
   near approaches have not demonstrated a retained improvement. Their records
   are preserved; the current candidate restores the baseline free-space pick.
-- Stove disk localization/caching, bounded drawer placement, and microwave
-  insertion are still being evaluated.
+- Microwave insertion now reaches door manipulation in some development
+  episodes, but no microwave success has yet been confirmed. Door feature
+  association, wrist staging, and retained contact still need improvement.
+- Additional development checks inspect basket placement collisions and
+  packages carried away after opening the gripper. They are not accepted
+  improvements until complete task replays are available.
 
 The microwave development fixture contains two raw boundary RGB-D surface
 clouds from the first observation of Long 09, init 0: a flat table false positive
