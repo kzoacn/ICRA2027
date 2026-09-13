@@ -417,6 +417,30 @@ class RouteBMicrowaveDoorDetector:
         ]
         if not plausible:
             raise LookupError("no plausible microwave body OBB was visible in either RGB-D view")
+        # A completed language box can be a bare table crop with the public
+        # appliance dimensions attached. Prefer candidates whose actual RGB-D
+        # surface supports the broad roof, before applying the old tie-break.
+        from ..route_b.microwave_interior import microwave_cavity_from_walls
+
+        supported = []
+        for candidate in plausible:
+            points = getattr(candidate, "surface_points_world", None)
+            surface_api = getattr(self.perception, "_fresh_surface_points", None)
+            if callable(surface_api):
+                points = surface_api(candidate, "microwave")
+            if points is None:
+                continue
+            try:
+                frame = MicrowaveDoorHandleDetector._fixture_frame(
+                    observation.robot.ee_pose.position, self._body_center(candidate),
+                    self._body_axes(candidate), self._body_extents(candidate) / 2,
+                )
+                microwave_cavity_from_walls(points, frame)
+            except (LookupError, ValueError):
+                continue
+            supported.append(candidate)
+        if supported:
+            plausible = supported
         body = min(
             plausible,
             key=lambda item: (

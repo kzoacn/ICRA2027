@@ -218,12 +218,10 @@ class ControllerConfig:
     # descent.  The final grasp/seat/proof orientation remains horizontal.
     cavity_rim_outer_finger_lift_rad: float = 0.17453292519943295
     cavity_rim_min_final_wall_clearance_m: float = 0.025
-    # When the approach-aligned far rim already has generous measured wall
-    # clearance, but the antipodal (near) rim is even roomier, the unperturbed
-    # sensor OBB axis is a safer nominal grasp than the tilted far-side
-    # profile.  This is a purely RGB-D geometric switch: narrower cavities
-    # retain the yawed/tilted/seat-conditioned far-side mechanics.
-    cavity_rim_roomy_far_clearance_m: float = 0.040
+    # Prefer a direct robot-facing grasp when that side itself has enough
+    # observed wall clearance. A roomy far side need not be reached first,
+    # and an additional camera view does not invalidate measured near space.
+    cavity_rim_roomy_near_clearance_m: float = 0.040
     cavity_rim_roomy_near_top_inset_m: float = 0.006
     # A strict 2-D IN fallback can identify the correct bowl while refusing to
     # invent a drawer OBB from insufficient depth.  Before giving up, move the
@@ -443,7 +441,7 @@ class ControllerConfig:
             self.cavity_rim_yaw_offset_rad,
             self.cavity_rim_outer_finger_lift_rad,
             self.cavity_rim_min_final_wall_clearance_m,
-            self.cavity_rim_roomy_far_clearance_m,
+            self.cavity_rim_roomy_near_clearance_m,
             self.cavity_rim_roomy_near_top_inset_m,
             self.cavity_active_view_clearance_m,
             self.cavity_active_view_offset_m,
@@ -1209,6 +1207,7 @@ class RouteBController:
         self._pick_initial_geometry: SceneObject | None = None
         self._drawer_episode_anchors: dict[str, object] = {}
         self._flat_transfer_waypoints: list[Pose] = []
+        self._stove_support_geometry = None
         # Optional sensor-only OBB of the fixture used to resolve an IN
         # selector.  Production perception exposes this as
         # ``last_selector_reference``; legacy/test adapters need not do so.
@@ -1466,6 +1465,7 @@ class RouteBController:
         self._pick_initial_geometry = None
         self._drawer_episode_anchors.clear()
         self._flat_transfer_waypoints = []
+        self._stove_support_geometry = None
         self._pick_cavity_reference = None
         self._pick_anchor_center_world = None
         self._pick_rotation_anchor_world = None
@@ -2186,6 +2186,9 @@ class RouteBController:
                     position_tolerance_m=self.config.grasp_position_tolerance_m,
                 )
             )
+            if pregrasp_reached:
+                    self._grasp_target_attempts[-1]["post_contact_staging_residual_m"] = float(
+                        np.linalg.norm(observation.robot.ee_pose.position - self._secondary_pose.position))
             if pregrasp_reached:
                 pinch_aperture = self._flat_pinch_approach_aperture()
                 if (
@@ -4653,6 +4656,21 @@ class RouteBController:
         """
 
         assert step.target is not None
+        if step.kind is SkillKind.PLACE_IN and step.target == "microwave":
+            from .microwave_interior import observed_microwave_cavity
+
+            reference = (self._episode_reset_position_world
+                         if self._episode_reset_position_world is not None
+                         else observation.robot.ee_pose.position)
+            try:
+                cavity, trace = observed_microwave_cavity(self.perception, observation, reference)
+            except (LookupError, ValueError) as exc:
+                trace = {"rejection": str(exc)}
+            else:
+                getattr(self.perception, "_selector_diagnostics", []).append({"kind": "microwave_cavity_grounding", **trace})
+                return (SceneSnapshot(self._observation_timestamp_s, {step.target: cavity}),
+                        "sensor-local microwave cavity")
+            getattr(self.perception, "_selector_diagnostics", []).append({"kind": "microwave_cavity_grounding", **trace})
         if step.kind is SkillKind.PLACE_IN and "drawer" in step.target.split():
             snapshot = self._observe_entity(observation, step.target, step.target_selector)
             fixture = snapshot.objects.get(step.target)
@@ -5277,7 +5295,10 @@ class RouteBController:
 
         if self._phase == "move_preplace":
             assert self._secondary_pose is not None
-            if self._pose_reached(observation.robot.ee_pose, self._secondary_pose):
+            drawer_staging = (self._place_destination_grounding == "sensor-local open drawer floor"
+                              and self._phase_ticks >= 35)
+            if self._pose_reached(observation.robot.ee_pose, self._secondary_pose,
+                                  position_tolerance_m=.012 if drawer_staging else None):
                 if (
                     self._grasp_mode is GraspMode.RIM_PINCH
                     and not self._rim_preplace_visual_refreshed
@@ -5330,6 +5351,8 @@ class RouteBController:
             pose_reached = self._pose_reached(
                 observation.robot.ee_pose,
                 self._motion_pose,
+                position_tolerance_m=(.010 if self._place_destination_grounding
+                                      == "sensor-local open drawer floor" else None),
             )
             generic_contact_reached = self._contact_reached(
                 observation.robot.ee_pose,
@@ -5341,6 +5364,17 @@ class RouteBController:
                 self._motion_pose,
                 observation.robot.gripper_width_m,
             )
+            if (self._grasp_mode is GraspMode.RIM_PINCH and self._placement_target_attempts
+                    and self._phase_ticks >= 30):
+                self._placement_target_attempts[-1]["last_rim_contact_gate"] = {
+                    "accepted": bool(rim_place_contact_reached),
+                    "window_stalled": self._contact_window_stalled(),
+                    "cartesian_span_m": self._contact_cartesian_span_m(),
+                    "held_subject": self._held_subject,
+                    "gripper_width_m": float(observation.robot.gripper_width_m),
+                    "phase_tick": self._phase_ticks,
+                    "shelf_entry_active": self._shelf_entry_pose is not None,
+                }
             # Exact pose convergence remains a valid release condition.  A
             # stalled RIM_PINCH descent, however, must pass the directional
             # thin-wall gate rather than the legacy 75-mm all-direction gate.
@@ -5352,6 +5386,31 @@ class RouteBController:
             if self._shelf_entry_pose is not None:
                 # A blocked insertion outside the bay is not a release pose.
                 contact_reached = False
+                if (self._place_destination_grounding == "sensor-local microwave cavity"
+                        and self._contact_window_stalled()
+                        and self._contact_cartesian_span_m() <= .005):
+                    cavity = self._place_destination_geometry
+                    predicted = observation.robot.ee_pose.position + self._side_cavity_payload_offset
+                    local = cavity.axes_world.T @ (predicted - cavity.centroid_world)
+                    half = self._side_cavity_payload_half
+                    clearance = cavity.extents_m / 2 - abs(local) - half
+                    residual = self._motion_pose.position - observation.robot.ee_pose.position
+                    inward = -cavity.axes_world[:, 1]
+                    shortfall = float(residual @ inward)
+                    transverse = float(np.linalg.norm(residual - shortfall*inward))
+                    rotation_error = float(np.linalg.norm(self._rotation_vector(
+                        self._motion_pose.rotation @ observation.robot.ee_pose.rotation.T)))
+                    contact_reached = bool(
+                        np.all(clearance >= .003)
+                        and 0. <= shortfall <= .035 and transverse <= .010
+                        and rotation_error <= .060
+                        and .003 <= observation.robot.gripper_width_m <= .060
+                    )
+                    self._placement_target_attempts[-1]["cavity_contained_insertion"] = {
+                        "accepted": contact_reached, "payload_clearance_m": clearance.tolist(),
+                        "inward_shortfall_m": shortfall, "transverse_error_m": transverse,
+                        "predicted_payload_center_world_m": predicted.tolist(),
+                    }
             if pose_reached or contact_reached:
                 if rim_place_contact_reached and not pose_reached:
                     self._record_rim_place_contact_completion(
@@ -6794,12 +6853,10 @@ class RouteBController:
                 and selected_side_profile == "far"
                 and not self._cavity_reference_from_active_view
                 and far_side_clearance is not None
-                and far_side_clearance
-                >= self.config.cavity_rim_roomy_far_clearance_m
             ):
-                # The yawed far profile is useful in a constrained cavity,
-                # but in a roomy fixture it needlessly gives up an even wider
-                # antipodal rim.  Test that choice in the same measured OBB
+                # A direct near approach avoids crossing the bowl and far
+                # lip when its own clearance supports the nominal fingers.
+                # Test that choice in the same measured OBB
                 # frame, then rebuild the selected candidate on the untouched
                 # base axis.  Both direction checks are explicit because PCA
                 # axes are unoriented and may flip sign between observations.
@@ -6844,12 +6901,13 @@ class RouteBController:
                 ]
                 use_roomy_near = bool(
                     trigger_other_clearance is not None
-                    and trigger_other_clearance > trigger_far_clearance
+                    and trigger_other_clearance
+                    >= self.config.cavity_rim_roomy_near_clearance_m
                     and trigger_other_approach_dot < 0.0
                     and nominal_near_approach_dot < 0.0
                     and nominal_near_clearance is not None
                     and nominal_near_clearance
-                    >= self.config.cavity_rim_min_final_wall_clearance_m
+                    >= self.config.cavity_rim_roomy_near_clearance_m
                 )
                 if use_roomy_near:
                     trigger_other_clearance_value = float(
@@ -6880,12 +6938,12 @@ class RouteBController:
                     selected_side_approach_dot = nominal_near_approach_dot
                     selected_side_profile = "roomy_near_nominal"
                     side_ordering_reason = (
-                        "roomy_far_has_roomier_opposite_nominal_side"
+                        "robot_facing_nominal_side_has_measured_clearance"
                     )
                     rim_side = "roomy_near_nominal"
                     roomy_near_trace = {
-                        "far_clearance_threshold_m": float(
-                            self.config.cavity_rim_roomy_far_clearance_m
+                        "near_clearance_threshold_m": float(
+                            self.config.cavity_rim_roomy_near_clearance_m
                         ),
                         "trigger_far_final_clearance_m": (
                             trigger_far_clearance
@@ -6909,6 +6967,21 @@ class RouteBController:
                         "tilted_pregrasp": False,
                         "seat_actions": 0,
                     }
+            if (side_rank == 0 and selected_side_profile == "far"
+                    and final_wall_clearances[-far_side_sign] is not None
+                    and final_wall_clearances[-far_side_sign]
+                    >= self.config.cavity_rim_roomy_near_clearance_m):
+                # A near rim with sufficient measured clearance can use the
+                # established yawed/seat-verified grasp directly. Keep this
+                # frame after an active view, where a nominal-axis switch can
+                # create a different high wrist solution next to the fixture.
+                side_sign = -far_side_sign
+                final_radial_xy = side_sign * finger_axis_xy
+                final_wall_clearance = final_wall_clearances[side_sign]
+                selected_side_approach_dot = float(np.dot(final_radial_xy, approach_direction))
+                selected_side_profile = "near"
+                side_ordering_reason = "robot_facing_yawed_side_has_measured_clearance"
+                rim_side = "cavity_near_clearance_first"
             raw_rim_radius = radius
             raw_final_wall_clearance = float(final_wall_clearance)
             details = {
@@ -6993,11 +7066,7 @@ class RouteBController:
                     if self._cavity_reference_from_active_view
                     else "initial_rgbd"
                 ),
-                "cavity_roomy_near_policy": (
-                    "disabled_preserve_approach_aligned_side_after_active_view"
-                    if self._cavity_reference_from_active_view
-                    else "enabled_for_initial_rgbd_reference"
-                ),
+                "cavity_roomy_near_policy": "enabled_when_measured_near_clearance_suffices",
                 "cavity_raw_rim_radius_m": float(raw_rim_radius),
                 "cavity_applied_rim_radius_m": float(radius),
                 "cavity_raw_final_wall_clearance_m": float(
@@ -7437,10 +7506,18 @@ class RouteBController:
         if not retain_phase and step.kind is SkillKind.PLACE_ON and step.target == "stove":
             from .stove_support import observed_stove_support
 
-            try:
-                destination, stove_support_trace = observed_stove_support(observation, destination)
-            except (LookupError, ValueError):
-                pass
+            if self._stove_support_geometry is not None:
+                destination = self._stove_support_geometry
+                stove_support_trace = {"strategy": "reuse_unoccluded_rgbd_burner_geometry"}
+            else:
+                try:
+                    destination, stove_support_trace = observed_stove_support(observation, destination)
+                except (LookupError, ValueError):
+                    pass
+                else:
+                    if (stove_support_trace is not None and stove_support_trace.get("strategy")
+                            == "rgbd_visible_burner_disk_plus_public_plate_geometry"):
+                        self._stove_support_geometry = destination
         if not retain_phase or self._place_destination_geometry is None:
             # The first place observation is made before the hand moves over
             # the destination and is therefore the least occluded RGB-D view.
@@ -7488,11 +7565,32 @@ class RouteBController:
                     )
         planning_held_offset = self._held_offset_world.copy()
         side_shelf = bool(destination_grounding and destination_grounding.startswith("sensor-local open shelf "))
+        side_cavity = destination_grounding == "sensor-local microwave cavity"
         slatted_rack = destination_grounding == "sensor-local slatted rack"
         if not retain_phase:
             self._place_rotation_world = None
             self._place_rotation_delta_world = None
             self._shelf_entry_pose = None
+            if side_cavity:
+                vertical = int(np.argmax(abs(placement_source.axes_world[2])))
+                planar = [i for i in range(3) if i != vertical]
+                long_axis = max(planar, key=lambda i: placement_source.extents_m[i])
+                up = placement_source.axes_world[:, vertical].copy()
+                if up[2] < 0:
+                    up *= -1
+                width = placement_source.axes_world[:, long_axis]
+                source_frame = np.column_stack((width, np.cross(up, width), up))
+                outward = destination.axes_world[:, 1]
+                candidates = []
+                for sign in (1., -1.):
+                    width = sign * destination.axes_world[:, 0]
+                    target_frame = np.column_stack((width, np.cross(outward, width), outward))
+                    delta = target_frame @ source_frame.T
+                    candidates.append((float(np.linalg.norm(self._rotation_vector(delta))), delta))
+                self._place_rotation_delta_world = min(candidates, key=lambda item: item[0])[1]
+                self._place_rotation_world = (
+                    self._place_rotation_delta_world @ observation.robot.ee_pose.rotation
+                )
             if slatted_rack:
                 from .slatted_rack import slatted_bottle_rotation
 
@@ -7626,6 +7724,7 @@ class RouteBController:
         release_above_narrow_opening = bool(
             step.kind is SkillKind.PLACE_IN
             and not side_shelf
+            and not side_cavity
             and self._grasp_mode is GraspMode.PINCH
             and (
                 step.target == "basket"
@@ -7657,7 +7756,7 @@ class RouteBController:
                 destination.bounds_min_world[2] + placement_source.height_m / 2
                 + self.config.release_clearance_m
             )
-        if side_shelf:
+        if side_shelf or side_cavity:
             release = motion_pose.position.copy()
             release[2] += 0.010
             motion_pose = Pose(release, motion_pose.rotation)
@@ -7668,6 +7767,12 @@ class RouteBController:
             high_entry = entry.copy()
             high_entry[2] = max(planned_preplace.position[2], destination.bounds_max_world[2] + 0.080)
             planned_preplace = Pose(high_entry, motion_pose.rotation)
+            if side_cavity:
+                self._side_cavity_payload_half = (
+                    abs(destination.axes_world.T @ placement_source.axes_world)
+                    @ (placement_source.extents_m / 2)
+                )
+                self._side_cavity_payload_offset = planning_held_offset.copy()
         if slatted_rack:
             normal = destination.axes_world[:, 2]
             payload_half = float(np.abs(normal @ placement_source.axes_world) @ placement_source.extents_m) / 2.0
@@ -7719,6 +7824,7 @@ class RouteBController:
                     "release_above_narrow_opening": release_above_narrow_opening,
                     "top_open_compartment": top_open_compartment,
                     "side_shelf_insertion": side_shelf,
+                    "side_cavity_insertion": side_cavity,
                     "circular_relative_footprint": circular_relative_footprint,
                     "slatted_rack_sideways_bottle": slatted_rack,
                     "shared_support_slot_offset_world_m": shared_support_offset.tolist(),

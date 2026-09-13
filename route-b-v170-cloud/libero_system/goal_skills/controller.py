@@ -4648,8 +4648,9 @@ class GoalContactPolicy:
         This gate is intentionally restricted to the known free-space
         ``move_precontact`` phase.  It consumes only public end-effector pose
         and wrench observations and can request at most one recovery for the
-        current language skill.  A contact or a mostly aligned wrist never
-        takes this path.
+        current language skill.  The arm can also stall in translation while
+        its wrist is aligned; an equivalent wrist frame changes the redundant
+        joint solution without changing the required drawer contact.
         """
 
         if self._drawer_wrist_recovery_used or self._phase != "move_precontact":
@@ -4688,8 +4689,11 @@ class GoalContactPolicy:
             self._phase_ticks >= self.config.drawer_wrist_recovery_stall_ticks
             and self._drawer_free_space_stall_ticks
             >= self.config.drawer_wrist_recovery_stall_ticks
-            and rotation_error
-            >= self.config.drawer_wrist_recovery_min_rotation_error_rad
+            and (
+                rotation_error
+                >= self.config.drawer_wrist_recovery_min_rotation_error_rad
+                or error > self.config.drawer_waypoint_tolerance_m
+            )
             and force_delta < self.config.contact_force_delta_n
         )
 

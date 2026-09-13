@@ -4,6 +4,58 @@ import numpy as np
 from .models import SceneObject
 
 
+def visible_burner_support(frames, preferred):
+    """Localize the visible red burner inside the grounded stove crop.
+
+    The circle is a rendered RGB feature. Its depth supplies the physical
+    metal/burner height; no evaluator region or scene object pose is read.
+    """
+    import cv2
+    from ..perception.geometry import backproject_frame
+
+    candidates = []
+    for frame in frames:
+        hsv = cv2.cvtColor(frame.rgb, cv2.COLOR_RGB2HSV)
+        red = ((hsv[:, :, 0] <= 12) & (hsv[:, :, 1] >= 80)
+               & (hsv[:, :, 2] >= 65))
+        count, labels, stats, _ = cv2.connectedComponentsWithStats(red.astype(np.uint8), 8)
+        for index in range(1, count):
+            if stats[index, cv2.CC_STAT_AREA] < 45:
+                continue
+            points = backproject_frame(frame, mask=labels == index).points_world
+            if len(points) < 45:
+                continue
+            low, high = np.quantile(points, [.02, .98], axis=0)
+            span = high - low
+            center = (low + high) / 2.0
+            if (not np.all((span[:2] >= .090) & (span[:2] <= .140))
+                    or span[2] > .005
+                    or np.linalg.norm(center[:2] - preferred.centroid_world[:2]) > .090
+                    or not preferred.bounds_min_world[2] < center[2] < preferred.bounds_max_world[2] + .025):
+                continue
+            candidates.append((len(points), center, points))
+    if not candidates:
+        raise LookupError('no complete visible burner disk inside the observed stove')
+    _, disk, points = max(candidates, key=lambda item: item[0])
+    # The public square metal plate is 190 mm wide; its collision surface is
+    # 3.5 mm above the visible red disk. Fit the horizontal frame from the
+    # grounded stove, but remove the knob from both centre and footprint.
+    vertical = int(np.argmax(abs(preferred.axes_world[2])))
+    planar = [i for i in range(3) if i != vertical]
+    axis = preferred.axes_world[:, planar[0]].copy(); axis[2] = 0
+    axis /= np.linalg.norm(axis)
+    axes = np.column_stack((axis, np.cross([0., 0., 1.], axis), [0., 0., 1.]))
+    top = float(disk[2] + .0035)
+    center = disk.copy(); center[2] = top - .02275
+    extents = np.array((.190, .190, .0455))
+    half = abs(axes) @ (extents / 2)
+    result = SceneObject(preferred.name, center, axes, extents, center-half, center+half,
+                         preferred.confidence, len(points), surface_points_world=points)
+    return result, dict(strategy='rgbd_visible_burner_disk_plus_public_plate_geometry',
+                        disk_center_world_m=disk.tolist(), old_center_world_m=preferred.centroid_world.tolist(),
+                        support_z_m=top, disk_points=len(points))
+
+
 def bounded_stove_height(points, preferred):
     """Correct a high crop only when a broad metal plane independently supports it.
 
@@ -50,6 +102,10 @@ def observed_stove_support(observation, preferred):
     from ..perception.adapters import coerce_rgbd_frame
 
     frames = [coerce_rgbd_frame(frame, name=name) for name, frame in observation.cameras.items()]
+    try:
+        return visible_burner_support(frames, preferred)
+    except LookupError:
+        pass
     cameras = {f.name: CameraFrame(f.rgb, f.depth_m, CameraCalibration(
         f.name, f.rgb.shape[1], f.rgb.shape[0], f.intrinsics, f.world_from_camera,
         f.observation_v_flipped)) for f in frames}
