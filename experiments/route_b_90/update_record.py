@@ -20,14 +20,25 @@ for batch in sorted((repo / 'runtime/route_b_90').iterdir()):
             outcomes.append({'episode_id': row['episode_id'], 'success': row['evaluator_success'],
                              'steps': row['steps'], 'failure': row['failure']})
     runs.append({'label': batch.name, 'state': status['state'],
+                 'kind': manifest.get('kind', 'development'),
                  'source_tree_sha256': manifest['source_tree_sha256'],
                  'protocol': manifest['protocol'], 'outcomes': outcomes,
                  'validated': (json.loads((batch / 'final-validation.json').read_text())
                                if (batch / 'final-validation.json').exists() else None),
                  'stop_reason': status.get('stop_reason')})
+accepted = [run for run in runs if run['kind'] == 'full_400'
+            and run['state'] == 'completed'
+            and run['validated'] and run['validated']['coverage_passed']
+            and not run['validated']['issues']
+            and run['validated']['episodes'] == 400
+            and len(run['outcomes']) == 400
+            and len({row['episode_id'] for row in run['outcomes']}) == 400
+            and sum(row['success'] for row in run['outcomes']) >= 360]
 record = {'updated_at': datetime.now(timezone.utc).isoformat(),
           'baseline': {'successes': 347, 'episodes': 400},
           'acceptance': 'one frozen source, 400 fresh episodes, at least 360 external successes',
-          'full_400_accepted': False, 'development_runs': runs}
+          'full_400_accepted': bool(accepted),
+          'accepted_full_campaigns': [run['label'] for run in accepted],
+          'development_runs': runs}
 (Path(__file__).parent / 'development_record.json').write_text(json.dumps(record, indent=2)+'\n')
-print(f'Recorded {len(runs)} development batches; no mixed candidate score is reported.')
+print(f'Recorded {len(runs)} batches; {len(accepted)} full campaigns meet acceptance. No mixed candidate score is reported.')

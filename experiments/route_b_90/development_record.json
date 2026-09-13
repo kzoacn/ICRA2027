@@ -1,15 +1,17 @@
 {
-  "updated_at": "2026-09-13T18:10:06.679859+00:00",
+  "updated_at": "2026-09-13T18:16:26.881574+00:00",
   "baseline": {
     "successes": 347,
     "episodes": 400
   },
   "acceptance": "one frozen source, 400 fresh episodes, at least 360 external successes",
   "full_400_accepted": false,
+  "accepted_full_campaigns": [],
   "development_runs": [
     {
       "label": "basket_palm_debug_02",
-      "state": "running",
+      "state": "completed",
+      "kind": "development",
       "source_tree_sha256": "01fc51645c207d789d4fa86ace7c9e5e3a232639a96155eb7c8860ba4b1e5c79",
       "protocol": {
         "tasks": 1,
@@ -31,13 +33,40 @@
         "new_episodes": 3,
         "reused_episodes": 0
       },
-      "outcomes": [],
-      "validated": null,
+      "outcomes": [
+        {
+          "episode_id": "b:libero_object:task07:ep0000",
+          "success": true,
+          "steps": 174,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_object:task07:ep0001",
+          "success": true,
+          "steps": 176,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_object:task07:ep0002",
+          "success": true,
+          "steps": 175,
+          "failure": null
+        }
+      ],
+      "validated": {
+        "coverage_passed": true,
+        "issues": [],
+        "episodes": 3,
+        "source_tree_sha256": "01fc51645c207d789d4fa86ace7c9e5e3a232639a96155eb7c8860ba4b1e5c79",
+        "episodes_jsonl_sha256": "637b23bfbe43a5ca069fca31fee7678218af2155574486e48ab738ade53d4366",
+        "validated_at": "2026-09-13T18:12:40+00:00"
+      },
       "stop_reason": null
     },
     {
       "label": "basket_release_01",
-      "state": "running",
+      "state": "interrupted",
+      "kind": "development",
       "source_tree_sha256": "24b1840ce66f0264654cc576573ec2b4c334ea8cd108ea14784ffee7a481d5b5",
       "protocol": {
         "tasks": 4,
@@ -86,6 +115,18 @@
           "failure": "phase 'open' timed out"
         },
         {
+          "episode_id": "b:libero_goal:task06:ep0003",
+          "success": false,
+          "steps": 277,
+          "failure": "phase 'open' timed out"
+        },
+        {
+          "episode_id": "b:libero_goal:task06:ep0004",
+          "success": true,
+          "steps": 278,
+          "failure": "phase 'open' timed out"
+        },
+        {
           "episode_id": "b:libero_10:task00:ep0000",
           "success": true,
           "steps": 250,
@@ -110,6 +151,18 @@
           "failure": null
         },
         {
+          "episode_id": "b:libero_10:task00:ep0004",
+          "success": true,
+          "steps": 255,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_10:task00:ep0005",
+          "success": true,
+          "steps": 252,
+          "failure": null
+        },
+        {
           "episode_id": "b:libero_10:task01:ep0000",
           "success": true,
           "steps": 344,
@@ -125,6 +178,18 @@
           "episode_id": "b:libero_10:task01:ep0002",
           "success": true,
           "steps": 343,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_10:task01:ep0003",
+          "success": true,
+          "steps": 361,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_10:task01:ep0004",
+          "success": true,
+          "steps": 356,
           "failure": null
         },
         {
@@ -162,6 +227,30 @@
           "success": true,
           "steps": 136,
           "failure": null
+        },
+        {
+          "episode_id": "b:libero_object:task07:ep0006",
+          "success": true,
+          "steps": 135,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_object:task07:ep0007",
+          "success": true,
+          "steps": 133,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_object:task07:ep0008",
+          "success": true,
+          "steps": 134,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_object:task07:ep0009",
+          "success": false,
+          "steps": 134,
+          "failure": null
         }
       ],
       "validated": null,
@@ -169,7 +258,8 @@
     },
     {
       "label": "bottom_drawer_carry_03",
-      "state": "running",
+      "state": "interrupted",
+      "kind": "development",
       "source_tree_sha256": "441a04f4a187f26632062ed1bea7756a447bfdf5691c2ff102b424bf9b3b66ab",
       "protocol": {
         "tasks": 1,
@@ -210,14 +300,81 @@
           "success": true,
           "steps": 381,
           "failure": "phase 'close_release' timed out (position_error=0.0141 m; rotation_error=0.0040 rad; current=[-0.075, 0.2153, 0.9537]; target=[-0.0714, 0.229, 0.9546])"
+        },
+        {
+          "episode_id": "b:libero_10:task03:ep0002",
+          "success": false,
+          "steps": 309,
+          "failure": "phase 'descend' timed out"
+        },
+        {
+          "episode_id": "b:libero_10:task03:ep0003",
+          "success": false,
+          "steps": 257,
+          "failure": "phase 'descend' timed out"
+        },
+        {
+          "episode_id": "b:libero_10:task03:ep0004",
+          "success": true,
+          "steps": 371,
+          "failure": "phase 'close_release' timed out (position_error=0.0106 m; rotation_error=0.0042 rad; current=[0.0845, 0.2046, 0.9573]; target=[0.0803, 0.2141, 0.9548])"
         }
       ],
       "validated": null,
       "stop_reason": null
     },
     {
+      "label": "bowl_release_debug_02",
+      "state": "completed",
+      "kind": "development",
+      "source_tree_sha256": "c954f817fb7dd2b046a961a13a9acc9f7f2f0ad87da97eba1f6c0da995eff4e6",
+      "protocol": {
+        "tasks": 1,
+        "episodes_per_task": 2,
+        "official_init_ids": [
+          3,
+          4
+        ],
+        "seed": 7,
+        "step_caps": {
+          "spatial": 220,
+          "object": 280,
+          "goal": 300,
+          "long": 520
+        },
+        "scoring": "external_sticky_any_success",
+        "expected_episodes": 2,
+        "new_episodes": 2,
+        "reused_episodes": 0
+      },
+      "outcomes": [
+        {
+          "episode_id": "b:libero_goal:task06:ep0003",
+          "success": false,
+          "steps": 141,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_goal:task06:ep0004",
+          "success": true,
+          "steps": 133,
+          "failure": null
+        }
+      ],
+      "validated": {
+        "coverage_passed": true,
+        "issues": [],
+        "episodes": 2,
+        "source_tree_sha256": "c954f817fb7dd2b046a961a13a9acc9f7f2f0ad87da97eba1f6c0da995eff4e6",
+        "episodes_jsonl_sha256": "c19dd0a1c23f4f2c1b06d6d40765d9297e3627293718d75f43aa1d4ce9a04e08",
+        "validated_at": "2026-09-13T18:13:56+00:00"
+      },
+      "stop_reason": null
+    },
+    {
       "label": "cavity_near_01",
       "state": "stopped_candidate_rejected",
+      "kind": "development",
       "source_tree_sha256": "b33dcb99abe21d550031095c0f08ea7e4926b279e4bd504d5996129b2b488c5b",
       "protocol": {
         "tasks": 1,
@@ -284,6 +441,7 @@
     {
       "label": "cavity_near_02",
       "state": "completed",
+      "kind": "development",
       "source_tree_sha256": "0aaff937d12759b2d10b478250bc408fe3705b59de64da2dbfb27678a1651bc4",
       "protocol": {
         "tasks": 1,
@@ -387,6 +545,7 @@
     {
       "label": "cavity_near_03",
       "state": "stopped_candidate_rejected",
+      "kind": "development",
       "source_tree_sha256": "02ba58985d0a98e7fcf1b660ac2dd5e9663b39ae4577e21351de6f4a632b861c",
       "protocol": {
         "tasks": 1,
@@ -453,6 +612,7 @@
     {
       "label": "cavity_near_04",
       "state": "stopped_candidate_rejected",
+      "kind": "development",
       "source_tree_sha256": "0c7d1a6ecc892b5226bc154e1685dd9f9a0da29b9d7882c91b8ae016e75d65e1",
       "protocol": {
         "tasks": 1,
@@ -519,6 +679,7 @@
     {
       "label": "cavity_near_05",
       "state": "stopped_candidate_rejected",
+      "kind": "development",
       "source_tree_sha256": "455cc54d77bec12cc70f34a5b59adb627668e4125076736e308805079e4dc0ea",
       "protocol": {
         "tasks": 1,
@@ -567,6 +728,7 @@
     {
       "label": "drawer_carry_frame_01",
       "state": "interrupted",
+      "kind": "development",
       "source_tree_sha256": "9b9ceaeb9960a831b6796242050625f4f563ebfd3798b6f611e524e551cf0eb2",
       "protocol": {
         "tasks": 2,
@@ -675,6 +837,7 @@
     {
       "label": "drawer_contact_01",
       "state": "completed",
+      "kind": "development",
       "source_tree_sha256": "3adba977d0f47af8b3134f57d28bc6cdd95b28cd059c470542c670c7736833d3",
       "protocol": {
         "tasks": 1,
@@ -778,6 +941,7 @@
     {
       "label": "drawer_placement_01",
       "state": "completed",
+      "kind": "development",
       "source_tree_sha256": "fb907ed9710a932144cde7cdae9c3d08090a39fc15cc7b70f51673c90c5e8c3b",
       "protocol": {
         "tasks": 1,
@@ -881,6 +1045,7 @@
     {
       "label": "drawer_placement_02",
       "state": "completed",
+      "kind": "development",
       "source_tree_sha256": "0f9dec374227f16525b4de3e950e7c67a10cf89b3521d12e4266fa50aefc6237",
       "protocol": {
         "tasks": 2,
@@ -1044,6 +1209,7 @@
     {
       "label": "drawer_stove_regression_01",
       "state": "completed",
+      "kind": "development",
       "source_tree_sha256": "1b189c46902052a7dbf77d6101c994ba532e87900f5e0cc5575e520b0d37ccec",
       "protocol": {
         "tasks": 2,
@@ -1207,6 +1373,7 @@
     {
       "label": "drawer_transfer_01",
       "state": "stopped_candidate_rejected",
+      "kind": "development",
       "source_tree_sha256": "f37850648813aeb56ddc90ce8cf6092377179757b933ac08e6bfee603b26a052",
       "protocol": {
         "tasks": 1,
@@ -1267,6 +1434,7 @@
     {
       "label": "drawer_transfer_02",
       "state": "completed",
+      "kind": "development",
       "source_tree_sha256": "78e407c79059d156e57ead07c82e0d6dbc7595e23590945330fa39d612bcda3b",
       "protocol": {
         "tasks": 1,
@@ -1370,6 +1538,7 @@
     {
       "label": "drawer_transfer_03",
       "state": "completed",
+      "kind": "development",
       "source_tree_sha256": "d24da31360dd97195a6cf09134f6395a3ff11836caa0adb4f01338f299fe56b9",
       "protocol": {
         "tasks": 1,
@@ -1473,6 +1642,7 @@
     {
       "label": "fixture_motion_01",
       "state": "interrupted",
+      "kind": "development",
       "source_tree_sha256": "61e11f77a4557ee8fcd0a12e0752ec266ba5858cb306f2783668fa1258540884",
       "protocol": {
         "tasks": 2,
@@ -1531,8 +1701,130 @@
       "stop_reason": null
     },
     {
+      "label": "full400_candidate_01",
+      "state": "running",
+      "kind": "full_400",
+      "source_tree_sha256": "c954f817fb7dd2b046a961a13a9acc9f7f2f0ad87da97eba1f6c0da995eff4e6",
+      "protocol": {
+        "tasks": 40,
+        "episodes_per_task": 10,
+        "official_init_ids": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ],
+        "seed": 7,
+        "step_caps": {
+          "spatial": 220,
+          "object": 280,
+          "goal": 300,
+          "long": 520
+        },
+        "scoring": "external_sticky_any_success",
+        "expected_episodes": 400,
+        "new_episodes": 400,
+        "reused_episodes": 0
+      },
+      "outcomes": [
+        {
+          "episode_id": "b:libero_goal:task00:ep0000",
+          "success": true,
+          "steps": 143,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_goal:task00:ep0001",
+          "success": true,
+          "steps": 123,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_goal:task06:ep0000",
+          "success": true,
+          "steps": 137,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_goal:task06:ep0001",
+          "success": true,
+          "steps": 125,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_goal:task06:ep0002",
+          "success": true,
+          "steps": 127,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_goal:task06:ep0003",
+          "success": false,
+          "steps": 141,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_10:task00:ep0000",
+          "success": true,
+          "steps": 250,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_10:task01:ep0000",
+          "success": true,
+          "steps": 344,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_10:task03:ep0000",
+          "success": true,
+          "steps": 475,
+          "failure": "phase 'close_release' timed out (position_error=0.0140 m; rotation_error=0.0075 rad; current=[0.0856, 0.2014, 0.9532]; target=[0.0805, 0.2144, 0.9532])"
+        },
+        {
+          "episode_id": "b:libero_10:task09:ep0000",
+          "success": false,
+          "steps": 386,
+          "failure": "phase 'microwave_close_align_outer_safe' timed out (position_error=0.0738 m; rotation_error=0.4248 rad; current=[-0.0941, 0.0138, 1.1274]; target=[-0.0295, 0.0336, 1.0978])"
+        },
+        {
+          "episode_id": "b:libero_object:task07:ep0000",
+          "success": true,
+          "steps": 174,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_object:task07:ep0001",
+          "success": true,
+          "steps": 176,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_object:task07:ep0002",
+          "success": true,
+          "steps": 175,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_object:task07:ep0003",
+          "success": true,
+          "steps": 249,
+          "failure": null
+        }
+      ],
+      "validated": null,
+      "stop_reason": null
+    },
+    {
       "label": "microwave_cavity_01",
       "state": "stopped_implementation_correction",
+      "kind": "development",
       "source_tree_sha256": "db0426cb82908e1b21e6ff665b39ba0977c0c603b35ef91a8702e5ad8651a5f3",
       "protocol": {
         "tasks": 1,
@@ -1568,6 +1860,7 @@
     {
       "label": "microwave_cavity_02",
       "state": "stopped_candidate_rejected",
+      "kind": "development",
       "source_tree_sha256": "a2f4358216f00927c7714b12e0bb35be75394f26f34f3433656d51a30fd3af7c",
       "protocol": {
         "tasks": 1,
@@ -1622,6 +1915,7 @@
     {
       "label": "microwave_cavity_03",
       "state": "stopped_candidate_rejected",
+      "kind": "development",
       "source_tree_sha256": "1b189c46902052a7dbf77d6101c994ba532e87900f5e0cc5575e520b0d37ccec",
       "protocol": {
         "tasks": 1,
@@ -1664,6 +1958,7 @@
     {
       "label": "microwave_cavity_04",
       "state": "interrupted",
+      "kind": "development",
       "source_tree_sha256": "e80c57430d676579432c749039732efc141cf3a81b0fc875eefc53b2fa611ed2",
       "protocol": {
         "tasks": 1,
@@ -1712,6 +2007,7 @@
     {
       "label": "microwave_cavity_06",
       "state": "interrupted",
+      "kind": "development",
       "source_tree_sha256": "14296e04851a1270a09ef3237b5d39abfb24d420cc0237242d718191d0c4216f",
       "protocol": {
         "tasks": 1,
@@ -1754,6 +2050,7 @@
     {
       "label": "microwave_cavity_07",
       "state": "interrupted",
+      "kind": "development",
       "source_tree_sha256": "fa83e6b6c9862f8dcc8825a71d442429465a678abc1bd327158865b97a81d07c",
       "protocol": {
         "tasks": 1,
@@ -1802,6 +2099,7 @@
     {
       "label": "microwave_cavity_08",
       "state": "interrupted",
+      "kind": "development",
       "source_tree_sha256": "e9d22824d492e0edae4e80b495e8760a2a8aa1feaf8e1cc1c57508e0bca25377",
       "protocol": {
         "tasks": 1,
@@ -1850,6 +2148,7 @@
     {
       "label": "microwave_cavity_09",
       "state": "interrupted",
+      "kind": "development",
       "source_tree_sha256": "453b3a90baa6bf9d06b8d76e852abc5d12e7cb51da8f1e35041fc268c61cb210",
       "protocol": {
         "tasks": 1,
@@ -1885,6 +2184,7 @@
     {
       "label": "microwave_cavity_10",
       "state": "interrupted",
+      "kind": "development",
       "source_tree_sha256": "447e9e5f71c52093cf6e607fdc4db899f0ddc2ea3fde9867feedc90bb4ccf559",
       "protocol": {
         "tasks": 1,
@@ -1933,6 +2233,7 @@
     {
       "label": "microwave_cavity_11",
       "state": "interrupted",
+      "kind": "development",
       "source_tree_sha256": "37828b1df5b77118f39bd3a2aa24e1d34adf5ff4ba9d182b9130716614e2726b",
       "protocol": {
         "tasks": 1,
@@ -2017,6 +2318,7 @@
     {
       "label": "microwave_frame_debug_12",
       "state": "completed",
+      "kind": "development",
       "source_tree_sha256": "d0a2a0f14c61203d23b6e96e216493e666bdffccbf50d627fd210b4e93868207",
       "protocol": {
         "tasks": 1,
@@ -2056,7 +2358,8 @@
     },
     {
       "label": "microwave_frame_debug_13",
-      "state": "running",
+      "state": "completed",
+      "kind": "development",
       "source_tree_sha256": "2987b7a53fdca153d15652330ae2ed77e7c57a0c283e8b75f03810b7dc464657",
       "protocol": {
         "tasks": 1,
@@ -2076,13 +2379,28 @@
         "new_episodes": 1,
         "reused_episodes": 0
       },
-      "outcomes": [],
-      "validated": null,
+      "outcomes": [
+        {
+          "episode_id": "b:libero_10:task09:ep0000",
+          "success": false,
+          "steps": 386,
+          "failure": "phase 'microwave_close_align_outer_safe' timed out (position_error=0.0738 m; rotation_error=0.4248 rad; current=[-0.0941, 0.0138, 1.1274]; target=[-0.0295, 0.0336, 1.0978])"
+        }
+      ],
+      "validated": {
+        "coverage_passed": true,
+        "issues": [],
+        "episodes": 1,
+        "source_tree_sha256": "2987b7a53fdca153d15652330ae2ed77e7c57a0c283e8b75f03810b7dc464657",
+        "episodes_jsonl_sha256": "87c9da768abecac36a956496d3495677be81f24fa4a4631b03c4ff0336794d08",
+        "validated_at": "2026-09-13T18:12:01+00:00"
+      },
       "stop_reason": null
     },
     {
       "label": "microwave_sensor_debug_01",
       "state": "completed",
+      "kind": "development",
       "source_tree_sha256": "a55d6328ed21d3a2ac8f2780f086aab77fc45d2f783f705cd5163aaedea42763",
       "protocol": {
         "tasks": 1,
@@ -2123,6 +2441,7 @@
     {
       "label": "moka_body_retry_01",
       "state": "interrupted",
+      "kind": "development",
       "source_tree_sha256": "7974da908ca2690a6998bda37164c65cd7e60888a43b9eb2584f3bfa462b764f",
       "protocol": {
         "tasks": 1,
@@ -2177,6 +2496,7 @@
     {
       "label": "moka_body_retry_debug_01",
       "state": "completed",
+      "kind": "development",
       "source_tree_sha256": "7974da908ca2690a6998bda37164c65cd7e60888a43b9eb2584f3bfa462b764f",
       "protocol": {
         "tasks": 1,
@@ -2217,6 +2537,7 @@
     {
       "label": "stove_disk_01",
       "state": "completed",
+      "kind": "development",
       "source_tree_sha256": "afd0334fb4e3d8637216b4d1488ceb0b9150dcfe7ace000f205015975b96529c",
       "protocol": {
         "tasks": 1,
@@ -2320,6 +2641,7 @@
     {
       "label": "stove_disk_02",
       "state": "completed",
+      "kind": "development",
       "source_tree_sha256": "b8489cec3a76f1c52266a257764805b94e7ae59d0ed23907789011048da09429",
       "protocol": {
         "tasks": 1,

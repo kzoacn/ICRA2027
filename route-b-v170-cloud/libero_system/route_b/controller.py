@@ -5418,7 +5418,7 @@ class RouteBController:
                 )
                 if (self._grasp_mode is GraspMode.PINCH
                         and step.kind is SkillKind.PLACE_IN
-                        and step.target in {"basket", "bowl"}):
+                        and step.target == "basket"):
                     # Clear the solid payload before withdrawing. Ten mm
                     # beyond the engaged width can leave a tilted package
                     # supported on a finger even after an internal check.
@@ -5670,7 +5670,7 @@ class RouteBController:
                     {step.target: self._place_destination_geometry},
                 )
             elif (
-                step.target == "basket"
+                step.target in {"basket", "bowl"}
                 and step.target_selector is None
                 and self._place_destination_geometry is not None
                 and callable(reacquire)
@@ -7767,6 +7767,12 @@ class RouteBController:
             release[2] = max(release[2], destination.bounds_max_world[2]
                              + placement_source.height_m / 2
                              - planning_held_offset[2] + 0.025)
+            if step.target == "bowl":
+                # A flat package fits the mouth, but a deeply inserted
+                # parallel gripper cannot open through the curved walls.
+                # Keep the finger undersides above the measured rim.
+                release[2] = max(release[2], destination.bounds_max_world[2]
+                                 + .045 - min(0., planning_held_offset[2]))
             motion_pose = Pose(release, motion_pose.rotation)
             high = planned_preplace.position.copy()
             high[2] = max(high[2], release[2] + 0.035)

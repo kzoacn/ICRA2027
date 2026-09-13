@@ -25,16 +25,22 @@ def main():
         assert type(row["success"]) is bool and row["seed"] == 7
         assert row["scoring"] == "external_sticky_any_success"
     assert len(groups) == 40 and all(v == set(range(10)) for v in groups.values())
-    assert sum(r["reused"] for r in rows) == 10
-    # These task counts are discussed explicitly in the main text.
-    for suite, task, successes in [("libero_goal",3,3),("libero_spatial",4,5),
-                                  ("libero_10",3,6),("libero_10",8,4),("libero_10",9,0)]:
-        assert sum(r["success"] for r in rows if r["suite"] == suite and r["task_id"] == task) == successes
-    microwave_failures = [r["failure"] or "" for r in rows
-                         if r["suite"] == "libero_10" and r["task_id"] == 9]
-    assert sum("cannot localize" in s for s in microwave_failures) == 4
-    assert sum("sensor verification rejected place_in" in s for s in microwave_failures) == 3
-    assert sum("timed out" in s for s in microwave_failures) == 3
+    assert sum(r["reused"] for r in rows) == meta["protocol"]["reused_episodes"]
+    caps = {"libero_spatial":220, "libero_object":280, "libero_goal":300, "libero_10":520}
+    assert all(0 <= r["steps"] <= caps[r["suite"]] for r in rows)
+    numbers = (PAPER / "generated/numbers.tex").read_text()
+    macros = dict(re.findall(r"\\newcommand\{\\(\w+)\}\{([^}]+)\}", numbers))
+    # Check every task count used in the prose against the frozen records.
+    for name, suite, task in [("TopDrawerSuccess","libero_goal",3),
+                              ("DrawerPickSuccess","libero_spatial",4),
+                              ("BottomDrawerSuccess","libero_10",3),
+                              ("MokaSuccess","libero_10",8),
+                              ("MicrowaveSuccess","libero_10",9)]:
+        expected = sum(r["success"] for r in rows if r["suite"] == suite and r["task_id"] == task)
+        assert int(macros[name]) == expected
+        assert "\\" + name in (PAPER / "main.tex").read_text()
+    assert int(macros["SuccessCount"]) == sum(r["success"] for r in rows)
+    assert int(macros["ReusedCount"]) == sum(r["reused"] for r in rows)
     tex = (PAPER / "main.tex").read_text()
     subprocess.run(["python3", str(PAPER / "scripts/build_comparison_table.py"), "--check"],
                    check=True)

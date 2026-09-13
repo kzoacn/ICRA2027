@@ -368,6 +368,14 @@ The run uses Ubuntu 22.04, Python 3.12, PyTorch 2.11.0 with CUDA 12.8,
 MuJoCo 3.3.2~\cite{mujoco}, robosuite 1.4.0~\cite{robosuite}, and
 hf-libero 0.1.4 on one RTX 5090.
 
+\ifAllFresh
+All 400 episodes are newly executed against one immutable source snapshot.
+Task processes execute independently under a dispatcher with up to eight
+workers. Each worker starts from the same declared seed and evaluates the
+ten official initializations of one task in index order. The source manifest,
+per-task configuration, episode coverage, and scoring mode are checked after
+the campaign. Development records are kept separately from this complete run.
+\else
 Task processes execute independently under a dispatcher, initially with four
 workers and then eight. Each worker evaluates ten initializations of one
 task. Ten Spatial task-00 episodes are reused from a stopped earlier run:
@@ -376,6 +384,7 @@ and their source records were frozen before the new campaign. Their
 inclusion was determined by identity and compatibility, not outcome.
 The other 390 episodes are newly executed. We report this reuse explicitly
 and keep timing analyses separate.
+\fi
 
 \subsection{External Scoring and Internal Completion}
 Let $q_t$ be the official success predicate observed by the evaluator.
@@ -474,23 +483,25 @@ episodes (\SuccessRate{}\%); the remaining planned trials are pending.
 \fi
 Suite success rates are \SpatialRate{}\% for Spatial, \ObjectRate{}\% for
 Object, \GoalRate{}\% for Goal, and \LongRate{}\% for Long.
+\ifAllFresh\else
 The newly executed subset succeeds in \FreshSuccessCount{} of
 \FreshCount{} trials (\FreshSuccessRate{}\%), allowing the effect of
 including the ten reused records to be inspected directly.
+\fi
 
 Figure~\ref{fig:tasks} shows the task-level distribution.
 \PerfectTaskCount{} tasks have ten successful recorded trials.
-The hardest observed task is Long 09, placing a mug inside a microwave and
-closing it, with $0/10$ successes. Its records contain four placement-target
-localization failures, three placement-verification rejections, and three
-phase timeouts. Long 08, placing both moka pots on the stove, succeeds in
-$4/10$ trials. These cases expose limitations in multi-stage execution that
-are hidden by the overall average.
+Long 09, placing a mug inside a microwave and closing it, succeeds in
+$\MicrowaveSuccess/10$ trials. Long 08, placing both moka pots on the stove,
+succeeds in $\MokaSuccess/10$ trials. These tasks combine object placement
+with confined access, shared supports, or fixture interaction; their
+individual outcomes provide information that is lost in the overall average.
 
 Drawer-related tasks also remain difficult: Goal task 03, opening the top
-drawer and placing a bowl inside, succeeds in $3/10$ trials; Spatial task 04,
-retrieving a bowl from a top drawer, succeeds in $5/10$; and Long task 03,
-placing a bowl in a bottom drawer and closing it, succeeds in $6/10$.
+drawer and placing a bowl inside, succeeds in $\TopDrawerSuccess/10$ trials;
+Spatial task 04, retrieving a bowl from a top drawer, succeeds in
+$\DrawerPickSuccess/10$; and Long task 03, placing a bowl in a bottom drawer
+and closing it, succeeds in $\BottomDrawerSuccess/10$.
 All five task groups were complete before analysis. The records identify
 specific scenarios and stopping reasons for further diagnosis, but do not
 show that articulation alone causes the failures.
@@ -578,7 +589,7 @@ They should not be interpreted as real-robot control frequency.
 The run reports \RuntimeExceptionCount{} runtime exceptions.
 \ifRunComplete
 Dispatcher wall time is \RunMinutes{} minutes for the campaign containing
-390 new and ten reused episodes.
+\FreshCount{} new and \ReusedCount{} reused episodes.
 \else
 Dispatcher wall time at the snapshot is \RunMinutes{} minutes.
 \fi

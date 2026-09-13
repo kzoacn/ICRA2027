@@ -50,6 +50,8 @@ def main():
                         default=Path("/root/autodl-tmp/route-b-v170-cloud"))
     parser.add_argument("--tasks", nargs="+", default=["goal:3", "spatial:4", "long:3"])
     parser.add_argument("--all", action="store_true")
+    parser.add_argument("--priority-tasks", nargs="+", default=[],
+                        help="Evaluate these tasks first in a complete campaign; coverage and per-task resets stay fixed.")
     parser.add_argument("--episodes", type=int, default=10)
     parser.add_argument("--start", type=int, default=0)
     parser.add_argument("--workers", type=int, default=4)
@@ -61,6 +63,10 @@ def main():
         assert args.episodes == 10 and args.start == 0
     selection = ([f"{s}:{t}" for s in SUITES for t in range(10)]
                  if args.all else args.tasks)
+    if args.priority_tasks:
+        assert args.all and len(args.priority_tasks) == len(set(args.priority_tasks))
+        assert set(args.priority_tasks) <= set(selection)
+        selection = args.priority_tasks + [task for task in selection if task not in args.priority_tasks]
     assert len(selection) == len(set(selection))
     parsed = [(s, int(t)) for s, t in (entry.split(":") for entry in selection)]
     assert all(s in SUITES and 0 <= t < 10 for s, t in parsed)

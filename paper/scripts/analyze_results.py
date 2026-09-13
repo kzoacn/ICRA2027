@@ -91,6 +91,7 @@ def main():
         "ControllerMissedSuccess": stopped_true, "DisagreementCount": completed_false+stopped_true,
         "DisagreementRate": f"{100*(completed_false+stopped_true)/n:.1f}",
         "FreshCount": len(fresh), "FreshSuccessCount": sum(r["success"] for r in fresh),
+        "ReusedCount": n-len(fresh),
         "FreshSuccessRate": f"{100*sum(r['success'] for r in fresh)/len(fresh):.1f}",
         "FreshMedianSeconds": f"{stats['new_median_elapsed_s']:.1f}",
         "RunMinutes": f"{meta['wall_elapsed_s']/60:.1f}",
@@ -100,10 +101,18 @@ def main():
     for s in summaries:
         macros[s["label"] + "Rate"] = f"{s['rate']:.1f}"
         macros[s["label"] + "MeanSteps"] = f"{s['mean_steps']:.1f}"
+    for name, suite, task in [("TopDrawerSuccess", "libero_goal", 3),
+                              ("DrawerPickSuccess", "libero_spatial", 4),
+                              ("BottomDrawerSuccess", "libero_10", 3),
+                              ("MokaSuccess", "libero_10", 8),
+                              ("MicrowaveSuccess", "libero_10", 9)]:
+        macros[name] = sum(r["success"] for r in rows if r["suite"] == suite and r["task_id"] == task)
     (generated / "numbers.tex").write_text(
         "% Generated from data/episodes.jsonl; do not edit manually.\n"
         + r"\newif\ifRunComplete" + "\n"
         + (r"\RunCompletetrue" if meta["complete"] else r"\RunCompletefalse") + "\n"
+        + r"\newif\ifAllFresh" + "\n"
+        + (r"\AllFreshtrue" if len(fresh) == n else r"\AllFreshfalse") + "\n"
         + "".join(r"\newcommand{\%s}{%s}" % (key,value) + "\n" for key,value in macros.items()))
     lines = [r"\begin{tabular}{lrrrr}", r"\toprule",
              r"Suite & Success & SR (\%) & Mean steps & Median s$^\dagger$ \\",
