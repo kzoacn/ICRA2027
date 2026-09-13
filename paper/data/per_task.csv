@@ -3,7 +3,7 @@ libero_spatial,0,10,10,pick up the black bowl between the plate and the ramekin 
 libero_spatial,1,10,8,pick up the black bowl next to the ramekin and place it on the plate
 libero_spatial,2,10,10,pick up the black bowl from table center and place it on the plate
 libero_spatial,3,10,9,pick up the black bowl on the cookie box and place it on the plate
-libero_spatial,4,10,5,pick up the black bowl in the top drawer of the wooden cabinet and place it on the plate
+libero_spatial,4,10,7,pick up the black bowl in the top drawer of the wooden cabinet and place it on the plate
 libero_spatial,5,10,9,pick up the black bowl on the ramekin and place it on the plate
 libero_spatial,6,10,10,pick up the black bowl next to the cookie box and place it on the plate
 libero_spatial,7,10,10,pick up the black bowl on the stove and place it on the plate
@@ -16,10 +16,10 @@ libero_object,3,10,10,pick up the bbq sauce and place it in the basket
 libero_object,4,10,9,pick up the ketchup and place it in the basket
 libero_object,5,10,10,pick up the tomato sauce and place it in the basket
 libero_object,6,10,10,pick up the butter and place it in the basket
-libero_object,7,10,8,pick up the milk and place it in the basket
+libero_object,7,10,10,pick up the milk and place it in the basket
 libero_object,8,10,10,pick up the chocolate pudding and place it in the basket
 libero_object,9,10,10,pick up the orange juice and place it in the basket
-libero_goal,0,10,7,open the middle drawer of the cabinet
+libero_goal,0,10,10,open the middle drawer of the cabinet
 libero_goal,1,10,10,put the bowl on the stove
 libero_goal,2,10,10,put the wine bottle on top of the cabinet
 libero_goal,3,10,3,open the top drawer and put the bowl inside
@@ -29,13 +29,13 @@ libero_goal,6,10,8,put the cream cheese in the bowl
 libero_goal,7,10,10,turn on the stove
 libero_goal,8,10,10,put the bowl on the plate
 libero_goal,9,10,10,put the wine bottle on the rack
-libero_10,0,10,8,put both the alphabet soup and the tomato sauce in the basket
+libero_10,0,10,10,put both the alphabet soup and the tomato sauce in the basket
 libero_10,1,10,9,put both the cream cheese box and the butter in the basket
 libero_10,2,10,9,turn on the stove and put the moka pot on it
-libero_10,3,10,6,put the black bowl in the bottom drawer of the cabinet and close it
+libero_10,3,10,7,put the black bowl in the bottom drawer of the cabinet and close it
 libero_10,4,10,8,put the white mug on the left plate and put the yellow and white mug on the right plate
 libero_10,5,10,9,pick up the book and place it in the back compartment of the caddy
 libero_10,6,10,9,put the white mug on the plate and put the chocolate pudding to the right of the plate
 libero_10,7,10,10,put both the alphabet soup and the cream cheese box in the basket
-libero_10,8,10,4,put both moka pots on the stove
+libero_10,8,10,7,put both moka pots on the stove
 libero_10,9,10,0,put the yellow and white mug in the microwave and close it

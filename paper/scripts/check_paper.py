@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Check the final local artifact, its anonymous PDF, and the measured dataset."""
 import collections
+import gzip
 import hashlib
 import json
 from pathlib import Path
@@ -19,6 +20,24 @@ def main():
     assert not meta["validation"]["issues"]
     assert hashlib.sha256(data).hexdigest() == meta["episodes_projection_sha256"]
     assert len(rows) == len({r["episode_id"] for r in rows}) == 400
+    if archive := meta.get("raw_episode_archive"):
+        compressed = (PAPER / "data" / archive["file"]).read_bytes()
+        assert hashlib.sha256(compressed).hexdigest() == archive["sha256"]
+        original = gzip.decompress(compressed)
+        assert hashlib.sha256(original).hexdigest() == archive["uncompressed_sha256"]
+        assert archive["uncompressed_sha256"] == meta["validation"]["episodes_jsonl_sha256"]
+        lines = original.splitlines()
+        actual = {json.loads(line)["episode_id"]:(json.loads(line), line) for line in lines}
+        assert len(lines) == len(actual) == archive["records"] == 400
+        for row in rows:
+            source, line = actual[row["episode_id"]]
+            assert hashlib.sha256(line).hexdigest() == row["source_record_sha256"]
+            assert source["evaluator_success"] is row["success"]
+            for key in ["instruction", "seed", "policy_status", "failure", "steps", "elapsed_s"]:
+                assert source[key] == row[key]
+            assert source["key"]["suite"] == row["suite"]
+            assert source["key"]["task_id"] == row["task_id"]
+            assert source["key"]["episode_index"] == row["init_id"]
     groups = collections.defaultdict(set)
     for row in rows:
         groups[row["suite"], row["task_id"]].add(row["init_id"])
@@ -41,6 +60,7 @@ def main():
         assert "\\" + name in (PAPER / "main.tex").read_text()
     assert int(macros["SuccessCount"]) == sum(r["success"] for r in rows)
     assert int(macros["ReusedCount"]) == sum(r["reused"] for r in rows)
+    assert (r"\AllFreshtrue" in numbers) == (not any(r["reused"] for r in rows))
     tex = (PAPER / "main.tex").read_text()
     subprocess.run(["python3", str(PAPER / "scripts/build_comparison_table.py"), "--check"],
                    check=True)
@@ -74,6 +94,9 @@ def main():
     assert len([line for line in urls.splitlines()[1:] if line.strip()]) == 0, urls
     report = {"passed": True, "pages": pages, "episodes":len(rows),
         "successes":sum(r["success"] for r in rows), "tasks":len(groups),
+        "controller_source_sha256":meta["controller_source_sha256"],
+        "raw_record_archive_verified":bool(meta.get("raw_episode_archive")),
+        "raw_records_verified":len(rows) if meta.get("raw_episode_archive") else 0,
         "references":len(cited), "author_metadata":"Anonymous",
         "published_comparison_rows":len(published["rows"]),
         "published_comparisons_sha256":hashlib.sha256(published_data).hexdigest(),

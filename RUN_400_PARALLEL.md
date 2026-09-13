@@ -1,4 +1,8 @@
-当前评测：`smolvla_scale_400_parallel_20260913`
+# 原始 400 次并行评测记录
+
+本次评测已完成，结果为 347/400（86.75%）。下文保留原调度过程、时间估计和操作说明。后续改进及全新复测见 [Route B 改进记录](experiments/route_b_90/README.md)。
+
+原评测：`smolvla_scale_400_parallel_20260913`
 
 采用 [SmolVLA 论文 §4.1](https://arxiv.org/html/2506.01844v1) 的采样规模：Spatial、Object、Goal、Long 四套，每套 10 个任务，每任务官方初态 0–9，共 400 次。沿用已部署的 Route B 控制器、seed=7、256×256 双路 RGB-D、220/280/300/520 步上限与原来的外部成功判定方式。这是对齐采样规模；控制器、输入模态等实验条件仍属于 Route B。
 

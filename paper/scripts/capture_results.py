@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Freeze an auditable, compact projection of the existing evaluation records."""
 import argparse
+import gzip
 import hashlib
 import json
 from pathlib import Path
@@ -49,7 +50,7 @@ def main():
     if args.source_root:
         subprocess.run(["sha256sum", "--quiet", "-c", "SHA256SUMS.deployed"],
                        cwd=root, check=True)
-    rows, sources, seen = [], [], set()
+    rows, sources, seen, originals = [], [], set(), []
     expected = set()
     for task in manifest["tasks"]:
         assert task["config"]["source_tree_sha256"] == manifest["source_tree_sha256"]
@@ -58,6 +59,7 @@ def main():
         if not path.exists():
             continue
         raw = path.read_bytes()
+        originals.append(raw)
         if args.batch_dir:
             summary = json.loads(Path(task["summary"]).read_text())
             assert summary["run_config"] == task["config"]
@@ -99,9 +101,19 @@ def main():
         assert sum(r["reused"] for r in rows) == manifest["protocol"]["reused_episodes"]
     rows.sort(key=lambda r: (r["suite"], r["task_id"], r["init_id"]))
     out = args.output_dir.resolve()
+    archive = None
+    archive_data = None
+    if args.batch_dir and complete:
+        original_data = b"".join(originals)
+        assert sha(original_data) == validation["episodes_jsonl_sha256"]
+        archive_data = gzip.compress(original_data, mtime=0)
+        archive = {"file": "raw_episodes.jsonl.gz", "sha256": sha(archive_data),
+                   "uncompressed_sha256": sha(original_data), "records": len(rows)}
     out.mkdir(parents=True, exist_ok=True)
     payload = "".join(json.dumps(r, ensure_ascii=False, sort_keys=True) + "\n" for r in rows)
     (out / "episodes.jsonl").write_text(payload)
+    if archive is not None:
+        (out / archive["file"]).write_bytes(archive_data)
     dump(out / "provenance.json", {
         "run_name": manifest.get("run_name", RUN), "state": status["state"], "complete": complete,
         "status_updated_at": status["updated_at"],
@@ -111,9 +123,12 @@ def main():
         "source_manifest_sha256": sha((job / "manifest.json").read_bytes()),
         "episodes_projection_sha256": sha(payload.encode()),
         "source_files": sources,
+        **({"raw_episode_archive": archive} if archive else {}),
         "projection_note": "Numerical fields are copied from original records; trace counts are derived. "
             "Each source_record_sha256 hashes its original JSONL line without the newline. "
-            "Original traces and videos remain on the evaluation server.",
+            + ("Complete original records, including geometry traces, are included in the compressed archive; "
+               "videos remain on the evaluation server." if archive else
+               "Original traces and videos remain on the evaluation server."),
         "validation": validation,
         "wall_elapsed_s": status.get("elapsed_wall_s"),
     })

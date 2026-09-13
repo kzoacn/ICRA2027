@@ -1,7 +1,8 @@
 # Manuscript evidence map
 
 This file is an author-facing audit aid; it is not supplementary material included in the submission PDF.
-Paths below are relative to ../route-b-v170-cloud unless stated otherwise.
+Implementation paths below are relative to ../route-b-v170-cloud.
+Paths beginning with paper/, experiments/, or runtime/ are relative to the repository root.
 The manuscript is a system study of the existing implementation, not a claim of a new general learning algorithm.
 
 | Claim or reported quantity | Evidence | Scope |
@@ -11,6 +12,8 @@ The manuscript is a system study of the existing implementation, not a claim of 
 | Deterministic language grammar and capability check | libero_system/route_b/task_compiler.py: TaskCompiler, route_b_execution_issue | Known language forms and allow-listed entities; no language-model resolver configured |
 | Frozen detector with offline asset gallery | libero_system/integration/components.py: build_perception_bundle_from_context; perception/grounding_dino.py | The detector is pretrained; the action controller is manually engineered |
 | Asset-derived texture and collision-size priors | libero_system/perception/gallery.py: TextureSizeGallery, collision_aabb_dimensions | Public asset knowledge is explicitly part of the system |
+| Visible burner and microwave physical geometry in the improved controller | libero_system/route_b/stove_support.py; microwave_interior.py; integration/adapters.py: RouteBMicrowaveDoorDetector; experiments/route_b_90/check_geometry.py | Calibrated visible surfaces plus declared physical dimensions; no scene object pose or task-region coordinates |
+| Basket slots and open-palm withdrawal in the improved controller | libero_system/route_b/controller.py: _shared_support_slot_offset, _act_place; release_geometry.py: open_jaw_peel_pose | Bounded hand-written geometric proposals, evaluated as part of the complete controller |
 | Gallery weights and temperature | TextureSizeGallery.__init__, classify_features | Color 0.4, shape 0.6, temperature 0.13; additional class-dependent gates |
 | Weighted multi-view fusion | libero_system/perception/fusion.py: fuse_instances_3d, _merge_members | Default center threshold 0.045 m; confidence times square-root point count |
 | Clipped Cartesian servo | libero_system/route_b/controller.py: _cartesian_action, ControllerConfig | Defaults 0.05 m and 0.25 rad; some branches use specialized scales |
@@ -20,11 +23,11 @@ The manuscript is a system study of the existing implementation, not a claim of 
 | Official initial-state indices and reset-stream handling | libero_system/common/env_adapter.py: reset | Seed 7; reset stream is restored/replayed, not equivalent to every benchmark implementation |
 | External ever-success and controller stopping | libero_system/integration/evaluator.py: _ExternalStickyScore, EvaluationDriver._run_b | Success can precede a later internal failure; final-only outcome is not separately recorded |
 | Software-boundary counters | _ExternalStickyScore.audit | Several zero counters are constructed by implementation; not independent process attestation |
-| 400 episodes and ten reused records | runtime/jobs/smolvla_scale_400_parallel_20260913/manifest.json; paper/data/provenance.json | Reuse selected by official IDs and compatible configuration before this campaign |
-| Success, runtime and status tables | paper/data/episodes.jsonl; paper/scripts/analyze_results.py | Derived directly from frozen record fields; elapsed times exclude reused records |
+| 400 episodes and declared record provenance | paper/data/provenance.json; paper/scripts/capture_results.py | Exact reuse/fresh counts, official IDs, seeds, budgets, source hashes and validation are preserved in the dataset provenance |
+| Success, runtime and status tables | paper/data/episodes.jsonl; paper/data/raw_episodes.jsonl.gz; paper/scripts/analyze_results.py | 360/400, with all records freshly executed; projected fields and original lines are checked against each other |
 | Published policy comparison | paper/data/published_comparisons.json; paper/scripts/build_comparison_table.py | Five externally reported mean rows with source versions, table numbers and PDF hashes; the Route B row is computed from its own episode records |
 | Failure groups | failure_group in paper/scripts/analyze_results.py | Message-based terminal categories, not independently verified physical causes |
-| Per-task examples in text | Goal 03: 3/10; Spatial 04: 5/10; Long 03: 6/10; Long 08: 4/10; Long 09: 0/10 | Counts and Long 09 stopping-reason breakdown checked by paper/scripts/check_paper.py |
+| Per-task examples in text | paper/generated/numbers.tex: TopDrawerSuccess, DrawerPickSuccess, BottomDrawerSuccess, MokaSuccess, MicrowaveSuccess | Each macro is independently checked against the frozen episode projection by paper/scripts/check_paper.py |
 | Qualitative rollouts | paper/data/figure_provenance.json | Selected recorded episodes, with video hashes and exact frame indices |
 | Historical 85.9% over 2000 episodes | provenance/source.json only | Excluded from current measured results because raw historical records are unavailable in the uploaded package |
 

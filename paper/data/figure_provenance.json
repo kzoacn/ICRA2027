@@ -4,14 +4,14 @@
     "success": true,
     "policy_status": "succeeded",
     "instruction": "pick up the alphabet soup and place it in the basket",
-    "video": "outputs/smolvla_scale_400_parallel_20260913/shards/object_task00/videos/route-b_libero_object_task-00_ep-0000.mp4",
-    "video_sha256": "a37faf4234e5df6f52a0968b732bfa6934b40c8b8af8c3e9fb75d031fc89c175",
-    "total_recorded_frames": 64,
+    "video": "shards/object_task00/videos/route-b_libero_object_task-00_ep-0000.mp4",
+    "video_sha256": "8857f7661d6b65570b45928501b7b6cded5120c2f408de258157dd56e3c7d230",
+    "total_recorded_frames": 69,
     "selected_frames": [
       0,
-      21,
-      42,
-      63
+      23,
+      45,
+      68
     ],
     "transformation": "Left half of original dual-view frame (agentview); no retouching."
   },
@@ -20,7 +20,7 @@
     "success": false,
     "policy_status": "timeout",
     "instruction": "open the top drawer and put the bowl inside",
-    "video": "outputs/smolvla_scale_400_parallel_20260913/shards/goal_task03/videos/route-b_libero_goal_task-03_ep-0002.mp4",
+    "video": "shards/goal_task03/videos/route-b_libero_goal_task-03_ep-0002.mp4",
     "video_sha256": "a11d6b9d7719d5cdfdaff2de7adb43410d6649dda7ef9144b472c41c702439f0",
     "total_recorded_frames": 151,
     "selected_frames": [

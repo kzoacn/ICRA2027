@@ -1,13 +1,119 @@
 {
-  "updated_at": "2026-09-13T18:16:26.881574+00:00",
+  "updated_at": "2026-09-13T19:30:21.583590+00:00",
   "baseline": {
     "successes": 347,
     "episodes": 400
   },
   "acceptance": "one frozen source, 400 fresh episodes, at least 360 external successes",
-  "full_400_accepted": false,
-  "accepted_full_campaigns": [],
+  "full_400_accepted": true,
+  "accepted_full_campaigns": [
+    "full400_candidate_01"
+  ],
   "development_runs": [
+    {
+      "label": "basket_mixed_regression_01",
+      "state": "completed",
+      "kind": "development",
+      "source_tree_sha256": "c954f817fb7dd2b046a961a13a9acc9f7f2f0ad87da97eba1f6c0da995eff4e6",
+      "protocol": {
+        "tasks": 1,
+        "episodes_per_task": 10,
+        "official_init_ids": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ],
+        "seed": 7,
+        "step_caps": {
+          "spatial": 220,
+          "object": 280,
+          "goal": 300,
+          "long": 520
+        },
+        "scoring": "external_sticky_any_success",
+        "expected_episodes": 10,
+        "new_episodes": 10,
+        "reused_episodes": 0
+      },
+      "outcomes": [
+        {
+          "episode_id": "b:libero_10:task07:ep0000",
+          "success": true,
+          "steps": 254,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_10:task07:ep0001",
+          "success": true,
+          "steps": 254,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_10:task07:ep0002",
+          "success": true,
+          "steps": 252,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_10:task07:ep0003",
+          "success": true,
+          "steps": 248,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_10:task07:ep0004",
+          "success": true,
+          "steps": 256,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_10:task07:ep0005",
+          "success": true,
+          "steps": 250,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_10:task07:ep0006",
+          "success": true,
+          "steps": 253,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_10:task07:ep0007",
+          "success": true,
+          "steps": 248,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_10:task07:ep0008",
+          "success": true,
+          "steps": 255,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_10:task07:ep0009",
+          "success": true,
+          "steps": 257,
+          "failure": null
+        }
+      ],
+      "validated": {
+        "coverage_passed": true,
+        "issues": [],
+        "episodes": 10,
+        "source_tree_sha256": "c954f817fb7dd2b046a961a13a9acc9f7f2f0ad87da97eba1f6c0da995eff4e6",
+        "episodes_jsonl_sha256": "f119a5e23d212f7f65fa692c88d647125cf3a9f2fb6505cf7767a938ded7c473",
+        "validated_at": "2026-09-13T19:08:32+00:00"
+      },
+      "stop_reason": null
+    },
     {
       "label": "basket_palm_debug_02",
       "state": "completed",
@@ -1702,7 +1808,7 @@
     },
     {
       "label": "full400_candidate_01",
-      "state": "running",
+      "state": "completed",
       "kind": "full_400",
       "source_tree_sha256": "c954f817fb7dd2b046a961a13a9acc9f7f2f0ad87da97eba1f6c0da995eff4e6",
       "protocol": {
@@ -1746,6 +1852,354 @@
           "failure": null
         },
         {
+          "episode_id": "b:libero_goal:task00:ep0002",
+          "success": true,
+          "steps": 208,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_goal:task00:ep0003",
+          "success": true,
+          "steps": 125,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_goal:task00:ep0004",
+          "success": true,
+          "steps": 121,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_goal:task00:ep0005",
+          "success": true,
+          "steps": 210,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_goal:task00:ep0006",
+          "success": true,
+          "steps": 213,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_goal:task00:ep0007",
+          "success": true,
+          "steps": 128,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_goal:task00:ep0008",
+          "success": true,
+          "steps": 119,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_goal:task00:ep0009",
+          "success": true,
+          "steps": 210,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_goal:task01:ep0000",
+          "success": true,
+          "steps": 213,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_goal:task01:ep0001",
+          "success": true,
+          "steps": 131,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_goal:task01:ep0002",
+          "success": true,
+          "steps": 150,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_goal:task01:ep0003",
+          "success": true,
+          "steps": 132,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_goal:task01:ep0004",
+          "success": true,
+          "steps": 131,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_goal:task01:ep0005",
+          "success": true,
+          "steps": 161,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_goal:task01:ep0006",
+          "success": true,
+          "steps": 135,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_goal:task01:ep0007",
+          "success": true,
+          "steps": 165,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_goal:task01:ep0008",
+          "success": true,
+          "steps": 186,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_goal:task01:ep0009",
+          "success": true,
+          "steps": 135,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_goal:task02:ep0000",
+          "success": true,
+          "steps": 223,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_goal:task02:ep0001",
+          "success": true,
+          "steps": 240,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_goal:task02:ep0002",
+          "success": true,
+          "steps": 234,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_goal:task02:ep0003",
+          "success": true,
+          "steps": 229,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_goal:task02:ep0004",
+          "success": true,
+          "steps": 241,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_goal:task02:ep0005",
+          "success": true,
+          "steps": 232,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_goal:task02:ep0006",
+          "success": true,
+          "steps": 231,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_goal:task02:ep0007",
+          "success": true,
+          "steps": 228,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_goal:task02:ep0008",
+          "success": true,
+          "steps": 222,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_goal:task02:ep0009",
+          "success": true,
+          "steps": 230,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_goal:task03:ep0000",
+          "success": true,
+          "steps": 261,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_goal:task03:ep0001",
+          "success": true,
+          "steps": 300,
+          "failure": "policy remained running at the 300-step limit"
+        },
+        {
+          "episode_id": "b:libero_goal:task03:ep0002",
+          "success": false,
+          "steps": 300,
+          "failure": "policy remained running at the 300-step limit"
+        },
+        {
+          "episode_id": "b:libero_goal:task03:ep0003",
+          "success": false,
+          "steps": 300,
+          "failure": "policy remained running at the 300-step limit"
+        },
+        {
+          "episode_id": "b:libero_goal:task03:ep0004",
+          "success": false,
+          "steps": 279,
+          "failure": "phase 'move_pregrasp' timed out"
+        },
+        {
+          "episode_id": "b:libero_goal:task03:ep0005",
+          "success": false,
+          "steps": 300,
+          "failure": "policy remained running at the 300-step limit"
+        },
+        {
+          "episode_id": "b:libero_goal:task03:ep0006",
+          "success": false,
+          "steps": 300,
+          "failure": "policy remained running at the 300-step limit"
+        },
+        {
+          "episode_id": "b:libero_goal:task03:ep0007",
+          "success": false,
+          "steps": 273,
+          "failure": "phase 'move_pregrasp' timed out"
+        },
+        {
+          "episode_id": "b:libero_goal:task03:ep0008",
+          "success": true,
+          "steps": 255,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_goal:task03:ep0009",
+          "success": false,
+          "steps": 282,
+          "failure": "phase 'move_pregrasp' timed out"
+        },
+        {
+          "episode_id": "b:libero_goal:task04:ep0000",
+          "success": true,
+          "steps": 221,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_goal:task04:ep0001",
+          "success": true,
+          "steps": 156,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_goal:task04:ep0002",
+          "success": true,
+          "steps": 147,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_goal:task04:ep0003",
+          "success": true,
+          "steps": 191,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_goal:task04:ep0004",
+          "success": true,
+          "steps": 157,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_goal:task04:ep0005",
+          "success": true,
+          "steps": 154,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_goal:task04:ep0006",
+          "success": true,
+          "steps": 203,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_goal:task04:ep0007",
+          "success": true,
+          "steps": 203,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_goal:task04:ep0008",
+          "success": true,
+          "steps": 146,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_goal:task04:ep0009",
+          "success": true,
+          "steps": 155,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_goal:task05:ep0000",
+          "success": true,
+          "steps": 98,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_goal:task05:ep0001",
+          "success": true,
+          "steps": 219,
+          "failure": "plate remained outside the sensor-derived stove-front region"
+        },
+        {
+          "episode_id": "b:libero_goal:task05:ep0002",
+          "success": true,
+          "steps": 275,
+          "failure": "plate remained outside the sensor-derived stove-front region"
+        },
+        {
+          "episode_id": "b:libero_goal:task05:ep0003",
+          "success": true,
+          "steps": 222,
+          "failure": "plate remained outside the sensor-derived stove-front region"
+        },
+        {
+          "episode_id": "b:libero_goal:task05:ep0004",
+          "success": true,
+          "steps": 113,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_goal:task05:ep0005",
+          "success": true,
+          "steps": 204,
+          "failure": "phase 'drag_rim' timed out (position_error=0.0093 m; rotation_error=0.0028 rad; current=[-0.1071, 0.2789, 0.9262]; target=[-0.1139, 0.2785, 0.9199])"
+        },
+        {
+          "episode_id": "b:libero_goal:task05:ep0006",
+          "success": true,
+          "steps": 221,
+          "failure": "plate remained outside the sensor-derived stove-front region"
+        },
+        {
+          "episode_id": "b:libero_goal:task05:ep0007",
+          "success": true,
+          "steps": 246,
+          "failure": "plate visual verification failed: no red-rimmed plate was visible in either RGB-D view"
+        },
+        {
+          "episode_id": "b:libero_goal:task05:ep0008",
+          "success": true,
+          "steps": 300,
+          "failure": "policy remained running at the 300-step limit"
+        },
+        {
+          "episode_id": "b:libero_goal:task05:ep0009",
+          "success": true,
+          "steps": 209,
+          "failure": "plate remained outside the sensor-derived stove-front region"
+        },
+        {
           "episode_id": "b:libero_goal:task06:ep0000",
           "success": true,
           "steps": 137,
@@ -1770,9 +2224,279 @@
           "failure": null
         },
         {
+          "episode_id": "b:libero_goal:task06:ep0004",
+          "success": true,
+          "steps": 133,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_goal:task06:ep0005",
+          "success": true,
+          "steps": 134,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_goal:task06:ep0006",
+          "success": true,
+          "steps": 129,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_goal:task06:ep0007",
+          "success": true,
+          "steps": 193,
+          "failure": "sensor verification rejected place_in(cream cheese, bowl)"
+        },
+        {
+          "episode_id": "b:libero_goal:task06:ep0008",
+          "success": true,
+          "steps": 129,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_goal:task06:ep0009",
+          "success": false,
+          "steps": 140,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_goal:task07:ep0000",
+          "success": true,
+          "steps": 88,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_goal:task07:ep0001",
+          "success": true,
+          "steps": 89,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_goal:task07:ep0002",
+          "success": true,
+          "steps": 87,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_goal:task07:ep0003",
+          "success": true,
+          "steps": 87,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_goal:task07:ep0004",
+          "success": true,
+          "steps": 88,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_goal:task07:ep0005",
+          "success": true,
+          "steps": 89,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_goal:task07:ep0006",
+          "success": true,
+          "steps": 89,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_goal:task07:ep0007",
+          "success": true,
+          "steps": 88,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_goal:task07:ep0008",
+          "success": true,
+          "steps": 89,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_goal:task07:ep0009",
+          "success": true,
+          "steps": 85,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_goal:task08:ep0000",
+          "success": true,
+          "steps": 129,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_goal:task08:ep0001",
+          "success": true,
+          "steps": 119,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_goal:task08:ep0002",
+          "success": true,
+          "steps": 124,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_goal:task08:ep0003",
+          "success": true,
+          "steps": 215,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_goal:task08:ep0004",
+          "success": true,
+          "steps": 173,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_goal:task08:ep0005",
+          "success": true,
+          "steps": 127,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_goal:task08:ep0006",
+          "success": true,
+          "steps": 186,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_goal:task08:ep0007",
+          "success": true,
+          "steps": 184,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_goal:task08:ep0008",
+          "success": true,
+          "steps": 120,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_goal:task08:ep0009",
+          "success": true,
+          "steps": 121,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_goal:task09:ep0000",
+          "success": true,
+          "steps": 223,
+          "failure": "sensor verification rejected place_on(wine bottle, rack)"
+        },
+        {
+          "episode_id": "b:libero_goal:task09:ep0001",
+          "success": true,
+          "steps": 220,
+          "failure": "sensor verification rejected place_on(wine bottle, rack)"
+        },
+        {
+          "episode_id": "b:libero_goal:task09:ep0002",
+          "success": true,
+          "steps": 226,
+          "failure": "sensor verification rejected place_on(wine bottle, rack)"
+        },
+        {
+          "episode_id": "b:libero_goal:task09:ep0003",
+          "success": true,
+          "steps": 223,
+          "failure": "sensor verification rejected place_on(wine bottle, rack)"
+        },
+        {
+          "episode_id": "b:libero_goal:task09:ep0004",
+          "success": true,
+          "steps": 226,
+          "failure": "sensor verification rejected place_on(wine bottle, rack)"
+        },
+        {
+          "episode_id": "b:libero_goal:task09:ep0005",
+          "success": true,
+          "steps": 224,
+          "failure": "sensor verification rejected place_on(wine bottle, rack)"
+        },
+        {
+          "episode_id": "b:libero_goal:task09:ep0006",
+          "success": true,
+          "steps": 184,
+          "failure": "sensor verification rejected place_on(wine bottle, rack)"
+        },
+        {
+          "episode_id": "b:libero_goal:task09:ep0007",
+          "success": true,
+          "steps": 180,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_goal:task09:ep0008",
+          "success": true,
+          "steps": 222,
+          "failure": "sensor verification rejected place_on(wine bottle, rack)"
+        },
+        {
+          "episode_id": "b:libero_goal:task09:ep0009",
+          "success": true,
+          "steps": 225,
+          "failure": "sensor verification rejected place_on(wine bottle, rack)"
+        },
+        {
           "episode_id": "b:libero_10:task00:ep0000",
           "success": true,
           "steps": 250,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_10:task00:ep0001",
+          "success": true,
+          "steps": 251,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_10:task00:ep0002",
+          "success": true,
+          "steps": 243,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_10:task00:ep0003",
+          "success": true,
+          "steps": 252,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_10:task00:ep0004",
+          "success": true,
+          "steps": 255,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_10:task00:ep0005",
+          "success": true,
+          "steps": 252,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_10:task00:ep0006",
+          "success": true,
+          "steps": 251,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_10:task00:ep0007",
+          "success": true,
+          "steps": 238,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_10:task00:ep0008",
+          "success": true,
+          "steps": 248,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_10:task00:ep0009",
+          "success": true,
+          "steps": 245,
           "failure": null
         },
         {
@@ -1782,16 +2506,958 @@
           "failure": null
         },
         {
+          "episode_id": "b:libero_10:task01:ep0001",
+          "success": true,
+          "steps": 353,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_10:task01:ep0002",
+          "success": true,
+          "steps": 343,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_10:task01:ep0003",
+          "success": true,
+          "steps": 361,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_10:task01:ep0004",
+          "success": true,
+          "steps": 356,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_10:task01:ep0005",
+          "success": true,
+          "steps": 342,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_10:task01:ep0006",
+          "success": true,
+          "steps": 338,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_10:task01:ep0007",
+          "success": false,
+          "steps": 332,
+          "failure": "phase 'move_pregrasp' timed out"
+        },
+        {
+          "episode_id": "b:libero_10:task01:ep0008",
+          "success": true,
+          "steps": 340,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_10:task01:ep0009",
+          "success": true,
+          "steps": 342,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_10:task02:ep0000",
+          "success": true,
+          "steps": 339,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_10:task02:ep0001",
+          "success": true,
+          "steps": 263,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_10:task02:ep0002",
+          "success": true,
+          "steps": 351,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_10:task02:ep0003",
+          "success": true,
+          "steps": 351,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_10:task02:ep0004",
+          "success": true,
+          "steps": 190,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_10:task02:ep0005",
+          "success": true,
+          "steps": 360,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_10:task02:ep0006",
+          "success": true,
+          "steps": 285,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_10:task02:ep0007",
+          "success": false,
+          "steps": 354,
+          "failure": "phase 'approach' timed out"
+        },
+        {
+          "episode_id": "b:libero_10:task02:ep0008",
+          "success": true,
+          "steps": 192,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_10:task02:ep0009",
+          "success": true,
+          "steps": 185,
+          "failure": null
+        },
+        {
           "episode_id": "b:libero_10:task03:ep0000",
           "success": true,
           "steps": 475,
           "failure": "phase 'close_release' timed out (position_error=0.0140 m; rotation_error=0.0075 rad; current=[0.0856, 0.2014, 0.9532]; target=[0.0805, 0.2144, 0.9532])"
         },
         {
+          "episode_id": "b:libero_10:task03:ep0001",
+          "success": true,
+          "steps": 381,
+          "failure": "phase 'close_release' timed out (position_error=0.0141 m; rotation_error=0.0040 rad; current=[-0.075, 0.2153, 0.9537]; target=[-0.0714, 0.229, 0.9546])"
+        },
+        {
+          "episode_id": "b:libero_10:task03:ep0002",
+          "success": false,
+          "steps": 309,
+          "failure": "phase 'descend' timed out"
+        },
+        {
+          "episode_id": "b:libero_10:task03:ep0003",
+          "success": false,
+          "steps": 257,
+          "failure": "phase 'descend' timed out"
+        },
+        {
+          "episode_id": "b:libero_10:task03:ep0004",
+          "success": true,
+          "steps": 371,
+          "failure": "phase 'close_release' timed out (position_error=0.0106 m; rotation_error=0.0042 rad; current=[0.0845, 0.2046, 0.9573]; target=[0.0803, 0.2141, 0.9548])"
+        },
+        {
+          "episode_id": "b:libero_10:task03:ep0005",
+          "success": false,
+          "steps": 255,
+          "failure": "phase 'descend' timed out"
+        },
+        {
+          "episode_id": "b:libero_10:task03:ep0006",
+          "success": true,
+          "steps": 211,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_10:task03:ep0007",
+          "success": true,
+          "steps": 347,
+          "failure": "phase 'close_release' timed out (position_error=0.0222 m; rotation_error=0.0059 rad; current=[0.0732, 0.2048, 0.9526]; target=[0.0604, 0.223, 0.9525])"
+        },
+        {
+          "episode_id": "b:libero_10:task03:ep0008",
+          "success": true,
+          "steps": 461,
+          "failure": "phase 'close_release' timed out (position_error=0.0110 m; rotation_error=0.0029 rad; current=[0.0866, 0.2021, 0.9527]; target=[0.0843, 0.2129, 0.9529])"
+        },
+        {
+          "episode_id": "b:libero_10:task03:ep0009",
+          "success": true,
+          "steps": 383,
+          "failure": "phase 'close_release' timed out (position_error=0.0118 m; rotation_error=0.0029 rad; current=[0.0685, 0.2201, 0.9537]; target=[0.0659, 0.2314, 0.9552])"
+        },
+        {
+          "episode_id": "b:libero_10:task04:ep0000",
+          "success": false,
+          "steps": 403,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_10:task04:ep0001",
+          "success": true,
+          "steps": 393,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_10:task04:ep0002",
+          "success": true,
+          "steps": 379,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_10:task04:ep0003",
+          "success": true,
+          "steps": 395,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_10:task04:ep0004",
+          "success": true,
+          "steps": 402,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_10:task04:ep0005",
+          "success": true,
+          "steps": 405,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_10:task04:ep0006",
+          "success": false,
+          "steps": 400,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_10:task04:ep0007",
+          "success": true,
+          "steps": 396,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_10:task04:ep0008",
+          "success": true,
+          "steps": 392,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_10:task04:ep0009",
+          "success": true,
+          "steps": 374,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_10:task05:ep0000",
+          "success": true,
+          "steps": 188,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_10:task05:ep0001",
+          "success": true,
+          "steps": 186,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_10:task05:ep0002",
+          "success": true,
+          "steps": 184,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_10:task05:ep0003",
+          "success": true,
+          "steps": 176,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_10:task05:ep0004",
+          "success": true,
+          "steps": 189,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_10:task05:ep0005",
+          "success": true,
+          "steps": 182,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_10:task05:ep0006",
+          "success": true,
+          "steps": 174,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_10:task05:ep0007",
+          "success": false,
+          "steps": 226,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_10:task05:ep0008",
+          "success": true,
+          "steps": 171,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_10:task05:ep0009",
+          "success": true,
+          "steps": 171,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_10:task06:ep0000",
+          "success": true,
+          "steps": 368,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_10:task06:ep0001",
+          "success": true,
+          "steps": 380,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_10:task06:ep0002",
+          "success": false,
+          "steps": 395,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_10:task06:ep0003",
+          "success": true,
+          "steps": 410,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_10:task06:ep0004",
+          "success": true,
+          "steps": 387,
+          "failure": "sensor verification rejected place_relative(chocolate pudding, plate)"
+        },
+        {
+          "episode_id": "b:libero_10:task06:ep0005",
+          "success": true,
+          "steps": 389,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_10:task06:ep0006",
+          "success": true,
+          "steps": 367,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_10:task06:ep0007",
+          "success": true,
+          "steps": 374,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_10:task06:ep0008",
+          "success": true,
+          "steps": 394,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_10:task06:ep0009",
+          "success": true,
+          "steps": 302,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_10:task07:ep0000",
+          "success": true,
+          "steps": 254,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_10:task07:ep0001",
+          "success": true,
+          "steps": 254,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_10:task07:ep0002",
+          "success": true,
+          "steps": 252,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_10:task07:ep0003",
+          "success": true,
+          "steps": 248,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_10:task07:ep0004",
+          "success": true,
+          "steps": 256,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_10:task07:ep0005",
+          "success": true,
+          "steps": 250,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_10:task07:ep0006",
+          "success": true,
+          "steps": 253,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_10:task07:ep0007",
+          "success": true,
+          "steps": 248,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_10:task07:ep0008",
+          "success": true,
+          "steps": 255,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_10:task07:ep0009",
+          "success": true,
+          "steps": 257,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_10:task08:ep0000",
+          "success": true,
+          "steps": 504,
+          "failure": "sensor verification rejected place_on(moka pot, stove)"
+        },
+        {
+          "episode_id": "b:libero_10:task08:ep0001",
+          "success": true,
+          "steps": 457,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_10:task08:ep0002",
+          "success": true,
+          "steps": 463,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_10:task08:ep0003",
+          "success": false,
+          "steps": 227,
+          "failure": "sensor verification rejected place_on(moka pot, stove)"
+        },
+        {
+          "episode_id": "b:libero_10:task08:ep0004",
+          "success": true,
+          "steps": 473,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_10:task08:ep0005",
+          "success": true,
+          "steps": 477,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_10:task08:ep0006",
+          "success": false,
+          "steps": 440,
+          "failure": "sensor verification rejected grasp of 'moka pot'"
+        },
+        {
+          "episode_id": "b:libero_10:task08:ep0007",
+          "success": true,
+          "steps": 463,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_10:task08:ep0008",
+          "success": true,
+          "steps": 485,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_10:task08:ep0009",
+          "success": false,
+          "steps": 458,
+          "failure": null
+        },
+        {
           "episode_id": "b:libero_10:task09:ep0000",
           "success": false,
           "steps": 386,
           "failure": "phase 'microwave_close_align_outer_safe' timed out (position_error=0.0738 m; rotation_error=0.4248 rad; current=[-0.0941, 0.0138, 1.1274]; target=[-0.0295, 0.0336, 1.0978])"
+        },
+        {
+          "episode_id": "b:libero_10:task09:ep0001",
+          "success": false,
+          "steps": 221,
+          "failure": "no reliable open microwave door edge was visible in either RGB-D view"
+        },
+        {
+          "episode_id": "b:libero_10:task09:ep0002",
+          "success": false,
+          "steps": 278,
+          "failure": "microwave close pusher exterior normal contradicted the frozen RGB-D sign"
+        },
+        {
+          "episode_id": "b:libero_10:task09:ep0003",
+          "success": false,
+          "steps": 187,
+          "failure": "phase 'approach' timed out"
+        },
+        {
+          "episode_id": "b:libero_10:task09:ep0004",
+          "success": false,
+          "steps": 297,
+          "failure": "microwave handle grasp was lost during the RGB-D hinge arc (width=0.0040 m; waypoint=4/38; measured_open_angle=0.0604 rad)"
+        },
+        {
+          "episode_id": "b:libero_10:task09:ep0005",
+          "success": false,
+          "steps": 271,
+          "failure": "microwave close pusher exterior normal contradicted the frozen RGB-D sign"
+        },
+        {
+          "episode_id": "b:libero_10:task09:ep0006",
+          "success": false,
+          "steps": 284,
+          "failure": "microwave close pusher exterior normal contradicted the frozen RGB-D sign"
+        },
+        {
+          "episode_id": "b:libero_10:task09:ep0007",
+          "success": false,
+          "steps": 278,
+          "failure": "microwave close pusher exterior normal contradicted the frozen RGB-D sign"
+        },
+        {
+          "episode_id": "b:libero_10:task09:ep0008",
+          "success": false,
+          "steps": 386,
+          "failure": "phase 'microwave_close_align_outer_safe' timed out (position_error=0.0715 m; rotation_error=0.5572 rad; current=[-0.0908, -0.001, 1.1381]; target=[-0.0429, 0.0336, 1.0978])"
+        },
+        {
+          "episode_id": "b:libero_10:task09:ep0009",
+          "success": false,
+          "steps": 329,
+          "failure": "phase 'lower_to_shelf_entry' timed out"
+        },
+        {
+          "episode_id": "b:libero_object:task00:ep0000",
+          "success": true,
+          "steps": 136,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_object:task00:ep0001",
+          "success": true,
+          "steps": 136,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_object:task00:ep0002",
+          "success": true,
+          "steps": 137,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_object:task00:ep0003",
+          "success": true,
+          "steps": 136,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_object:task00:ep0004",
+          "success": true,
+          "steps": 136,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_object:task00:ep0005",
+          "success": true,
+          "steps": 137,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_object:task00:ep0006",
+          "success": true,
+          "steps": 137,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_object:task00:ep0007",
+          "success": true,
+          "steps": 138,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_object:task00:ep0008",
+          "success": true,
+          "steps": 137,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_object:task00:ep0009",
+          "success": true,
+          "steps": 138,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_object:task01:ep0000",
+          "success": true,
+          "steps": 144,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_object:task01:ep0001",
+          "success": true,
+          "steps": 242,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_object:task01:ep0002",
+          "success": true,
+          "steps": 211,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_object:task01:ep0003",
+          "success": false,
+          "steps": 262,
+          "failure": "phase 'approach' timed out"
+        },
+        {
+          "episode_id": "b:libero_object:task01:ep0004",
+          "success": true,
+          "steps": 143,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_object:task01:ep0005",
+          "success": true,
+          "steps": 280,
+          "failure": "policy remained running at the 280-step limit"
+        },
+        {
+          "episode_id": "b:libero_object:task01:ep0006",
+          "success": true,
+          "steps": 215,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_object:task01:ep0007",
+          "success": true,
+          "steps": 226,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_object:task01:ep0008",
+          "success": true,
+          "steps": 142,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_object:task01:ep0009",
+          "success": true,
+          "steps": 141,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_object:task02:ep0000",
+          "success": true,
+          "steps": 252,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_object:task02:ep0001",
+          "success": true,
+          "steps": 246,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_object:task02:ep0002",
+          "success": true,
+          "steps": 228,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_object:task02:ep0003",
+          "success": true,
+          "steps": 226,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_object:task02:ep0004",
+          "success": true,
+          "steps": 227,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_object:task02:ep0005",
+          "success": true,
+          "steps": 248,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_object:task02:ep0006",
+          "success": true,
+          "steps": 247,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_object:task02:ep0007",
+          "success": true,
+          "steps": 229,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_object:task02:ep0008",
+          "success": true,
+          "steps": 219,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_object:task02:ep0009",
+          "success": true,
+          "steps": 240,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_object:task03:ep0000",
+          "success": true,
+          "steps": 252,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_object:task03:ep0001",
+          "success": true,
+          "steps": 253,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_object:task03:ep0002",
+          "success": true,
+          "steps": 251,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_object:task03:ep0003",
+          "success": true,
+          "steps": 264,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_object:task03:ep0004",
+          "success": true,
+          "steps": 253,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_object:task03:ep0005",
+          "success": true,
+          "steps": 255,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_object:task03:ep0006",
+          "success": true,
+          "steps": 260,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_object:task03:ep0007",
+          "success": true,
+          "steps": 255,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_object:task03:ep0008",
+          "success": true,
+          "steps": 252,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_object:task03:ep0009",
+          "success": true,
+          "steps": 234,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_object:task04:ep0000",
+          "success": true,
+          "steps": 280,
+          "failure": "policy remained running at the 280-step limit"
+        },
+        {
+          "episode_id": "b:libero_object:task04:ep0001",
+          "success": true,
+          "steps": 280,
+          "failure": "policy remained running at the 280-step limit"
+        },
+        {
+          "episode_id": "b:libero_object:task04:ep0002",
+          "success": true,
+          "steps": 280,
+          "failure": "policy remained running at the 280-step limit"
+        },
+        {
+          "episode_id": "b:libero_object:task04:ep0003",
+          "success": true,
+          "steps": 280,
+          "failure": "policy remained running at the 280-step limit"
+        },
+        {
+          "episode_id": "b:libero_object:task04:ep0004",
+          "success": true,
+          "steps": 280,
+          "failure": "policy remained running at the 280-step limit"
+        },
+        {
+          "episode_id": "b:libero_object:task04:ep0005",
+          "success": true,
+          "steps": 280,
+          "failure": "policy remained running at the 280-step limit"
+        },
+        {
+          "episode_id": "b:libero_object:task04:ep0006",
+          "success": true,
+          "steps": 280,
+          "failure": "policy remained running at the 280-step limit"
+        },
+        {
+          "episode_id": "b:libero_object:task04:ep0007",
+          "success": true,
+          "steps": 280,
+          "failure": "policy remained running at the 280-step limit"
+        },
+        {
+          "episode_id": "b:libero_object:task04:ep0008",
+          "success": false,
+          "steps": 181,
+          "failure": "phase 'approach' timed out"
+        },
+        {
+          "episode_id": "b:libero_object:task04:ep0009",
+          "success": true,
+          "steps": 266,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_object:task05:ep0000",
+          "success": true,
+          "steps": 134,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_object:task05:ep0001",
+          "success": true,
+          "steps": 134,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_object:task05:ep0002",
+          "success": true,
+          "steps": 133,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_object:task05:ep0003",
+          "success": true,
+          "steps": 134,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_object:task05:ep0004",
+          "success": true,
+          "steps": 132,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_object:task05:ep0005",
+          "success": true,
+          "steps": 132,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_object:task05:ep0006",
+          "success": true,
+          "steps": 133,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_object:task05:ep0007",
+          "success": true,
+          "steps": 131,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_object:task05:ep0008",
+          "success": true,
+          "steps": 133,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_object:task05:ep0009",
+          "success": true,
+          "steps": 133,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_object:task06:ep0000",
+          "success": true,
+          "steps": 241,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_object:task06:ep0001",
+          "success": true,
+          "steps": 239,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_object:task06:ep0002",
+          "success": true,
+          "steps": 241,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_object:task06:ep0003",
+          "success": true,
+          "steps": 235,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_object:task06:ep0004",
+          "success": true,
+          "steps": 234,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_object:task06:ep0005",
+          "success": true,
+          "steps": 241,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_object:task06:ep0006",
+          "success": true,
+          "steps": 239,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_object:task06:ep0007",
+          "success": true,
+          "steps": 234,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_object:task06:ep0008",
+          "success": true,
+          "steps": 237,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_object:task06:ep0009",
+          "success": true,
+          "steps": 239,
+          "failure": null
         },
         {
           "episode_id": "b:libero_object:task07:ep0000",
@@ -1816,9 +3482,772 @@
           "success": true,
           "steps": 249,
           "failure": null
+        },
+        {
+          "episode_id": "b:libero_object:task07:ep0004",
+          "success": true,
+          "steps": 171,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_object:task07:ep0005",
+          "success": true,
+          "steps": 175,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_object:task07:ep0006",
+          "success": true,
+          "steps": 174,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_object:task07:ep0007",
+          "success": true,
+          "steps": 173,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_object:task07:ep0008",
+          "success": true,
+          "steps": 174,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_object:task07:ep0009",
+          "success": true,
+          "steps": 173,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_object:task08:ep0000",
+          "success": true,
+          "steps": 136,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_object:task08:ep0001",
+          "success": true,
+          "steps": 135,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_object:task08:ep0002",
+          "success": true,
+          "steps": 136,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_object:task08:ep0003",
+          "success": true,
+          "steps": 138,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_object:task08:ep0004",
+          "success": true,
+          "steps": 136,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_object:task08:ep0005",
+          "success": true,
+          "steps": 134,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_object:task08:ep0006",
+          "success": true,
+          "steps": 138,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_object:task08:ep0007",
+          "success": true,
+          "steps": 135,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_object:task08:ep0008",
+          "success": true,
+          "steps": 137,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_object:task08:ep0009",
+          "success": true,
+          "steps": 138,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_object:task09:ep0000",
+          "success": true,
+          "steps": 172,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_object:task09:ep0001",
+          "success": true,
+          "steps": 162,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_object:task09:ep0002",
+          "success": true,
+          "steps": 171,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_object:task09:ep0003",
+          "success": true,
+          "steps": 158,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_object:task09:ep0004",
+          "success": true,
+          "steps": 172,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_object:task09:ep0005",
+          "success": true,
+          "steps": 171,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_object:task09:ep0006",
+          "success": true,
+          "steps": 172,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_object:task09:ep0007",
+          "success": true,
+          "steps": 170,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_object:task09:ep0008",
+          "success": true,
+          "steps": 172,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_object:task09:ep0009",
+          "success": true,
+          "steps": 172,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_spatial:task00:ep0000",
+          "success": true,
+          "steps": 118,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_spatial:task00:ep0001",
+          "success": true,
+          "steps": 148,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_spatial:task00:ep0002",
+          "success": true,
+          "steps": 126,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_spatial:task00:ep0003",
+          "success": true,
+          "steps": 123,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_spatial:task00:ep0004",
+          "success": true,
+          "steps": 124,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_spatial:task00:ep0005",
+          "success": true,
+          "steps": 119,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_spatial:task00:ep0006",
+          "success": true,
+          "steps": 147,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_spatial:task00:ep0007",
+          "success": true,
+          "steps": 148,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_spatial:task00:ep0008",
+          "success": true,
+          "steps": 120,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_spatial:task00:ep0009",
+          "success": true,
+          "steps": 117,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_spatial:task01:ep0000",
+          "success": true,
+          "steps": 185,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_spatial:task01:ep0001",
+          "success": true,
+          "steps": 135,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_spatial:task01:ep0002",
+          "success": true,
+          "steps": 141,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_spatial:task01:ep0003",
+          "success": true,
+          "steps": 184,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_spatial:task01:ep0004",
+          "success": true,
+          "steps": 138,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_spatial:task01:ep0005",
+          "success": false,
+          "steps": 184,
+          "failure": "phase 'approach' timed out"
+        },
+        {
+          "episode_id": "b:libero_spatial:task01:ep0006",
+          "success": true,
+          "steps": 166,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_spatial:task01:ep0007",
+          "success": true,
+          "steps": 186,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_spatial:task01:ep0008",
+          "success": true,
+          "steps": 186,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_spatial:task01:ep0009",
+          "success": false,
+          "steps": 129,
+          "failure": "both sensor-bound free-space physical rim grasps failed sensor retention verification"
+        },
+        {
+          "episode_id": "b:libero_spatial:task02:ep0000",
+          "success": true,
+          "steps": 121,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_spatial:task02:ep0001",
+          "success": true,
+          "steps": 124,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_spatial:task02:ep0002",
+          "success": true,
+          "steps": 130,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_spatial:task02:ep0003",
+          "success": true,
+          "steps": 131,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_spatial:task02:ep0004",
+          "success": true,
+          "steps": 133,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_spatial:task02:ep0005",
+          "success": true,
+          "steps": 132,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_spatial:task02:ep0006",
+          "success": true,
+          "steps": 131,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_spatial:task02:ep0007",
+          "success": true,
+          "steps": 131,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_spatial:task02:ep0008",
+          "success": true,
+          "steps": 119,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_spatial:task02:ep0009",
+          "success": true,
+          "steps": 124,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_spatial:task03:ep0000",
+          "success": true,
+          "steps": 119,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_spatial:task03:ep0001",
+          "success": true,
+          "steps": 121,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_spatial:task03:ep0002",
+          "success": true,
+          "steps": 124,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_spatial:task03:ep0003",
+          "success": true,
+          "steps": 121,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_spatial:task03:ep0004",
+          "success": true,
+          "steps": 123,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_spatial:task03:ep0005",
+          "success": false,
+          "steps": 2,
+          "failure": "cannot localize pick object 'black bowl'"
+        },
+        {
+          "episode_id": "b:libero_spatial:task03:ep0006",
+          "success": true,
+          "steps": 120,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_spatial:task03:ep0007",
+          "success": true,
+          "steps": 120,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_spatial:task03:ep0008",
+          "success": true,
+          "steps": 118,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_spatial:task03:ep0009",
+          "success": true,
+          "steps": 119,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_spatial:task04:ep0000",
+          "success": false,
+          "steps": 203,
+          "failure": "phase 'move_pregrasp' timed out"
+        },
+        {
+          "episode_id": "b:libero_spatial:task04:ep0001",
+          "success": true,
+          "steps": 153,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_spatial:task04:ep0002",
+          "success": false,
+          "steps": 207,
+          "failure": "phase 'move_pregrasp' timed out"
+        },
+        {
+          "episode_id": "b:libero_spatial:task04:ep0003",
+          "success": true,
+          "steps": 152,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_spatial:task04:ep0004",
+          "success": true,
+          "steps": 153,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_spatial:task04:ep0005",
+          "success": true,
+          "steps": 152,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_spatial:task04:ep0006",
+          "success": true,
+          "steps": 154,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_spatial:task04:ep0007",
+          "success": true,
+          "steps": 168,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_spatial:task04:ep0008",
+          "success": true,
+          "steps": 220,
+          "failure": "policy remained running at the 220-step limit"
+        },
+        {
+          "episode_id": "b:libero_spatial:task04:ep0009",
+          "success": false,
+          "steps": 138,
+          "failure": "width-controlled cavity rim approach remained blocked before safe contact"
+        },
+        {
+          "episode_id": "b:libero_spatial:task05:ep0000",
+          "success": true,
+          "steps": 181,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_spatial:task05:ep0001",
+          "success": true,
+          "steps": 177,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_spatial:task05:ep0002",
+          "success": true,
+          "steps": 128,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_spatial:task05:ep0003",
+          "success": true,
+          "steps": 127,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_spatial:task05:ep0004",
+          "success": true,
+          "steps": 167,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_spatial:task05:ep0005",
+          "success": true,
+          "steps": 173,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_spatial:task05:ep0006",
+          "success": true,
+          "steps": 193,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_spatial:task05:ep0007",
+          "success": false,
+          "steps": 133,
+          "failure": "both sensor-bound free-space physical rim grasps failed sensor retention verification"
+        },
+        {
+          "episode_id": "b:libero_spatial:task05:ep0008",
+          "success": true,
+          "steps": 171,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_spatial:task05:ep0009",
+          "success": true,
+          "steps": 131,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_spatial:task06:ep0000",
+          "success": true,
+          "steps": 143,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_spatial:task06:ep0001",
+          "success": true,
+          "steps": 141,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_spatial:task06:ep0002",
+          "success": true,
+          "steps": 142,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_spatial:task06:ep0003",
+          "success": true,
+          "steps": 139,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_spatial:task06:ep0004",
+          "success": true,
+          "steps": 138,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_spatial:task06:ep0005",
+          "success": true,
+          "steps": 143,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_spatial:task06:ep0006",
+          "success": true,
+          "steps": 142,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_spatial:task06:ep0007",
+          "success": true,
+          "steps": 142,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_spatial:task06:ep0008",
+          "success": true,
+          "steps": 147,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_spatial:task06:ep0009",
+          "success": true,
+          "steps": 139,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_spatial:task07:ep0000",
+          "success": true,
+          "steps": 135,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_spatial:task07:ep0001",
+          "success": true,
+          "steps": 139,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_spatial:task07:ep0002",
+          "success": true,
+          "steps": 133,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_spatial:task07:ep0003",
+          "success": true,
+          "steps": 148,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_spatial:task07:ep0004",
+          "success": true,
+          "steps": 134,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_spatial:task07:ep0005",
+          "success": true,
+          "steps": 146,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_spatial:task07:ep0006",
+          "success": true,
+          "steps": 137,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_spatial:task07:ep0007",
+          "success": true,
+          "steps": 141,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_spatial:task07:ep0008",
+          "success": true,
+          "steps": 150,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_spatial:task07:ep0009",
+          "success": true,
+          "steps": 145,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_spatial:task08:ep0000",
+          "success": true,
+          "steps": 123,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_spatial:task08:ep0001",
+          "success": true,
+          "steps": 194,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_spatial:task08:ep0002",
+          "success": true,
+          "steps": 125,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_spatial:task08:ep0003",
+          "success": true,
+          "steps": 126,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_spatial:task08:ep0004",
+          "success": true,
+          "steps": 126,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_spatial:task08:ep0005",
+          "success": true,
+          "steps": 115,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_spatial:task08:ep0006",
+          "success": true,
+          "steps": 183,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_spatial:task08:ep0007",
+          "success": true,
+          "steps": 122,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_spatial:task08:ep0008",
+          "success": true,
+          "steps": 126,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_spatial:task08:ep0009",
+          "success": true,
+          "steps": 122,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_spatial:task09:ep0000",
+          "success": true,
+          "steps": 194,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_spatial:task09:ep0001",
+          "success": true,
+          "steps": 200,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_spatial:task09:ep0002",
+          "success": true,
+          "steps": 194,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_spatial:task09:ep0003",
+          "success": true,
+          "steps": 195,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_spatial:task09:ep0004",
+          "success": true,
+          "steps": 193,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_spatial:task09:ep0005",
+          "success": true,
+          "steps": 203,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_spatial:task09:ep0006",
+          "success": true,
+          "steps": 192,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_spatial:task09:ep0007",
+          "success": true,
+          "steps": 186,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_spatial:task09:ep0008",
+          "success": true,
+          "steps": 200,
+          "failure": null
+        },
+        {
+          "episode_id": "b:libero_spatial:task09:ep0009",
+          "success": true,
+          "steps": 196,
+          "failure": null
         }
       ],
-      "validated": null,
+      "validated": {
+        "coverage_passed": true,
+        "issues": [],
+        "episodes": 400,
+        "source_tree_sha256": "c954f817fb7dd2b046a961a13a9acc9f7f2f0ad87da97eba1f6c0da995eff4e6",
+        "episodes_jsonl_sha256": "c3556852322cf95aa6a6ed096124291b47c104558d8acd64c8d389ea23235dc4",
+        "validated_at": "2026-09-13T19:29:01+00:00"
+      },
       "stop_reason": null
     },
     {

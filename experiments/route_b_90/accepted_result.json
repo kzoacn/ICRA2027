@@ -1,0 +1,251 @@
+{
+  "accepted": true,
+  "baseline": {
+    "commit": "fa398a2f24abf1c42c98cf480b97d16e609a4393",
+    "successes": 347,
+    "episodes": 400
+  },
+  "candidate": {
+    "label": "full400_candidate_01",
+    "source_tree_sha256": "c954f817fb7dd2b046a961a13a9acc9f7f2f0ad87da97eba1f6c0da995eff4e6",
+    "policy_files_match_commit": "5705b19aec4c1cba4093ae0e805bec68ba4ffc4f",
+    "successes": 360,
+    "episodes": 400,
+    "fresh_episodes": 400,
+    "reused_episodes": 0,
+    "raw_episodes_sha256": "c3556852322cf95aa6a6ed096124291b47c104558d8acd64c8d389ea23235dc4",
+    "validated_at": "2026-09-13T19:29:01+00:00",
+    "wall_elapsed_s": 4624.822450214997
+  },
+  "protocol": {
+    "tasks": 40,
+    "episodes_per_task": 10,
+    "official_init_ids": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9
+    ],
+    "seed": 7,
+    "step_caps": {
+      "spatial": 220,
+      "object": 280,
+      "goal": 300,
+      "long": 520
+    },
+    "scoring": "external_sticky_any_success",
+    "expected_episodes": 400,
+    "new_episodes": 400,
+    "reused_episodes": 0
+  },
+  "suites": {
+    "libero_object": {
+      "episodes": 100,
+      "successes": 98
+    },
+    "libero_goal": {
+      "episodes": 100,
+      "successes": 91
+    },
+    "libero_10": {
+      "episodes": 100,
+      "successes": 78
+    },
+    "libero_spatial": {
+      "episodes": 100,
+      "successes": 93
+    }
+  },
+  "paired_improvements": [
+    "b:libero_object:task07:ep0001",
+    "b:libero_object:task07:ep0002",
+    "b:libero_10:task00:ep0006",
+    "b:libero_10:task00:ep0007",
+    "b:libero_10:task03:ep0008",
+    "b:libero_10:task08:ep0000",
+    "b:libero_10:task08:ep0004",
+    "b:libero_10:task08:ep0008",
+    "b:libero_goal:task00:ep0005",
+    "b:libero_goal:task00:ep0006",
+    "b:libero_goal:task00:ep0009",
+    "b:libero_spatial:task04:ep0006",
+    "b:libero_spatial:task04:ep0008"
+  ],
+  "paired_regressions": [],
+  "task_counts": {
+    "libero_object:07": {
+      "baseline_successes": 8,
+      "candidate_successes": 10
+    },
+    "libero_goal:06": {
+      "baseline_successes": 8,
+      "candidate_successes": 8
+    },
+    "libero_10:00": {
+      "baseline_successes": 8,
+      "candidate_successes": 10
+    },
+    "libero_10:01": {
+      "baseline_successes": 9,
+      "candidate_successes": 9
+    },
+    "libero_10:03": {
+      "baseline_successes": 6,
+      "candidate_successes": 7
+    },
+    "libero_10:08": {
+      "baseline_successes": 4,
+      "candidate_successes": 7
+    },
+    "libero_10:09": {
+      "baseline_successes": 0,
+      "candidate_successes": 0
+    },
+    "libero_goal:00": {
+      "baseline_successes": 7,
+      "candidate_successes": 10
+    },
+    "libero_spatial:04": {
+      "baseline_successes": 5,
+      "candidate_successes": 7
+    },
+    "libero_spatial:00": {
+      "baseline_successes": 10,
+      "candidate_successes": 10
+    },
+    "libero_spatial:01": {
+      "baseline_successes": 8,
+      "candidate_successes": 8
+    },
+    "libero_spatial:02": {
+      "baseline_successes": 10,
+      "candidate_successes": 10
+    },
+    "libero_spatial:03": {
+      "baseline_successes": 9,
+      "candidate_successes": 9
+    },
+    "libero_spatial:05": {
+      "baseline_successes": 9,
+      "candidate_successes": 9
+    },
+    "libero_spatial:06": {
+      "baseline_successes": 10,
+      "candidate_successes": 10
+    },
+    "libero_spatial:07": {
+      "baseline_successes": 10,
+      "candidate_successes": 10
+    },
+    "libero_spatial:08": {
+      "baseline_successes": 10,
+      "candidate_successes": 10
+    },
+    "libero_spatial:09": {
+      "baseline_successes": 10,
+      "candidate_successes": 10
+    },
+    "libero_object:00": {
+      "baseline_successes": 10,
+      "candidate_successes": 10
+    },
+    "libero_object:01": {
+      "baseline_successes": 9,
+      "candidate_successes": 9
+    },
+    "libero_object:02": {
+      "baseline_successes": 10,
+      "candidate_successes": 10
+    },
+    "libero_object:03": {
+      "baseline_successes": 10,
+      "candidate_successes": 10
+    },
+    "libero_object:04": {
+      "baseline_successes": 9,
+      "candidate_successes": 9
+    },
+    "libero_object:05": {
+      "baseline_successes": 10,
+      "candidate_successes": 10
+    },
+    "libero_object:06": {
+      "baseline_successes": 10,
+      "candidate_successes": 10
+    },
+    "libero_object:08": {
+      "baseline_successes": 10,
+      "candidate_successes": 10
+    },
+    "libero_object:09": {
+      "baseline_successes": 10,
+      "candidate_successes": 10
+    },
+    "libero_goal:01": {
+      "baseline_successes": 10,
+      "candidate_successes": 10
+    },
+    "libero_goal:02": {
+      "baseline_successes": 10,
+      "candidate_successes": 10
+    },
+    "libero_goal:03": {
+      "baseline_successes": 3,
+      "candidate_successes": 3
+    },
+    "libero_goal:04": {
+      "baseline_successes": 10,
+      "candidate_successes": 10
+    },
+    "libero_goal:05": {
+      "baseline_successes": 10,
+      "candidate_successes": 10
+    },
+    "libero_goal:07": {
+      "baseline_successes": 10,
+      "candidate_successes": 10
+    },
+    "libero_goal:08": {
+      "baseline_successes": 10,
+      "candidate_successes": 10
+    },
+    "libero_goal:09": {
+      "baseline_successes": 10,
+      "candidate_successes": 10
+    },
+    "libero_10:02": {
+      "baseline_successes": 9,
+      "candidate_successes": 9
+    },
+    "libero_10:04": {
+      "baseline_successes": 8,
+      "candidate_successes": 8
+    },
+    "libero_10:05": {
+      "baseline_successes": 9,
+      "candidate_successes": 9
+    },
+    "libero_10:06": {
+      "baseline_successes": 9,
+      "candidate_successes": 9
+    },
+    "libero_10:07": {
+      "baseline_successes": 10,
+      "candidate_successes": 10
+    }
+  },
+  "validation": {
+    "coverage_passed": true,
+    "issues": [],
+    "episodes": 400,
+    "source_tree_sha256": "c954f817fb7dd2b046a961a13a9acc9f7f2f0ad87da97eba1f6c0da995eff4e6",
+    "episodes_jsonl_sha256": "c3556852322cf95aa6a6ed096124291b47c104558d8acd64c8d389ea23235dc4",
+    "validated_at": "2026-09-13T19:29:01+00:00"
+  }
+}

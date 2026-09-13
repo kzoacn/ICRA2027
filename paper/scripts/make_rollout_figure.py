@@ -17,17 +17,27 @@ PAPER = Path(__file__).resolve().parents[1]
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--source-root", type=Path, required=True)
+    inputs = parser.add_mutually_exclusive_group(required=True)
+    inputs.add_argument("--source-root", type=Path)
+    inputs.add_argument("--batch-dir", type=Path)
     args = parser.parse_args()
-    source = args.source_root.resolve()
+    source = (args.batch_dir or args.source_root).resolve()
+    records_root = (source / "shards" if args.batch_dir else
+                    source / "outputs/smolvla_scale_400_parallel_20260913/shards")
     selected = [("object_task00", 0, "Object 00 / init 00: external success"),
                 ("goal_task03", 2, "Goal 03 / init 02: action-budget exhaustion")]
     fig, axes = plt.subplots(2, 4, figsize=(6.8, 3.35))
     provenance = []
     for row_index, (task, init, label) in enumerate(selected):
-        records = source / "outputs/smolvla_scale_400_parallel_20260913/shards" / task / "episodes.jsonl"
+        records = records_root / task / "episodes.jsonl"
         row = next(json.loads(line) for line in records.read_text().splitlines()
                    if json.loads(line)["key"]["episode_index"] == init)
+        assert row["evaluator_success"] is (row_index == 0), "Update the caption when the illustrated outcome changes."
+        if row_index == 1:
+            assert row["policy_status"] == "timeout", "The illustrated failure must match its action-budget caption."
+            preceding = [json.loads(line) for line in records.read_text().splitlines()
+                         if json.loads(line)["key"]["episode_index"] < init]
+            assert all(item["evaluator_success"] for item in preceding), "The selected failure must be first in index order."
         video = Path(row["video_paths"]["dual"])
         reader = imageio.get_reader(video)
         frames = reader.count_frames()

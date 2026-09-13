@@ -39,9 +39,9 @@ are retained.
 
 ## Development checkpoint
 
-The accepted full-run result is still **347/400**. Development results below
-come from different immutable candidates and must not be presented as a new
-400-episode result.
+The accepted complete replay is **360/400 (90.0%)**, documented below.
+The earlier development results in this section came from different immutable
+candidates; acceptance uses the separate fresh 400-episode replay.
 
 - cavity_near_02: Spatial 04 improved from 5/10 to 7/10. Wider measured
   near-side clearance allows two extra direct nominal rim grasps.
@@ -53,16 +53,18 @@ come from different immutable candidates and must not be presented as a new
   the second version caches that unoccluded geometry across placements.
 - drawer_placement_02: Long 03 improved from 6/10 to 7/10, while Goal 03
   fell from 3/10 to 2/10. The subsequent candidate confines carry-frame and
-  convergence changes to the bottom drawer; its replay is still pending.
+  convergence changes to the bottom drawer. The complete replay confirms
+  Long 03 at 7/10 and preserves Goal 03 at 3/10.
 - Post-drawer detours, initial wrist-frame changes, and direct active-view
   near approaches have not demonstrated a retained improvement. Their records
   are preserved; the current candidate restores the baseline free-space pick.
 - Microwave insertion now reaches door manipulation in some development
   episodes, but no microwave success has yet been confirmed. Door feature
   association, wrist staging, and retained contact still need improvement.
-- Additional development checks inspect basket placement collisions and
-  packages carried away after opening the gripper. They are not accepted
-  improvements until complete task replays are available.
+- Basket placement checks identified colliding sequential placements and
+  packages carried away after opening the gripper. The complete replay
+  confirms Object 07 and Long 00 at 10/10; Long 01 and Long 07 retain 9/10
+  and 10/10 respectively.
 
 The microwave development fixture contains two raw boundary RGB-D surface
 clouds from the first observation of Long 09, init 0: a flat table false positive
@@ -77,3 +79,40 @@ Run check_geometry.py with the deployed Python environment. Run update_record.py
 to refresh development_record.json from preserved batch outputs. This index
 includes unsuccessful and interrupted attempts and never merges candidate
 scores into an acceptance claim.
+
+## Accepted complete replay
+
+`full400_candidate_01` completed 400 new episodes with one frozen policy source:
+`c954f817fb7dd2b046a961a13a9acc9f7f2f0ad87da97eba1f6c0da995eff4e6`.
+Its policy files match commit `5705b19`; later manuscript or runner edits do
+not enter the snapshot. All 400 episodes are new, with the protocol above.
+The dispatcher started with two workers while development jobs finished,
+then increased to eight. Priority affects task scheduling only; every task
+retains initial-state order 0–9 and its independent reset stream.
+
+The outcome is 360/400: Spatial 93/100, Object 98/100, Goal 91/100,
+and Long 78/100. Thirteen previously unsuccessful initializations succeed;
+no previously successful initialization regresses. All coverage, source,
+configuration, video-presence and runtime-exception checks passed.
+See [accepted_result.json](accepted_result.json) for the exact comparison.
+
+| Task | Baseline | Complete replay |
+|---|---:|---:|
+| Spatial 04: bowl from top drawer | 5/10 | 7/10 |
+| Object 07: milk into basket | 8/10 | 10/10 |
+| Goal 00: open middle drawer | 7/10 | 10/10 |
+| Long 00: soup and tomato sauce into basket | 8/10 | 10/10 |
+| Long 03: bowl into bottom drawer and close | 6/10 | 7/10 |
+| Long 08: both moka pots onto stove | 4/10 | 7/10 |
+
+Other task outcomes are unchanged. Microwave Long 09 remains 0/10.
+The anonymous manuscript, tables and figures use this complete replay.
+Full original episode records are included in `paper/data/raw_episodes.jsonl.gz`;
+all development snapshots, logs and videos remain preserved on the server.
+
+To reproduce the paper data, import it with `paper/scripts/capture_results.py
+--batch-dir runtime/route_b_90/full400_candidate_01`. Regenerate numerical
+artifacts with `make -C paper figures`. Extract its actual rollout frames
+with `paper/scripts/make_rollout_figure.py --batch-dir ...` using a Python
+environment with imageio and matplotlib, then run `make -C paper check`.
+The capture script rejects a development batch as a final paper dataset.

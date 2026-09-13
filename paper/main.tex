@@ -327,6 +327,25 @@ These routines preserve the distinction between a robot-side mechanical
 signal and an estimate of task completion. Their hand-selected parameters
 are part of the fixed controller configuration evaluated below.
 
+\ifAllFresh
+Several fixture skills refine the grounded object box into physical contact
+geometry. A complete visible burner disk anchors the stove support centre;
+public plate thickness supplies the offset from the visible disk to the
+load-bearing surface. That unoccluded estimate is retained across sequential
+placements. For an open microwave, visible vertical control-panel and side-wall
+surfaces, together with the roof height, constrain the cavity and hinge frame
+through public physical dimensions. A flat tabletop crop or a roof without
+supporting vertical structure is insufficient for this fit.
+
+Placement also accounts for the hand's withdrawal. The microwave approach
+aligns the payload with the cavity width and uses a lateral entry path.
+Repeated basket placements receive separate diagonal landing centres.
+Before withdrawing from a basket, the controller opens the jaws to a measured
+clearance; a bounded open-wrist tilt clears tall bodies near the palm.
+All such proposals use language, RGB-D estimates, and robot measurements;
+the external task predicate is unavailable to their selection or execution.
+\fi
+
 \begin{table}[t]
 \caption{Declared conditions for the evaluated system.}
 \label{tab:conditions}
@@ -453,11 +472,8 @@ Eq.~\eqref{eq:score}. These differences make the table a comparison of
 reported system outcomes under their stated conditions, rather than a
 controlled ranking.
 
-Our \SuccessRate{}\% overall rate is close numerically to SmolVLA's reported
-87.3\%, while the strongest listed policy result is OpenVLA-OFT at 97.1\%.
-Long is the lowest-scoring suite for every listed method, including
-\method{}. This descriptive pattern motivates examining which multi-stage
-tasks account for our remaining failures.
+Long has the lowest success rate for every listed method, including
+\method{}, motivating a closer examination of our multi-stage failures.
 
 \begin{table*}[t]
 \caption{LIBERO success rates (\%). Published rows contain the reported
@@ -502,15 +518,8 @@ drawer and placing a bowl inside, succeeds in $\TopDrawerSuccess/10$ trials;
 Spatial task 04, retrieving a bowl from a top drawer, succeeds in
 $\DrawerPickSuccess/10$; and Long task 03, placing a bowl in a bottom drawer
 and closing it, succeeds in $\BottomDrawerSuccess/10$.
-All five task groups were complete before analysis. The records identify
-specific scenarios and stopping reasons for further diagnosis, but do not
-show that articulation alone causes the failures.
-
-The contrast between these tasks and simpler placement scenarios suggests
-that a single aggregate score conceals important differences in grounding,
-accessibility, and stage composition. It also cautions against interpreting
-the suite name as a reliable ordering of control difficulty. The task-wise
-counts expose these differences without changing the planned sample weights.
+These complete task records identify difficult scenarios and stopping
+reasons; they do not establish articulation as the cause of failure.
 
 \begin{figure*}[t]
 \centering

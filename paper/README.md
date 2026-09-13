@@ -6,6 +6,7 @@
 - [LaTeX 源文件](main.tex)
 - [参考文献](references.bib)
 - [实验记录投影](data/episodes.jsonl)
+- [完整原始记录及几何追踪](data/raw_episodes.jsonl.gz)
 - [统计结果](data/statistics.json)
 - [公开对比数据及原论文来源](data/published_comparisons.json)
 - [数据来源与完整性](data/provenance.json)
@@ -13,6 +14,7 @@
 - [本地成稿检查](data/artifact_validation.json)
 
 这是依据当前代码和实测结果撰写的英文匿名初稿，尚未提交 PaperPlaza。
+当前结果为同一冻结版本全新复测的 **360/400（90.0%）**。
 论文按一个使用资产先验、显式几何和人工技能的系统基线定位。
 对比表引用原论文公开结果，并标明输入、训练和评测条件；本项目一行来自实际评测记录。
 作者及单位暂用 Anonymous Authors；PDF 内不包含本项目的 GitHub 账号或仓库链接。
@@ -43,7 +45,7 @@ NumPy 与 Matplotlib：
     make
     make check
 
-如果要重新读取服务器的完整评测结果：
+如果要重现原服务器的历史基线结果：
 
     python3 scripts/capture_results.py --source-root /path/to/route-b-v170-cloud
     python3 scripts/analyze_results.py
@@ -53,6 +55,17 @@ NumPy 与 Matplotlib：
 capture_results.py 默认要求评测完成且校验通过，防止把未完成的结果当作最终分数。
 仅用于撰写期间的 --allow-partial 选项会将数据标记为未完成，并在编译稿中明确提示；
 这种稿件不能通过 make check。
+
+改进实验的完整新复测使用批次目录导入：
+
+    python3 scripts/capture_results.py --batch-dir ../runtime/route_b_90/full400_candidate_01
+    python3 scripts/analyze_results.py
+    python3 scripts/make_rollout_figure.py --batch-dir ../runtime/route_b_90/full400_candidate_01
+    make check
+
+这种导入还会生成 `data/raw_episodes.jsonl.gz`，保存全部原始逐回合记录与几何追踪。
+校验脚本核对压缩文件、解压内容和每条原始记录的 SHA256，并逐条比对论文投影中的
+成功标记、初态、步数和内部状态。开发用小批次不能作为最终论文数据导入。
 
 录像图使用 ImageIO、imageio-ffmpeg、NumPy 与 Matplotlib，可在已部署的虚拟环境中运行：
 
@@ -86,15 +99,16 @@ data/published_comparisons.json 保存原论文版本、表号、PDF 页码、PD
 ## 数据与结论边界
 
 400 次清单覆盖四套各十个任务，每任务官方初态 0–9，seed=7。
-其中 Spatial task 00 的十条结果是按预先确定的初态清单复用的，其余 390 条为新跑结果。
-时间统计排除了复用回合，失败回合完整保留。
+本次 400 条记录全部新跑，没有复用开发批次或历史回合；全部使用同一冻结控制器。
+失败回合完整保留。Spatial / Object / Goal / Long 分别为 93 / 98 / 91 / 78 次成功。
 
 论文使用外部 ever-success 判定：回合中曾满足官方谓词即为成功。
 控制器继续执行至自己停止或达到预算。因此论文同时报告内部完成状态与外部成功的交叉表。
 这一口径不能直接替换成终态成功，也不等价于 OpenVLA 的整套评测协议。
 
-数据投影保存原始数值和每条原始 JSONL 行的 SHA256，省略完整几何追踪和视频。
-原追踪、完整日志与视频仍保存在评测服务器。源文件校验值和字段来源见 provenance.json。
+数据投影保存原始数值和每条原始 JSONL 行的 SHA256。
+`data/raw_episodes.jsonl.gz` 包含全部 400 条原始记录及几何追踪；完整日志和录像仍保留在
+评测服务器。源文件与压缩档的校验值、字段来源见 provenance.json。
 已有 2000 次历史摘要缺少当前包中的完整逐回合原记录，没有作为本论文的实验结果。
 
 ## 作者审阅

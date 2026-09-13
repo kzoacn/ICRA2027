@@ -57,4 +57,4 @@ assert np.linalg.norm(stove.centroid_world[:2]) < .002
 assert np.isclose(stove.bounds_max_world[2], 1.0035)
 frame.rgb = rgb.copy(); frame.rgb[:, :80] = 255
 rejected(visible_burner_support, [frame], fixture)
-print('Sensor geometry checks passed: yaw/translation, physical heights, empty/table/edge/partial-disk rejection.')
+print('Sensor geometry checks passed: yaw/translation, physical heights, table/roof-only/partial-disk rejection.')

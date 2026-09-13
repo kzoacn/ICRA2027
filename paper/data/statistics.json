@@ -1,65 +1,65 @@
 {
   "episodes": 400,
-  "successes": 347,
-  "rate": 86.75,
+  "successes": 360,
+  "rate": 90.0,
   "per_suite": [
     {
       "suite": "libero_spatial",
       "label": "Spatial",
       "n": 100,
-      "successes": 91,
-      "rate": 91.0,
-      "mean_steps": 147.36,
-      "median_elapsed_s": 68.6970870969817,
+      "successes": 93,
+      "rate": 93.0,
+      "mean_steps": 147.07,
+      "median_elapsed_s": 68.05149636301212,
       "all_success_tasks": 6
     },
     {
       "suite": "libero_object",
       "label": "Object",
       "n": 100,
-      "successes": 96,
-      "rate": 96.0,
-      "mean_steps": 173,
-      "median_elapsed_s": 54.68641019705683,
-      "all_success_tasks": 7
+      "successes": 98,
+      "rate": 98.0,
+      "mean_steps": 195.3,
+      "median_elapsed_s": 59.480422721477225,
+      "all_success_tasks": 8
     },
     {
       "suite": "libero_goal",
       "label": "Goal",
       "n": 100,
-      "successes": 88,
-      "rate": 88.0,
-      "mean_steps": 180.91,
-      "median_elapsed_s": 67.2444408510346,
-      "all_success_tasks": 7
+      "successes": 91,
+      "rate": 91.0,
+      "mean_steps": 180.57,
+      "median_elapsed_s": 71.49968448362779,
+      "all_success_tasks": 8
     },
     {
       "suite": "libero_10",
       "label": "Long",
       "n": 100,
-      "successes": 72,
-      "rate": 72.0,
-      "mean_steps": 293.28,
-      "median_elapsed_s": 90.4115532389842,
-      "all_success_tasks": 1
+      "successes": 78,
+      "rate": 78.0,
+      "mean_steps": 316.99,
+      "median_elapsed_s": 97.19019962556195,
+      "all_success_tasks": 2
     }
   ],
   "policy_external_disagreement": {
-    "controller_completed_external_failed": 11,
-    "external_success_without_controller_completion": 35
+    "controller_completed_external_failed": 7,
+    "external_success_without_controller_completion": 37
   },
   "failure_groups": {
-    "Controller completion / external failure": 11,
     "Phase timeout": 17,
-    "Sensor verification rejection": 9,
-    "Grasp / retention rejection": 3,
-    "Other controller failure": 6,
-    "Global action budget": 7
+    "Controller completion / external failure": 7,
+    "Sensor verification rejection": 1,
+    "Grasp / retention rejection": 4,
+    "Other controller failure": 7,
+    "Global action budget": 4
   },
-  "new_episodes": 390,
-  "reused_episodes": 10,
-  "new_successes": 337,
-  "reused_successes": 10,
-  "new_median_elapsed_s": 66.45450447313488,
-  "new_total_episode_elapsed_s": 28560.32479858678
+  "new_episodes": 400,
+  "reused_episodes": 0,
+  "new_successes": 360,
+  "reused_successes": 0,
+  "new_median_elapsed_s": 69.51251951197628,
+  "new_total_episode_elapsed_s": 30537.355814036913
 }
