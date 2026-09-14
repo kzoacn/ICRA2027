@@ -46,6 +46,7 @@ def failure_group(row):
 def main():
     data = (PAPER / "data/episodes.jsonl").read_bytes()
     meta = json.loads((PAPER / "data/provenance.json").read_text())
+    task_refresh = meta.get("evaluation_kind") == "task_replacement"
     assert hashlib.sha256(data).hexdigest() == meta["episodes_projection_sha256"]
     rows = [json.loads(line) for line in data.splitlines()]
     assert len(rows) == len({r["episode_id"] for r in rows}) == meta["recorded_episodes"]
@@ -65,7 +66,7 @@ def main():
     summaries = []
     for suite, label in SUITES:
         group = [r for r in rows if r["suite"] == suite]
-        times = [r["elapsed_s"] for r in group if not r["reused"]]
+        times = [r["elapsed_s"] for r in group if task_refresh or not r["reused"]]
         summaries.append({"suite": suite, "label": label, "n": len(group),
             "successes": sum(r["success"] for r in group),
             "rate": 100 * sum(r["success"] for r in group) / len(group),
@@ -75,6 +76,7 @@ def main():
                   and sum(r["task_id"] == t for r in group) == 10 for t in range(10))})
     failures = collections.Counter(failure_group(r) for r in rows if not r["success"])
     stats = {"episodes": n, "successes": successes, "rate": 100 * successes / n,
+        "evaluation_kind": meta.get("evaluation_kind", "full_campaign"),
         "per_suite": summaries, "policy_external_disagreement": {
             "controller_completed_external_failed": completed_false,
             "external_success_without_controller_completion": stopped_true},
@@ -97,6 +99,7 @@ def main():
         "RunMinutes": f"{meta['wall_elapsed_s']/60:.1f}",
         "RuntimeExceptionCount": sum(r["policy_status"] == "exception" for r in rows),
         "PerfectTaskCount": sum(s["all_success_tasks"] for s in summaries),
+        "BaselineSuccessCount": meta.get("task_replacement", {}).get("baseline_total_successes", successes),
     }
     for s in summaries:
         macros[s["label"] + "Rate"] = f"{s['rate']:.1f}"
@@ -113,6 +116,8 @@ def main():
         + (r"\RunCompletetrue" if meta["complete"] else r"\RunCompletefalse") + "\n"
         + r"\newif\ifAllFresh" + "\n"
         + (r"\AllFreshtrue" if len(fresh) == n else r"\AllFreshfalse") + "\n"
+        + r"\newif\ifTaskRefresh" + "\n"
+        + (r"\TaskRefreshtrue" if task_refresh else r"\TaskRefreshfalse") + "\n"
         + "".join(r"\newcommand{\%s}{%s}" % (key,value) + "\n" for key,value in macros.items()))
     lines = [r"\begin{tabular}{lrrrr}", r"\toprule",
              r"Suite & Success & SR (\%) & Mean steps & Median s$^\dagger$ \\",
@@ -122,7 +127,7 @@ def main():
                      f"{s['mean_steps']:.1f} & {s['median_elapsed_s']:.1f}" + r" \\")
     lines += [r"\midrule", f"Overall & {successes}/{n} & {100*successes/n:.1f} & "
               f"{statistics.mean(r['steps'] for r in rows):.1f} & "
-              f"{statistics.median(r['elapsed_s'] for r in fresh):.1f}" + r" \\",
+              f"{statistics.median(r['elapsed_s'] for r in (rows if task_refresh else fresh)):.1f}" + r" \\",
               r"\bottomrule", r"\end{tabular}"]
     (generated / "suite_table.tex").write_text("\n".join(lines) + "\n")
     lines = [r"\begin{tabular}{lrr}",r"\toprule",

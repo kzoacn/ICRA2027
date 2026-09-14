@@ -105,12 +105,13 @@ See [accepted_result.json](accepted_result.json) for the exact comparison.
 | Long 03: bowl into bottom drawer and close | 6/10 | 7/10 |
 | Long 08: both moka pots onto stove | 4/10 | 7/10 |
 
-Other task outcomes are unchanged. Microwave Long 09 remains 0/10.
-The anonymous manuscript, tables and figures use this complete replay.
-Full original episode records are included in `paper/data/raw_episodes.jsonl.gz`;
+Other task outcomes are unchanged. Microwave Long 09 is 0/10 in this complete replay.
+The subsequent [Long 09 follow-up](../long09/README.md) updates that task only;
+the current manuscript distinguishes its new records from the historical 390.
+This original full evaluation is preserved in `paper/data/full400_reference/`;
 all development snapshots, logs and videos remain preserved on the server.
 
-To reproduce the paper data, import it with `paper/scripts/capture_results.py
+To reproduce the original full-run paper data, import it with `paper/scripts/capture_results.py
 --batch-dir runtime/route_b_90/full400_candidate_01`. Regenerate numerical
 artifacts with `make -C paper figures`. Extract its actual rollout frames
 with `paper/scripts/make_rollout_figure.py --batch-dir ...` using a Python

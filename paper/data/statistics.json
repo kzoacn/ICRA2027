@@ -1,7 +1,8 @@
 {
   "episodes": 400,
-  "successes": 360,
-  "rate": 90.0,
+  "successes": 368,
+  "rate": 92.0,
+  "evaluation_kind": "task_replacement",
   "per_suite": [
     {
       "suite": "libero_spatial",
@@ -37,29 +38,29 @@
       "suite": "libero_10",
       "label": "Long",
       "n": 100,
-      "successes": 78,
-      "rate": 78.0,
-      "mean_steps": 316.99,
-      "median_elapsed_s": 97.19019962556195,
+      "successes": 86,
+      "rate": 86.0,
+      "mean_steps": 324.47,
+      "median_elapsed_s": 93.36835241736844,
       "all_success_tasks": 2
     }
   ],
   "policy_external_disagreement": {
     "controller_completed_external_failed": 7,
-    "external_success_without_controller_completion": 37
+    "external_success_without_controller_completion": 38
   },
   "failure_groups": {
-    "Phase timeout": 17,
+    "Phase timeout": 15,
     "Controller completion / external failure": 7,
     "Sensor verification rejection": 1,
-    "Grasp / retention rejection": 4,
-    "Other controller failure": 7,
-    "Global action budget": 4
+    "Grasp / retention rejection": 3,
+    "Global action budget": 4,
+    "Other controller failure": 2
   },
-  "new_episodes": 400,
-  "reused_episodes": 0,
-  "new_successes": 360,
-  "reused_successes": 0,
-  "new_median_elapsed_s": 69.51251951197628,
-  "new_total_episode_elapsed_s": 30537.355814036913
+  "new_episodes": 10,
+  "reused_episodes": 390,
+  "new_successes": 8,
+  "reused_successes": 360,
+  "new_median_elapsed_s": 78.7270416598767,
+  "new_total_episode_elapsed_s": 750.7389521636069
 }

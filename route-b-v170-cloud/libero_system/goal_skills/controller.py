@@ -1055,6 +1055,7 @@ class GoalContactPolicy:
         self._drawer_wrist_recovery_return_position = np.zeros(3)
         self._drawer_wrist_recovery_rotation = np.eye(3)
         self._microwave_initial_point = np.zeros(3)
+        self._microwave_face_closer = None
         self._microwave_direction = np.zeros(3)
         self._microwave_precontact_position = np.zeros(3)
         self._microwave_outer_position = np.zeros(3)
@@ -1286,6 +1287,7 @@ class GoalContactPolicy:
         self._drawer_wrist_recovery_rotation = np.eye(3)
         self._push_contact_position = np.zeros(3)
         self._microwave_initial_point = np.zeros(3)
+        self._microwave_face_closer = None
         self._microwave_direction = np.zeros(3)
         self._microwave_precontact_position = np.zeros(3)
         self._microwave_outer_position = np.zeros(3)
@@ -2438,6 +2440,16 @@ class GoalContactPolicy:
 
         if self.microwave_detector is None:
             return self._fail("no sensor-only microwave detector is configured")
+        if (step.kind is GoalSkillKind.CLOSE_MICROWAVE
+                and callable(getattr(self.microwave_detector, 'panel_geometry', None))):
+            from ..route_b.microwave_close import MicrowaveFaceCloser
+
+            if self._phase == 'detect':
+                try:
+                    self._microwave_face_closer = MicrowaveFaceCloser(observation, self.microwave_detector)
+                except (LookupError, ValueError) as exc:
+                    return self._detection_miss(str(exc), gripper=-1.0)
+            return self._microwave_face_closer.act(self, observation)
         if self._phase == "detect":
             try:
                 self._target = self.microwave_detector.detect(

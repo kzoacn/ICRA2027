@@ -1,0 +1,296 @@
+{
+  "run_name": "full400_candidate_01",
+  "state": "completed",
+  "complete": true,
+  "status_updated_at": "2026-09-13T19:29:01+00:00",
+  "recorded_episodes": 400,
+  "expected_episodes": 400,
+  "protocol": {
+    "tasks": 40,
+    "episodes_per_task": 10,
+    "official_init_ids": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9
+    ],
+    "seed": 7,
+    "step_caps": {
+      "spatial": 220,
+      "object": 280,
+      "goal": 300,
+      "long": 520
+    },
+    "scoring": "external_sticky_any_success",
+    "expected_episodes": 400,
+    "new_episodes": 400,
+    "reused_episodes": 0
+  },
+  "controller_source_sha256": "c954f817fb7dd2b046a961a13a9acc9f7f2f0ad87da97eba1f6c0da995eff4e6",
+  "source_manifest_sha256": "da7eb42c9f3791de4fc3a3913ee6444434f6a73a1930bba21b13899cb54a6893",
+  "episodes_projection_sha256": "0516d11a8ddc96ca8f05ad78a15b9a46e16f6a94c7356c7262e659ec50d64590",
+  "source_files": [
+    {
+      "path": "shards/object_task07/episodes.jsonl",
+      "sha256": "13c1a3e8bb9de9944b96a1108595f6c4a7322cad8e8806a0ab7d6118395f9a31",
+      "task": "object_task07",
+      "reused": false
+    },
+    {
+      "path": "shards/goal_task06/episodes.jsonl",
+      "sha256": "2f0aa4a9623c7cd249e30eb36cc26fa7ccca442b86fb0c81fa69124f53370fb9",
+      "task": "goal_task06",
+      "reused": false
+    },
+    {
+      "path": "shards/long_task00/episodes.jsonl",
+      "sha256": "bf457e87d2e551ed0051632d8cc59df62f74b132c32edb388eba47828a8f19a2",
+      "task": "long_task00",
+      "reused": false
+    },
+    {
+      "path": "shards/long_task01/episodes.jsonl",
+      "sha256": "9a8a603b40f2e007bd37be111e0f39990908682609d77c78cf66bf5fea643d14",
+      "task": "long_task01",
+      "reused": false
+    },
+    {
+      "path": "shards/long_task03/episodes.jsonl",
+      "sha256": "3bb55fef81d34bbfa491d5d5f590b521424ddc7d2e7439f42fd0d5b0377e81f1",
+      "task": "long_task03",
+      "reused": false
+    },
+    {
+      "path": "shards/long_task08/episodes.jsonl",
+      "sha256": "c0d8ea39abd4c7097b11d7297018c77b214a8b5f2f43e0ed8cb7cbd78483e1fe",
+      "task": "long_task08",
+      "reused": false
+    },
+    {
+      "path": "shards/long_task09/episodes.jsonl",
+      "sha256": "437d735c092fa705c931a24b385d42ceed13c2236368a352fd8f1d9d4aeb209f",
+      "task": "long_task09",
+      "reused": false
+    },
+    {
+      "path": "shards/goal_task00/episodes.jsonl",
+      "sha256": "8bdd70daf766085a67129387d7eb1084099d32ba1173742515d0bf71ad0537b0",
+      "task": "goal_task00",
+      "reused": false
+    },
+    {
+      "path": "shards/spatial_task04/episodes.jsonl",
+      "sha256": "75328ff618d3c986199b05981a3d7f2c974cd1a745255cd3bad16caf2d62b0cb",
+      "task": "spatial_task04",
+      "reused": false
+    },
+    {
+      "path": "shards/spatial_task00/episodes.jsonl",
+      "sha256": "152daefbe7ac2dd47c17edee770dc34e0e9bd3bbf02e169ed91c8b4383033b33",
+      "task": "spatial_task00",
+      "reused": false
+    },
+    {
+      "path": "shards/spatial_task01/episodes.jsonl",
+      "sha256": "e7944b14f6d4c14bc9a5b3811933a7089881d0d01122e4546f8510838b701a0d",
+      "task": "spatial_task01",
+      "reused": false
+    },
+    {
+      "path": "shards/spatial_task02/episodes.jsonl",
+      "sha256": "1a12278e877227384e8975288ee28a0d074adf06a69409fa58480e48687d2532",
+      "task": "spatial_task02",
+      "reused": false
+    },
+    {
+      "path": "shards/spatial_task03/episodes.jsonl",
+      "sha256": "6c80771f9e1b280c5b774e76d1902a70cde336dbd66b79dc7b7d4941dd75d352",
+      "task": "spatial_task03",
+      "reused": false
+    },
+    {
+      "path": "shards/spatial_task05/episodes.jsonl",
+      "sha256": "85c748460989ed5d94b1121b50ff7d1a7228e4333c06d312a2e7c301e5583efb",
+      "task": "spatial_task05",
+      "reused": false
+    },
+    {
+      "path": "shards/spatial_task06/episodes.jsonl",
+      "sha256": "de922356ed360e55722b024322b82b03ffa2db5fd7b368db0b1a9ce0254fb0b0",
+      "task": "spatial_task06",
+      "reused": false
+    },
+    {
+      "path": "shards/spatial_task07/episodes.jsonl",
+      "sha256": "a45a4fccedb2615cf72fed388c51e37c1260568035276d62ed46598d2875490e",
+      "task": "spatial_task07",
+      "reused": false
+    },
+    {
+      "path": "shards/spatial_task08/episodes.jsonl",
+      "sha256": "5b02a57c61eb2eff3c0260678ad846074ad3d86e35b224ff476e3059eb43aa6e",
+      "task": "spatial_task08",
+      "reused": false
+    },
+    {
+      "path": "shards/spatial_task09/episodes.jsonl",
+      "sha256": "6ccaa8b58403bd85aa0297341f80e64ab50a0fc3d1686d022dca3a492dd95ae5",
+      "task": "spatial_task09",
+      "reused": false
+    },
+    {
+      "path": "shards/object_task00/episodes.jsonl",
+      "sha256": "3a7f8e5dcff6499a0f7977a72b5116d5dc9c7121b7bbe244d80c0466cbba2fb0",
+      "task": "object_task00",
+      "reused": false
+    },
+    {
+      "path": "shards/object_task01/episodes.jsonl",
+      "sha256": "c4ff2f83420afb4bc13f8c85a90b54b96b8cc67b301ef6d9b5e06e12a00cfa27",
+      "task": "object_task01",
+      "reused": false
+    },
+    {
+      "path": "shards/object_task02/episodes.jsonl",
+      "sha256": "cfed22e337d5ab2e7f2ffe7f3e24eaf110f031f64ad582b29dff3a3be2e714c4",
+      "task": "object_task02",
+      "reused": false
+    },
+    {
+      "path": "shards/object_task03/episodes.jsonl",
+      "sha256": "b89e53da2a2a23677922f8be1a60bc706321cca94d120d2a5f061ccfa90ce675",
+      "task": "object_task03",
+      "reused": false
+    },
+    {
+      "path": "shards/object_task04/episodes.jsonl",
+      "sha256": "1df5d4d5f365d74d86638d3cb22eec489c10459c9e38691c46d39c6af9201afd",
+      "task": "object_task04",
+      "reused": false
+    },
+    {
+      "path": "shards/object_task05/episodes.jsonl",
+      "sha256": "24720ca64b68ed21b6b64709b2b6565b364ff30b66bbafaf2692ea8e331bf538",
+      "task": "object_task05",
+      "reused": false
+    },
+    {
+      "path": "shards/object_task06/episodes.jsonl",
+      "sha256": "1484f410a3d5fe8c89ffff5ec2f89e4dfc6b73ef6028608d30f192a10259c973",
+      "task": "object_task06",
+      "reused": false
+    },
+    {
+      "path": "shards/object_task08/episodes.jsonl",
+      "sha256": "2c477fd9b14b80ebb1bfdd53090e526130d40baf7d42e67426469c8cafd09af7",
+      "task": "object_task08",
+      "reused": false
+    },
+    {
+      "path": "shards/object_task09/episodes.jsonl",
+      "sha256": "3536eb32468e4057c957193ac869bc3d3420cf762959dd6a0011ac26caf35324",
+      "task": "object_task09",
+      "reused": false
+    },
+    {
+      "path": "shards/goal_task01/episodes.jsonl",
+      "sha256": "0d8dc026675353c70a3a229ea816207334646c1454b6f70b55b877b671a8cca6",
+      "task": "goal_task01",
+      "reused": false
+    },
+    {
+      "path": "shards/goal_task02/episodes.jsonl",
+      "sha256": "e92e1e6342998b6d8f3d07209030d187b17a8bfe3eae89e36d71c8de20d388f8",
+      "task": "goal_task02",
+      "reused": false
+    },
+    {
+      "path": "shards/goal_task03/episodes.jsonl",
+      "sha256": "82e8ccaa14703ebef415387be8a2a0ee2dfa359625d0cea3193a4e287fd7f316",
+      "task": "goal_task03",
+      "reused": false
+    },
+    {
+      "path": "shards/goal_task04/episodes.jsonl",
+      "sha256": "5a8662942c9001a672c5eb4f7e22450ecde113b3fa5bb3d55a9e5a8b88be936c",
+      "task": "goal_task04",
+      "reused": false
+    },
+    {
+      "path": "shards/goal_task05/episodes.jsonl",
+      "sha256": "00d8205b003998a167af8a13df688b44466dc67b3653c653ad724905acf41916",
+      "task": "goal_task05",
+      "reused": false
+    },
+    {
+      "path": "shards/goal_task07/episodes.jsonl",
+      "sha256": "05580ab4a68e034ccb418d1afb22aee8abf366d632eff1101f3f613adaf37e06",
+      "task": "goal_task07",
+      "reused": false
+    },
+    {
+      "path": "shards/goal_task08/episodes.jsonl",
+      "sha256": "14c1372e25521aef03eb2938d9c7c8c6eb6fe7e0fe1f65aa7567c76eb2fceb0d",
+      "task": "goal_task08",
+      "reused": false
+    },
+    {
+      "path": "shards/goal_task09/episodes.jsonl",
+      "sha256": "a451da9b55f43c6c8bb089ff63ede4676cc0b16ede7dfa07d617be4ae645a5b5",
+      "task": "goal_task09",
+      "reused": false
+    },
+    {
+      "path": "shards/long_task02/episodes.jsonl",
+      "sha256": "59cf3771e720cc1372651368f5a7bc30daf032e7c62ef4bc571543529167439a",
+      "task": "long_task02",
+      "reused": false
+    },
+    {
+      "path": "shards/long_task04/episodes.jsonl",
+      "sha256": "4787113055d5b4d1e0ee56d69154d9d7a7170cfbeca583900e7b2f5ba0c2ce1b",
+      "task": "long_task04",
+      "reused": false
+    },
+    {
+      "path": "shards/long_task05/episodes.jsonl",
+      "sha256": "1888475b110c23a9ba647d21e64ef038403715c842196c54c5faf737d367b52d",
+      "task": "long_task05",
+      "reused": false
+    },
+    {
+      "path": "shards/long_task06/episodes.jsonl",
+      "sha256": "f6a8df60d4c49434b43877f2cfe9d3187ccf64c68b470be89e9cc5902f5ce7b9",
+      "task": "long_task06",
+      "reused": false
+    },
+    {
+      "path": "shards/long_task07/episodes.jsonl",
+      "sha256": "4d39577ebc4a83cc83febabf6fe4684b00300a28e3d740efb2ed8808ba56eaa9",
+      "task": "long_task07",
+      "reused": false
+    }
+  ],
+  "raw_episode_archive": {
+    "file": "raw_episodes.jsonl.gz",
+    "sha256": "bbaa30e1590f8bf491130995bb02adc33285ad7526003d249d4b10625f5d3571",
+    "uncompressed_sha256": "c3556852322cf95aa6a6ed096124291b47c104558d8acd64c8d389ea23235dc4",
+    "records": 400
+  },
+  "projection_note": "Numerical fields are copied from original records; trace counts are derived. Each source_record_sha256 hashes its original JSONL line without the newline. Complete original records, including geometry traces, are included in the compressed archive; videos remain on the evaluation server.",
+  "validation": {
+    "coverage_passed": true,
+    "issues": [],
+    "episodes": 400,
+    "source_tree_sha256": "c954f817fb7dd2b046a961a13a9acc9f7f2f0ad87da97eba1f6c0da995eff4e6",
+    "episodes_jsonl_sha256": "c3556852322cf95aa6a6ed096124291b47c104558d8acd64c8d389ea23235dc4",
+    "validated_at": "2026-09-13T19:29:01+00:00"
+  },
+  "wall_elapsed_s": 4624.822450214997
+}

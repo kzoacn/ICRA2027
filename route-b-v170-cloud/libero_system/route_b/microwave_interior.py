@@ -90,3 +90,63 @@ def observed_microwave_cavity(perception, observation, reference_position):
     if points is None:
         raise LookupError('microwave body lacks a fresh RGB-D surface')
     return microwave_cavity_from_walls(points, frame)
+
+
+def observed_door_panel(observation, hinge, control_side, outward, *, reference_angle=None, open_only=False):
+    """Fit the visible vertical panel in a measured appliance hinge frame.
+
+    A swept physical door slab excludes the static control panel and the
+    cavity back wall. Only calibrated dark, neutral RGB-D surfaces enter the
+    fit; the angle is measured anew, never read from a simulator joint.
+    """
+    from ..common import backproject_depth
+
+    clouds = []
+    for camera in observation.cameras.values():
+        rgb = camera.rgb.astype(float)
+        mask = (rgb.max(axis=2) < 150) & (np.ptp(rgb, axis=2) < 40)
+        cloud = backproject_depth(camera, mask=mask, world=True)
+        delta = cloud - hinge
+        cloud = cloud[(abs(delta[:, 2]) < .087)
+                      & (np.linalg.norm(delta[:, :2], axis=1) < .275)
+                      & (np.linalg.norm(delta[:, :2], axis=1) > .035)
+                      & (delta @ outward > (.040 if open_only else -.025))
+                      & (np.linalg.norm(cloud-observation.proprio.ee_position_world, axis=1) > .045)]
+        if len(cloud):
+            clouds.append(cloud)
+    if not clouds:
+        raise LookupError('no visible microwave panel samples')
+    points = np.concatenate(clouds)
+    _, unique = np.unique(np.rint(points/.004).astype(int), axis=0, return_index=True)
+    points = points[unique]
+    delta = points-hinge
+    candidates = []
+    for angle in np.linspace(-2.12, .12, 225):
+        if open_only and angle > -.20:
+            continue
+        if reference_angle is not None and abs(angle-reference_angle) > .35:
+            continue
+        radial = np.cos(angle)*control_side-np.sin(angle)*outward
+        normal = np.sin(angle)*control_side+np.cos(angle)*outward
+        along, depth = delta @ radial, delta @ normal
+        selected = (along > .040) & (along < .245) & (abs(depth-.013) < .017)
+        fit = points[selected]
+        if len(fit) < 35:
+            continue
+        span = np.ptp(fit @ radial)
+        height = np.ptp(fit[:, 2])
+        if span < .095 or height < .085:
+            continue
+        residual = float(np.median(abs(depth[selected]-.013)))
+        candidates.append((len(fit), -residual, float(angle), radial, normal, span, height))
+    if not candidates:
+        raise LookupError('no supported vertical microwave panel within the physical sweep')
+    count, residual, angle, radial, normal, span, height = max(candidates, key=lambda row: row[:2])
+    return angle, radial, normal, dict(
+        strategy='rgbd_vertical_panel_in_frozen_physical_hinge_sweep',
+        angle_rad=angle, inlier_voxels=count, cloud_voxels=len(points),
+        radial_span_m=float(span), vertical_span_m=float(height),
+        median_plane_error_m=-residual,
+        leading_candidates=[{'angle_rad':row[2], 'inlier_voxels':row[0]}
+                            for row in sorted(candidates,key=lambda row:row[:2],reverse=True)[:8]],
+    )

@@ -18,8 +18,13 @@ the frozen source and records.
 - [Local artifact validation](data/artifact_validation.json)
 
 This anonymous English draft is based on the current code and measured results.
-It has not been submitted to PaperPlaza. The current result is **360/400 (90.0%)**
-from a fresh full evaluation of one frozen version. The paper presents a system
+It has not been submitted to PaperPlaza. The original complete evaluation records
+**360/400 (90.0%)** with one frozen controller. The Long 09 follow-up uses a new
+controller snapshot for that task's ten official initial states. Updated summary
+statistics combine those ten episodes with 390 retained historical episodes;
+Long 09 improves from **0/10 to 8/10**, and the combined count is
+**368/400 (92.0%)**. This is not a full-suite evaluation of the updated controller.
+The paper presents a system
 baseline using asset priors, explicit geometry, and hand-engineered skills.
 The comparison table cites published results and identifies their input, training,
 and evaluation conditions; this project's row comes from actual evaluation records.
@@ -66,7 +71,7 @@ validation, preventing unfinished results from being treated as final scores.
 The drafting-only `--allow-partial` option marks the data as incomplete and displays
 that status explicitly in the compiled manuscript. Such a draft cannot pass `make check`.
 
-Import the improved controller's fresh full evaluation from its batch directory:
+Import the original controller's fresh full evaluation from its batch directory:
 
     python3 scripts/capture_results.py --batch-dir ../runtime/route_b_90/full400_candidate_01
     python3 scripts/analyze_results.py
@@ -78,6 +83,22 @@ episode records and geometric traces. The validation script checks the SHA256 of
 the compressed file, decompressed content, and each original record. It compares
 success flags, initial states, step counts, and internal states against the paper's
 projected records. Small development batches cannot be imported as final paper data.
+
+To reproduce the task-specific update used in the current manuscript:
+
+    python3 scripts/update_task_results.py \
+      --baseline-batch ../runtime/route_b_90/full400_candidate_01 \
+      --task-batch ../runtime/route_b_90/long09_final_02
+    make figures
+    make check
+
+This importer requires a completed Long 09 retest of all ten official initial
+states under the original seed, budget, and scoring rule. It replaces the whole
+task, including failures, and retains the original complete dataset under
+`data/full400_reference/`. Every projected row records its source campaign and
+controller checksum. The original JSONL lines remain unchanged in the compressed
+archive. Validation also checks that the other 390 records match the historical
+reference. See [the targeted evaluation record](../experiments/long09/README.md).
 
 The rollout figure uses ImageIO, imageio-ffmpeg, NumPy, and Matplotlib and can be
 regenerated in the deployed virtual environment:
@@ -127,10 +148,18 @@ text statistics:
 
 ## Data and scope of the conclusions
 
-The 400-episode manifest covers four suites of ten tasks, with official initial-state
-indices 0–9 per task and seed=7. All 400 episodes are newly executed with one frozen
-controller; none are reused from development batches or historical runs. All failed
-episodes are retained. Spatial / Object / Goal / Long have 93 / 98 / 91 / 78 successes.
+The combined dataset covers four suites of ten tasks, with official initial-state
+indices 0–9 per task and seed=7. Its 390 retained episodes come from the original
+full evaluation; ten new Long 09 episodes come from the updated controller.
+All failed episodes are retained. The other 39 tasks have not been rerun with the
+updated controller. `data/statistics.json` and the generated tables report the
+combined counts and identify the ten newly executed episodes. Spatial / Object /
+Goal / Long have **93 / 98 / 91 / 86** successes, respectively, out of 100 records each.
+
+The original run used an RTX 5090. The Long 09 retest uses an RTX 4090 with the
+same pinned software environment; see `experiments/long09/environment.json`.
+Suite timings pool source-run records and therefore reflect both execution
+settings. Targeted elapsed time refers only to the ten-episode retest.
 
 The paper uses external ever-success scoring: an episode succeeds if the official
 predicate is satisfied at any point. The controller continues until it requests

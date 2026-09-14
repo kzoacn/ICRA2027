@@ -1,0 +1,167 @@
+{
+  "objective": "At least 7/10 external successes on Long 09, without a new full-suite campaign.",
+  "accepted": true,
+  "batch": "long09_final_02",
+  "completed_at": "2026-09-14T07:36:12+00:00",
+  "source_tree_sha256": "da1e0b8603977522e81cd9b4fd51837c10345a11566f89744018bb689230618a",
+  "current_source_matches_snapshot": true,
+  "protocol": {
+    "tasks": 1,
+    "episodes_per_task": 10,
+    "official_init_ids": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9
+    ],
+    "seed": 7,
+    "step_caps": {
+      "spatial": 220,
+      "object": 280,
+      "goal": 300,
+      "long": 520
+    },
+    "scoring": "external_sticky_any_success",
+    "expected_episodes": 10,
+    "new_episodes": 10,
+    "reused_episodes": 0
+  },
+  "baseline": {
+    "batch": "full400_candidate_01",
+    "controller_source_sha256": "c954f817fb7dd2b046a961a13a9acc9f7f2f0ad87da97eba1f6c0da995eff4e6",
+    "long09_successes": 0,
+    "long09_episodes": 10,
+    "full_campaign_successes": 360,
+    "full_campaign_episodes": 400
+  },
+  "targeted_result": {
+    "successes": 8,
+    "episodes": 10,
+    "rate": 80.0,
+    "dispatcher_wall_s": 771.4525477662683
+  },
+  "combined_records": {
+    "successes": 368,
+    "episodes": 400,
+    "rate": 92.0,
+    "fresh_episodes": 10,
+    "historical_episodes": 390,
+    "controller_versions": 2,
+    "other_39_tasks_rerun": false,
+    "scope": "Combined task records from two controller versions; not a fresh full-400 evaluation of the updated controller."
+  },
+  "per_initial_state": [
+    {
+      "init_id": 0,
+      "baseline_success": false,
+      "success": true,
+      "steps": 380,
+      "policy_status": "succeeded",
+      "failure": null,
+      "source_record_sha256": "852ecb95f625de8a48233b5605de22562f8d77d9ec8c5a4e4f6c5bb5812afd31"
+    },
+    {
+      "init_id": 1,
+      "baseline_success": false,
+      "success": true,
+      "steps": 361,
+      "policy_status": "succeeded",
+      "failure": null,
+      "source_record_sha256": "3911139e6f8ef5b08190e53297688ec284384712cbe12cedc3d31553011d1903"
+    },
+    {
+      "init_id": 2,
+      "baseline_success": false,
+      "success": true,
+      "steps": 379,
+      "policy_status": "succeeded",
+      "failure": null,
+      "source_record_sha256": "3674aac9aeb485d0d0d058f29da0c0f8c7a79e89fed91c8ed23dc4c28aa56799"
+    },
+    {
+      "init_id": 3,
+      "baseline_success": false,
+      "success": false,
+      "steps": 187,
+      "policy_status": "failed",
+      "failure": "phase 'approach' timed out",
+      "source_record_sha256": "bf033fea28ca0e348789699555d4910b3ccca3c7acc9bdf1595cdd36a889141f"
+    },
+    {
+      "init_id": 4,
+      "baseline_success": false,
+      "success": true,
+      "steps": 408,
+      "policy_status": "succeeded",
+      "failure": null,
+      "source_record_sha256": "a608fdec6b7ce019630c56b604b37db3484db900669ad5248b24c13cff956ee7"
+    },
+    {
+      "init_id": 5,
+      "baseline_success": false,
+      "success": true,
+      "steps": 366,
+      "policy_status": "succeeded",
+      "failure": null,
+      "source_record_sha256": "187a5479e160d95c985468837aed54d79a914fca97f64a4359181afb8958a63b"
+    },
+    {
+      "init_id": 6,
+      "baseline_success": false,
+      "success": true,
+      "steps": 381,
+      "policy_status": "succeeded",
+      "failure": null,
+      "source_record_sha256": "b78a3f23ea64ab8aa545163b1b2e11833def686be8d0c31bc91c5cdad13d09ab"
+    },
+    {
+      "init_id": 7,
+      "baseline_success": false,
+      "success": true,
+      "steps": 492,
+      "policy_status": "failed",
+      "failure": "microwave panel remained open at observed angle -0.3400 rad",
+      "source_record_sha256": "116303e42f37cac231bd0ac38e3436ec2f5414966f1317e1f07dfd6cab7aa715"
+    },
+    {
+      "init_id": 8,
+      "baseline_success": false,
+      "success": true,
+      "steps": 382,
+      "policy_status": "succeeded",
+      "failure": null,
+      "source_record_sha256": "fc7e5580c3de235d86e4115749a406dedf9d7825c9d3fcee3e03640e2f8ae874"
+    },
+    {
+      "init_id": 9,
+      "baseline_success": false,
+      "success": false,
+      "steps": 329,
+      "policy_status": "failed",
+      "failure": "phase 'lower_to_shelf_entry' timed out",
+      "source_record_sha256": "a6d7b02d4bc7f921688f0fbe02a9e49cd5bddc84fca01b17d284b781ee3dfa12"
+    }
+  ],
+  "validation": {
+    "coverage_passed": true,
+    "issues": [],
+    "episodes": 10,
+    "source_tree_sha256": "da1e0b8603977522e81cd9b4fd51837c10345a11566f89744018bb689230618a",
+    "episodes_jsonl_sha256": "5e99b101a91a04e97fc430d059f2862499ca27d6e3de03724fc9befe0ffc2be2",
+    "validated_at": "2026-09-14T07:36:12+00:00"
+  },
+  "evidence": {
+    "source_files": "accepted_source_files.json",
+    "projected_records": "../../paper/data/episodes.jsonl",
+    "raw_records": "../../paper/data/raw_episodes.jsonl.gz",
+    "historical_reference": "../../paper/data/full400_reference/",
+    "development_attempts": "development_record.json",
+    "environment": "environment.json"
+  }
+}

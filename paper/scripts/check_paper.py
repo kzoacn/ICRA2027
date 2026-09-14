@@ -45,6 +45,38 @@ def main():
         assert row["scoring"] == "external_sticky_any_success"
     assert len(groups) == 40 and all(v == set(range(10)) for v in groups.values())
     assert sum(r["reused"] for r in rows) == meta["protocol"]["reused_episodes"]
+    task_refresh = meta.get("evaluation_kind") == "task_replacement"
+    if task_refresh:
+        assert meta["controller_source_sha256"] is None
+        replacement = meta["task_replacement"]
+        assert (replacement["suite"], replacement["task_id"]) == ("libero_10", 9)
+        reference_dir = PAPER / "data/full400_reference"
+        reference_meta = json.loads((reference_dir / "provenance.json").read_text())
+        reference_data = (reference_dir / "episodes.jsonl").read_bytes()
+        assert hashlib.sha256(reference_data).hexdigest() == reference_meta["episodes_projection_sha256"]
+        reference_rows = {r["episode_id"]: r for r in map(json.loads, reference_data.splitlines())}
+        refreshed, retained = [], []
+        for row in rows:
+            source_line = actual[row["episode_id"]][1]
+            if row["suite"] == replacement["suite"] and row["task_id"] == replacement["task_id"]:
+                assert not row["reused"]
+                assert row["controller_source_sha256"] == replacement["batch_manifest"]["source_tree_sha256"]
+                refreshed.append(row)
+            else:
+                assert row["reused"]
+                assert row["controller_source_sha256"] == reference_meta["controller_source_sha256"]
+                assert row["source_record_sha256"] == reference_rows[row["episode_id"]]["source_record_sha256"]
+                retained.append(row)
+        assert len(refreshed) == 10 and len(retained) == 390
+        assert sum(row["success"] for row in refreshed) == replacement["successes"]
+        refreshed_raw = b"".join(actual[row["episode_id"]][1] + b"\n"
+                                  for row in sorted(refreshed, key=lambda row: row["init_id"]))
+        assert hashlib.sha256(refreshed_raw).hexdigest() == replacement["batch_validation"]["episodes_jsonl_sha256"]
+        assert replacement["batch_validation"]["coverage_passed"]
+        assert not replacement["batch_validation"]["issues"]
+        expected_sources = collections.Counter({item["source_tree_sha256"]: item["included_episodes"]
+                                                for item in meta["controller_sources"]})
+        assert collections.Counter(row["controller_source_sha256"] for row in rows) == expected_sources
     caps = {"libero_spatial":220, "libero_object":280, "libero_goal":300, "libero_10":520}
     assert all(0 <= r["steps"] <= caps[r["suite"]] for r in rows)
     numbers = (PAPER / "generated/numbers.tex").read_text()
@@ -61,6 +93,7 @@ def main():
     assert int(macros["SuccessCount"]) == sum(r["success"] for r in rows)
     assert int(macros["ReusedCount"]) == sum(r["reused"] for r in rows)
     assert (r"\AllFreshtrue" in numbers) == (not any(r["reused"] for r in rows))
+    assert (r"\TaskRefreshtrue" in numbers) == task_refresh
     tex = (PAPER / "main.tex").read_text()
     subprocess.run(["python3", str(PAPER / "scripts/build_comparison_table.py"), "--check"],
                    check=True)
@@ -85,6 +118,9 @@ def main():
     assert not any(t in text for t in ["kzoacn","ICRA2027.git","/root/","??",
                                      "preliminary snapshot","remaining planned trials are pending"])
     assert "400" in text
+    if task_refresh:
+        assert "390" in text and "two controller versions" in text
+        assert "All 400 episodes are newly executed" not in text
     fonts = subprocess.check_output(["pdffonts", str(PAPER/"main.pdf")], text=True)
     assert "Type 3" not in fonts
     for line in fonts.splitlines()[2:]:
@@ -95,6 +131,9 @@ def main():
     report = {"passed": True, "pages": pages, "episodes":len(rows),
         "successes":sum(r["success"] for r in rows), "tasks":len(groups),
         "controller_source_sha256":meta["controller_source_sha256"],
+        "evaluation_kind":meta.get("evaluation_kind", "full_campaign"),
+        "fresh_episodes":sum(not row["reused"] for row in rows),
+        "historical_episodes":sum(row["reused"] for row in rows),
         "raw_record_archive_verified":bool(meta.get("raw_episode_archive")),
         "raw_records_verified":len(rows) if meta.get("raw_episode_archive") else 0,
         "references":len(cited), "author_metadata":"Anonymous",

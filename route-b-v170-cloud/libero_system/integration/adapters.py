@@ -286,6 +286,24 @@ class RouteBMicrowaveDoorDetector:
         self._append_selector_diagnostic(self.last_contact_detection)
         return replace(target, kind=kind)
 
+    def panel_geometry(self, observation: RobotObservation):
+        """Bind an appliance from RGB-D, then fit its movable door panel."""
+        from ..route_b.microwave_interior import microwave_cavity_from_walls, observed_door_panel
+
+        converted = to_route_b_observation(observation)
+        center, axes, half = self._select_fixture_geometry(converted)
+        frame = MicrowaveDoorHandleDetector._fixture_frame(
+            observation.proprio.ee_position_world, center, axes, half)
+        cavity, wall_trace = microwave_cavity_from_walls(self._fixture_surface_points_world, frame)
+        side = np.asarray(wall_trace['control_side_world'])
+        outward = np.asarray(wall_trace['outward_world'])
+        hinge = cavity.centroid_world-.1325*side+.084*outward
+        angle, radial, normal, trace = observed_door_panel(observation, hinge, side, outward, open_only=True)
+        self._append_selector_diagnostic({'kind': 'microwave_panel_initial_fit', **trace,
+            'hinge_world_m': hinge.tolist(), 'control_side_world': side.tolist(),
+            'outward_world': outward.tolist()})
+        return hinge, side, outward, angle, radial, normal
+
     def articulation_geometry(
         self,
         reference_ee_position_world: np.ndarray,

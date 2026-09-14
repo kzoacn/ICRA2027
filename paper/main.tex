@@ -58,8 +58,15 @@ and visual checks to manage articulation and recovery. The policy interface
 excludes task-success feedback, while an external evaluator records whether
 the official predicate is ever satisfied.
 \ifRunComplete
+\ifTaskRefresh
+A combined set of 400 task records, comprising 390 historical episodes and
+10 newly executed Long 09 episodes, contains \SuccessCount{} successes
+(\SuccessRate{}\%). It includes two controller versions; the updated
+controller has not been reevaluated on the other 39 tasks.
+\else
 On 400 fixed initializations spanning 40 LIBERO tasks, the deployed system
 succeeds in \SuccessCount{} trials (\SuccessRate{}\%).
+\fi
 \else
 In a preliminary snapshot of an ongoing 400-trial evaluation, it succeeds in
 \SuccessCount{} of \EpisodeCount{} completed trials (\SuccessRate{}\%).
@@ -111,8 +118,8 @@ estimates, separate from benchmark success.
 
 We evaluate the deployed implementation on the Spatial, Object, Goal, and Long
 suites of LIBERO~\cite{libero}. Each suite contains ten evaluated tasks, with
-ten official initial states per task. The evaluation uses the existing
-controller and fixed evaluation configuration; its scope is a system study on
+ten official initial states per task. The evaluation retains fixed task configurations and records controller
+versions; its scope is a system study on
 known benchmark assets and instruction forms. We make three contributions:
 
 \begin{enumerate}
@@ -334,7 +341,6 @@ These routines preserve the distinction between a robot-side mechanical
 signal and an estimate of task completion. Their hand-selected parameters
 are part of the fixed controller configuration evaluated below.
 
-\ifAllFresh
 Several fixture skills refine the grounded object box into physical contact
 geometry. A complete visible burner disk anchors the stove support centre;
 public plate thickness supplies the offset from the visible disk to the
@@ -351,6 +357,17 @@ Before withdrawing from a basket, the controller opens the jaws to a measured
 clearance; a bounded open-wrist tilt clears tall bodies near the palm.
 All such proposals use language, RGB-D estimates, and robot measurements;
 the external task predicate is unavailable to their selection or execution.
+
+\ifTaskRefresh
+The revised microwave close skill fits a vertical door slab within the
+sensor-grounded hinge sweep. Initial fitting excludes the fixed front frame
+by requiring panel evidence outside the appliance body. A compact top-down
+gripper approaches the exterior face and follows bounded hinge-frame
+waypoints. After a motion plateau, a fresh panel-angle estimate can initiate
+withdrawal; a second view after retreat verifies closure. Placement remains
+separate and now requires a measured 78-mm jaw opening and a settling dwell
+before withdrawing from the cavity, preventing a mug rim from remaining
+hooked on a finger. A closed door alone need not satisfy the full task.
 \fi
 
 \begin{table}[t]
@@ -390,10 +407,25 @@ Spatial/Object/Goal/Long action budgets are $220/280/300/520$, matching
 the numerical budgets in the OpenVLA evaluation script~\cite{openvlacode}.
 Our environment seed and success-handling logic differ from that script;
 its environment utility uses seed $0$.
-The run uses Ubuntu 22.04, Python 3.12, PyTorch 2.11.0 with CUDA 12.8,
+The original full run uses Ubuntu 22.04, Python 3.12, PyTorch 2.11.0 with CUDA 12.8,
 MuJoCo 3.3.2~\cite{mujoco}, robosuite 1.4.0~\cite{robosuite}, and
 hf-libero 0.1.4 on one RTX 5090.
+\ifTaskRefresh
+The targeted Long 09 retest uses the same software environment on an RTX 4090.
+\fi
 
+\ifTaskRefresh
+The original full campaign records \BaselineSuccessCount/400 successes with
+one frozen controller. We subsequently revise microwave release and closure and execute
+all ten Long 09 initializations with one updated source snapshot, in index
+order. The updated task succeeds in $\MicrowaveSuccess/10$ episodes.
+The combined statistics retain the original 390 episodes for the other
+39 tasks and replace all ten Long 09 records, including failures.
+They therefore contain two controller versions and do not establish a
+full-suite result for the updated controller. The original complete campaign,
+both source manifests, and each record's source version are preserved.
+These initializations also informed development; this follow-up is not held out.
+\else
 \ifAllFresh
 All 400 episodes are newly executed against one immutable source snapshot.
 Task processes execute independently under a dispatcher with up to eight
@@ -410,6 +442,7 @@ and their source records were frozen before the new campaign. Their
 inclusion was determined by identity and compatibility, not outcome.
 The other 390 episodes are newly executed. We report this reuse explicitly
 and keep timing analyses separate.
+\fi
 \fi
 
 \subsection{External Scoring and Internal Completion}
@@ -431,31 +464,40 @@ Each record additionally stores terminal controller state, step count,
 elapsed time, failure message, and geometric traces. The reported success rate
 is $\widehat p=N^{-1}\sum_iY_i$. Equal task sample counts make the overall
 episode average equal to the macro-average over tasks in the completed run.
-We retain all planned failures; no outcome-based episode retry or selection
-is used. Controller-internal retries remain part of a single episode.
+Each reported batch retains all planned failures; candidate outcomes are not
+mixed within a task. Controller-internal retries remain within one episode.
 
 \subsection{Scope of the Evidence}
 \ifRunComplete
+\ifTaskRefresh
+Both source runs pass their respective coverage checks. The combined
+record set contains 400 unique task/initial-state pairs with the declared
+configuration; original record hashes identify the retained and replaced
+episodes independently.
+\else
 The completed campaign passes its record-coverage validation: 400 unique
 episodes, fixed configuration, existing recorded videos, and matching
 deployed source checksums.
+\fi
 \else
 This draft contains \EpisodeCount{} completed episodes from the ongoing run.
 Its figures and tables are a partial snapshot and must not be read as the
 final 400-episode result.
 \fi
-Tables describing our measurements are generated from a frozen projection
-of the original records, with hashes retaining the connection to their source
-lines. Published comparison values are transcribed from the cited tables
-and stored separately from our episode records.
-Our rates summarize the specified initial states; per-task counts retain
-the sample size and contribution of each task to the aggregate.
+Tables are generated from hashed original records. Published values are
+stored separately with their cited sources. Per-task counts expose the
+sample size behind each rate.
 
 \begin{table}[t]
-\caption{Observed success and execution cost. SR uses the external
-ever-success predicate. $^\dagger$Elapsed-time medians use newly executed
-episodes only; steps include reused records. Times include the recorded
-episode execution overhead under concurrent evaluation.}
+\caption{Observed success and execution cost. SR uses external ever-success.
+\ifTaskRefresh
+The combined records retain 390 historical episodes and replace Long 09 with
+10 new episodes. $^\dagger$Medians use recorded elapsed times from both runs;
+hardware and concurrency differ.
+\else
+$^\dagger$Elapsed-time medians use newly executed episodes only; steps include
+reused records. Times include execution overhead under concurrent evaluation.
+\fi}
 \label{tab:results}
 \centering
 \footnotesize
@@ -467,7 +509,7 @@ episode execution overhead under concurrent evaluation.}
 \label{sec:comparison}
 Table~\ref{tab:published} compares our measurements with published LIBERO
 success rates, retaining the original papers' reported averages.
-Our implementation is the only system evaluated in the present campaign.
+Our implementation is the only system evaluated in the present study.
 
 The table specifies the distinct sensing and policy-training settings.
 The OpenVLA study uses filtered demonstrations~\cite{openvla}.
@@ -486,10 +528,12 @@ Long has the lowest success rate for every listed method, including
 \caption{LIBERO success rates (\%). Published rows contain the reported
 means from OpenVLA Table~12~\cite{openvla}, SmolVLA Table~2~\cite{smolvla},
 and OpenVLA-OFT Table~I~\cite{openvlaoft}; they are not reruns by us.
-The OpenVLA-OFT row uses the full setting with additional inputs and filtered
-demonstrations. The final row is measured in this work.
-All methods receive language instructions; sensing, priors, training, and
-evaluation protocols differ as described in the text.}
+OpenVLA-OFT uses its full setting. The final row is measured in this work.
+\ifTaskRefresh
+It combines 390 historical episodes and 10 new Long 09 episodes from two
+controller versions; it is not a full rerun of the updated controller.
+\fi
+All methods receive language; their sensing, training, and protocols differ.}
 \label{tab:published}
 \centering
 \footnotesize
@@ -498,27 +542,32 @@ evaluation protocols differ as described in the text.}
 
 \subsection{Aggregate and Task-Level Performance}
 \ifRunComplete
+\ifTaskRefresh
+The combined records contain \SuccessCount{} successes in 400 episodes
+(\SuccessRate{}\%; Table~\ref{tab:results}).
+\else
 The system succeeds in \SuccessCount{} of 400 episodes, for an overall
 success rate of \SuccessRate{}\% (Table~\ref{tab:results}).
+\fi
 \else
 The current snapshot succeeds in \SuccessCount{} of \EpisodeCount{} completed
 episodes (\SuccessRate{}\%); the remaining planned trials are pending.
 \fi
 Suite success rates are \SpatialRate{}\% for Spatial, \ObjectRate{}\% for
 Object, \GoalRate{}\% for Goal, and \LongRate{}\% for Long.
-\ifAllFresh\else
+\ifTaskRefresh\else\ifAllFresh\else
 The newly executed subset succeeds in \FreshSuccessCount{} of
 \FreshCount{} trials (\FreshSuccessRate{}\%), allowing the effect of
 including the ten reused records to be inspected directly.
+\fi
 \fi
 
 Figure~\ref{fig:tasks} shows the task-level distribution.
 \PerfectTaskCount{} tasks have ten successful recorded trials.
 Long 09, placing a mug inside a microwave and closing it, succeeds in
 $\MicrowaveSuccess/10$ trials. Long 08, placing both moka pots on the stove,
-succeeds in $\MokaSuccess/10$ trials. These tasks combine object placement
-with confined access, shared supports, or fixture interaction; their
-individual outcomes provide information that is lost in the overall average.
+succeeds in $\MokaSuccess/10$ trials. These tasks combine placement with
+confined access, shared supports, or fixture interaction.
 
 Drawer-related tasks also remain difficult: Goal task 03, opening the top
 drawer and placing a bowl inside, succeeds in $\TopDrawerSuccess/10$ trials;
@@ -531,10 +580,10 @@ reasons; they do not establish articulation as the cause of failure.
 \begin{figure*}[t]
 \centering
 \includegraphics[width=\textwidth]{figures/per_task.pdf}
-\caption{External successes divided by recorded trials for each official task
-index. Columns identify different tasks in each suite; darker cells indicate
-higher success. Counts, rather than rounded percentages alone, show the
-sample size supporting each result.}
+\caption{External successes per ten trials. Columns identify different tasks
+in each suite; darker cells indicate higher success.
+\ifTaskRefresh Long 09 uses the targeted retest; other cells retain the
+original full-campaign records.\fi}
 \label{fig:tasks}
 \end{figure*}
 
@@ -580,8 +629,6 @@ A phase timeout may arise from an inaccessible target, calibration error,
 occlusion, or contact resistance. Likewise, a rejected sensor verification
 may reflect an actual placement error or perception uncertainty.
 Determining these causes requires frame-level or geometric-trace analysis.
-The current evidence supports identifying where execution terminates, while
-leaving causal attribution open.
 
 \begin{table}[t]
 \caption{Outcome groups among external failures. Categories are derived from
@@ -593,28 +640,36 @@ recorded controller messages with a fixed precedence rule.}
 \end{table}
 
 \subsection{Execution Cost and Qualitative Context}
+\ifTaskRefresh
+The median Long 09 retest episode takes \FreshMedianSeconds{} seconds.
+\else
 The median newly executed episode takes \FreshMedianSeconds{} seconds.
+\fi
 Mean action counts range across suites as shown in Table~\ref{tab:results}.
 Long episodes average \LongMeanSteps{} actions, compared with
 \ObjectMeanSteps{} for Object. These costs include controller execution
 through its own stopping condition; they are not time-to-first-success.
 Recorded elapsed times mix perception, simulation, rendering, and video
-overhead while workers compete for the same CPU and GPU.
+overhead under each run's hardware and scheduling configuration.
 They should not be interpreted as real-robot control frequency.
 
 The run reports \RuntimeExceptionCount{} runtime exceptions.
 \ifRunComplete
+\ifTaskRefresh
+The ten-episode targeted retest takes \RunMinutes{} minutes of dispatcher
+wall time. There is no single wall-time measurement for the combined
+400-episode record set.
+\else
 Dispatcher wall time is \RunMinutes{} minutes for the campaign containing
 \FreshCount{} new and \ReusedCount{} reused episodes.
+\fi
 \else
 Dispatcher wall time at the snapshot is \RunMinutes{} minutes.
 \fi
 Figure~\ref{fig:rollouts} provides visual context from actual recordings.
-The upper row shows a successful Object task-00 episode. The lower row is
-the earliest externally unsuccessful Goal task-03 episode in the official
-index order, which exhausts its action budget. Selection is stated to make
-the figure interpretable as illustration, rather than a representative
-sampling estimate or evidence of a particular failure mechanism.
+The upper row shows a successful Object task-00 episode; the lower row is
+the first unsuccessful Goal task-03 initialization, which exhausts its
+budget. These selected examples illustrate execution, not failure prevalence.
 
 \begin{figure*}[t]
 \centering
@@ -631,9 +686,8 @@ display; left/right is preserved.}
 \section{Discussion and Limitations}
 Explicit geometry and specialized skills solve a substantial fraction of the
 selected episodes under declared asset and calibration assumptions.
-Texture and size priors encode known objects; grammar rules encode known
-language forms; and specialized controllers reflect manual development.
-These resources matter when interpreting the published-policy comparison.
+Object priors, grammar rules, and manually developed skills are part of
+these conditions.
 
 \paragraph{Generalization and novelty.}
 The run covers known assets, language forms, and one simulated embodiment
@@ -657,21 +711,24 @@ changing the policy's observations.
 \paragraph{Reproducibility.}
 Source and resource checksums, fixed initial-state identifiers, and
 record-derived figures support reconstruction of this evaluation.
-The software-boundary counters are implementation-generated records, rather
-than independent security attestations. The current artifact should therefore
-be used to reproduce and inspect a concrete system, with the experimental
-scope stated above.
+Boundary counters are implementation-generated records, not independent
+attestations.
 
 \section{Conclusion}
 We presented \method{}, an asset-informed geometric manipulation baseline
 that compiles supported language into closed-loop grasp--place and contact
-skills. Under its declared sensing and prior assumptions, the evaluated
+skills. Under the declared sensing and prior assumptions, the
+\ifTaskRefresh
+combined records contain \SuccessRate{}\% external successes across
+\EpisodeCount{} episodes, with Long 09 updated to $\MicrowaveSuccess/10$.
+This task-specific update combines two controller versions; broader
+performance of the updated controller remains unmeasured.
+\else
 system achieves \SuccessRate{}\% external success across
 \EpisodeCount{} recorded episodes.
-Task-level outcomes and completion disagreements reveal limitations that an
-aggregate success rate alone would hide. The implementation and record-based
-analysis make the system's information requirements, contact behavior, and
-policy-evaluation interface available for inspection and reproduction.
+\fi
+Task-level outcomes and completion disagreements expose limitations hidden
+by aggregate rates; the source and records support inspection and reproduction.
 
 \section*{Acknowledgments and AI Disclosure}
 OpenAI GPT-6-Astra (via Codex) assisted in drafting and editing the text in all sections,

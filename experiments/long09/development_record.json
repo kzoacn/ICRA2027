@@ -1,0 +1,607 @@
+{
+  "scope": "Development and complete targeted retests, kept separately by frozen controller source. No full-suite evaluation was launched for this follow-up.",
+  "batches": [
+    {
+      "batch": "long09_exterior_01",
+      "state": "completed",
+      "source_tree_sha256": "7e8ecb252044d1ed3f4226efbcbcc46fb2c2de3ad17bcfbd9a60621bea4c2df5",
+      "protocol": {
+        "tasks": 1,
+        "episodes_per_task": 3,
+        "official_init_ids": [
+          0,
+          1,
+          2
+        ],
+        "seed": 7,
+        "step_caps": {
+          "spatial": 220,
+          "object": 280,
+          "goal": 300,
+          "long": 520
+        },
+        "scoring": "external_sticky_any_success",
+        "expected_episodes": 3,
+        "new_episodes": 3,
+        "reused_episodes": 0
+      },
+      "episodes": 3,
+      "successes": 0,
+      "records": [
+        {
+          "episode_id": "b:libero_10:task09:ep0000",
+          "init_id": 0,
+          "success": false,
+          "policy_status": "failed",
+          "steps": 414,
+          "failure": "phase 'microwave_close_descend_outer' timed out (position_error=0.1046 m; rotation_error=0.7587 rad; current=[-0.3774, -0.0341, 1.1509]; target=[-0.3106, -0.0275, 1.0706])",
+          "source_record_sha256": "fcb30334ea2638207e1e82ec26a77a3297e5f4527a13d4d05fd31f9cdc37056c"
+        },
+        {
+          "episode_id": "b:libero_10:task09:ep0001",
+          "init_id": 1,
+          "success": false,
+          "policy_status": "failed",
+          "steps": 221,
+          "failure": "no reliable open microwave door edge was visible in either RGB-D view",
+          "source_record_sha256": "399d0cb4f48da831e6deee2dd4d708ff8fef25af353ac03c1dcff63891f283dd"
+        },
+        {
+          "episode_id": "b:libero_10:task09:ep0002",
+          "init_id": 2,
+          "success": false,
+          "policy_status": "failed",
+          "steps": 434,
+          "failure": "phase 'microwave_close_push_clear_edge' timed out (position_error=0.0560 m; rotation_error=0.0406 rad; current=[0.0827, 0.2407, 1.0291]; target=[0.1367, 0.2522, 1.0387])",
+          "source_record_sha256": "483a4a4fe8d28a6594fc9d0a933c82ed5eb07df3ee6b3de88b5035c717dbd3ee"
+        }
+      ],
+      "validation": {
+        "coverage_passed": true,
+        "issues": [],
+        "episodes": 3,
+        "source_tree_sha256": "7e8ecb252044d1ed3f4226efbcbcc46fb2c2de3ad17bcfbd9a60621bea4c2df5",
+        "episodes_jsonl_sha256": "b95b6da9971a892369fed0667360bc02fd47525891226d4e553abff5cf5b6f9d",
+        "validated_at": "2026-09-14T06:56:53+00:00"
+      }
+    },
+    {
+      "batch": "long09_face_02",
+      "state": "completed",
+      "source_tree_sha256": "4a5b1e88771a8fa2081f1e73c0044dca3c4cb273230af10d03ab88e5438b012f",
+      "protocol": {
+        "tasks": 1,
+        "episodes_per_task": 3,
+        "official_init_ids": [
+          0,
+          1,
+          2
+        ],
+        "seed": 7,
+        "step_caps": {
+          "spatial": 220,
+          "object": 280,
+          "goal": 300,
+          "long": 520
+        },
+        "scoring": "external_sticky_any_success",
+        "expected_episodes": 3,
+        "new_episodes": 3,
+        "reused_episodes": 0
+      },
+      "episodes": 3,
+      "successes": 0,
+      "records": [
+        {
+          "episode_id": "b:libero_10:task09:ep0000",
+          "init_id": 0,
+          "success": false,
+          "policy_status": "failed",
+          "steps": 416,
+          "failure": "phase 'microwave_face_engage' timed out (position_error=0.0691 m; rotation_error=0.0488 rad; current=[0.0526, 0.2048, 1.0693]; target=[0.0342, 0.2711, 1.0628])",
+          "source_record_sha256": "a722869377e4a67347a1703a9d189371053aa786e612d4dad1f9c0b4854cee4c"
+        },
+        {
+          "episode_id": "b:libero_10:task09:ep0001",
+          "init_id": 1,
+          "success": false,
+          "policy_status": "failed",
+          "steps": 413,
+          "failure": "phase 'microwave_face_engage' timed out (position_error=0.0689 m; rotation_error=0.0486 rad; current=[0.045, 0.2093, 1.0686]; target=[0.0272, 0.2756, 1.0628])",
+          "source_record_sha256": "05d791d0a8cb96e1378e02ed2b0f7054d24a81837a02f83ed6382e08f2759e24"
+        },
+        {
+          "episode_id": "b:libero_10:task09:ep0002",
+          "init_id": 2,
+          "success": false,
+          "policy_status": "failed",
+          "steps": 415,
+          "failure": "phase 'microwave_face_engage' timed out (position_error=0.0690 m; rotation_error=0.0493 rad; current=[0.0468, 0.2058, 1.0694]; target=[0.0291, 0.2721, 1.0628])",
+          "source_record_sha256": "e567016bf66ec566a924d152e1493feb199c4729c0f81e8d2c6b65aa160666f0"
+        }
+      ],
+      "validation": {
+        "coverage_passed": true,
+        "issues": [],
+        "episodes": 3,
+        "source_tree_sha256": "4a5b1e88771a8fa2081f1e73c0044dca3c4cb273230af10d03ab88e5438b012f",
+        "episodes_jsonl_sha256": "d61e51839ff9d160f6c8f53b3a629630bff0e2947b14b4cbfb2f60b1dbba5fac",
+        "validated_at": "2026-09-14T07:03:33+00:00"
+      }
+    },
+    {
+      "batch": "long09_face_03",
+      "state": "completed",
+      "source_tree_sha256": "ea6a19b9d5a97ddd50b6fd37210923305efa8c01da144688fa06aa8f821c2420",
+      "protocol": {
+        "tasks": 1,
+        "episodes_per_task": 2,
+        "official_init_ids": [
+          0,
+          1
+        ],
+        "seed": 7,
+        "step_caps": {
+          "spatial": 220,
+          "object": 280,
+          "goal": 300,
+          "long": 520
+        },
+        "scoring": "external_sticky_any_success",
+        "expected_episodes": 2,
+        "new_episodes": 2,
+        "reused_episodes": 0
+      },
+      "episodes": 2,
+      "successes": 1,
+      "records": [
+        {
+          "episode_id": "b:libero_10:task09:ep0000",
+          "init_id": 0,
+          "success": true,
+          "policy_status": "failed",
+          "steps": 444,
+          "failure": "phase 'microwave_face_sweep' timed out (position_error=0.0385 m; rotation_error=0.0135 rad; current=[0.0164, 0.1316, 1.0559]; target=[0.0181, 0.1695, 1.0628])",
+          "source_record_sha256": "cbb98f1cf357ed5b82a7fb45b2ed5562ed74cbea4f6ffe9f4309f6613a22db6a"
+        },
+        {
+          "episode_id": "b:libero_10:task09:ep0001",
+          "init_id": 1,
+          "success": false,
+          "policy_status": "failed",
+          "steps": 434,
+          "failure": "phase 'microwave_face_sweep' timed out (position_error=0.0660 m; rotation_error=0.4514 rad; current=[-0.0466, 0.0455, 1.0962]; target=[-0.0417, 0.1023, 1.0628])",
+          "source_record_sha256": "eb9c17a32201fede9c32339056839898e59e95dec1539c6c8d6e19c5bd39ea9b"
+        }
+      ],
+      "validation": {
+        "coverage_passed": true,
+        "issues": [],
+        "episodes": 2,
+        "source_tree_sha256": "ea6a19b9d5a97ddd50b6fd37210923305efa8c01da144688fa06aa8f821c2420",
+        "episodes_jsonl_sha256": "4fa145af22c6758d903b6f331c4272d16dff56217c5f814356b4415387e41715",
+        "validated_at": "2026-09-14T07:06:31+00:00"
+      }
+    },
+    {
+      "batch": "long09_face_03_init4",
+      "state": "completed",
+      "source_tree_sha256": "ea6a19b9d5a97ddd50b6fd37210923305efa8c01da144688fa06aa8f821c2420",
+      "protocol": {
+        "tasks": 1,
+        "episodes_per_task": 1,
+        "official_init_ids": [
+          4
+        ],
+        "seed": 7,
+        "step_caps": {
+          "spatial": 220,
+          "object": 280,
+          "goal": 300,
+          "long": 520
+        },
+        "scoring": "external_sticky_any_success",
+        "expected_episodes": 1,
+        "new_episodes": 1,
+        "reused_episodes": 0
+      },
+      "episodes": 1,
+      "successes": 1,
+      "records": [
+        {
+          "episode_id": "b:libero_10:task09:ep0004",
+          "init_id": 4,
+          "success": true,
+          "policy_status": "failed",
+          "steps": 459,
+          "failure": "phase 'microwave_face_sweep' timed out (position_error=0.0459 m; rotation_error=0.0128 rad; current=[0.0127, 0.1469, 1.0533]; target=[0.0152, 0.1918, 1.0628])",
+          "source_record_sha256": "35b1b2628dd41018951c580b7bcc144b0491c459505c1124e664c32bd668d3ff"
+        }
+      ],
+      "validation": {
+        "coverage_passed": true,
+        "issues": [],
+        "episodes": 1,
+        "source_tree_sha256": "ea6a19b9d5a97ddd50b6fd37210923305efa8c01da144688fa06aa8f821c2420",
+        "episodes_jsonl_sha256": "2ac5044b1200b199bf01fc80c7a7427503a21b9920a46b48a5f3dc502bac0144",
+        "validated_at": "2026-09-14T07:07:20+00:00"
+      }
+    },
+    {
+      "batch": "long09_face_04",
+      "state": "completed",
+      "source_tree_sha256": "2e22d7dfc0a05c44aef7715dfabec45bfcfc79b2d6c7b0c660837efd1ebd1f02",
+      "protocol": {
+        "tasks": 1,
+        "episodes_per_task": 3,
+        "official_init_ids": [
+          0,
+          1,
+          2
+        ],
+        "seed": 7,
+        "step_caps": {
+          "spatial": 220,
+          "object": 280,
+          "goal": 300,
+          "long": 520
+        },
+        "scoring": "external_sticky_any_success",
+        "expected_episodes": 3,
+        "new_episodes": 3,
+        "reused_episodes": 0
+      },
+      "episodes": 3,
+      "successes": 2,
+      "records": [
+        {
+          "episode_id": "b:libero_10:task09:ep0000",
+          "init_id": 0,
+          "success": true,
+          "policy_status": "succeeded",
+          "steps": 353,
+          "failure": null,
+          "source_record_sha256": "886489c2d2693fad86171b15f72c572147fb4c4b81156e2153d8605d6b57f461"
+        },
+        {
+          "episode_id": "b:libero_10:task09:ep0001",
+          "init_id": 1,
+          "success": false,
+          "policy_status": "failed",
+          "steps": 434,
+          "failure": "phase 'microwave_face_sweep' timed out (position_error=0.0660 m; rotation_error=0.4514 rad; current=[-0.0466, 0.0455, 1.0962]; target=[-0.0417, 0.1023, 1.0628])",
+          "source_record_sha256": "f5831bc982fb0c92b476175b8591f7d0aa14069b5bf892f4427e36dc99e052d5"
+        },
+        {
+          "episode_id": "b:libero_10:task09:ep0002",
+          "init_id": 2,
+          "success": true,
+          "policy_status": "succeeded",
+          "steps": 352,
+          "failure": null,
+          "source_record_sha256": "c3c84c7180075080d13b609a3616fabfc8a0977a5fbf7549524d4598ef097d88"
+        }
+      ],
+      "validation": {
+        "coverage_passed": true,
+        "issues": [],
+        "episodes": 3,
+        "source_tree_sha256": "2e22d7dfc0a05c44aef7715dfabec45bfcfc79b2d6c7b0c660837efd1ebd1f02",
+        "episodes_jsonl_sha256": "69d4598ef494e218759b92bf424e2182c4f358066ba184001a31ff510fcd6c1f",
+        "validated_at": "2026-09-14T07:10:40+00:00"
+      }
+    },
+    {
+      "batch": "long09_final_01",
+      "state": "completed",
+      "source_tree_sha256": "b80d6ec07237c56c9e8f5cbb9bd97e689d905ea6e1f5e42fe1e1d723aaefea97",
+      "protocol": {
+        "tasks": 1,
+        "episodes_per_task": 10,
+        "official_init_ids": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ],
+        "seed": 7,
+        "step_caps": {
+          "spatial": 220,
+          "object": 280,
+          "goal": 300,
+          "long": 520
+        },
+        "scoring": "external_sticky_any_success",
+        "expected_episodes": 10,
+        "new_episodes": 10,
+        "reused_episodes": 0
+      },
+      "episodes": 10,
+      "successes": 6,
+      "records": [
+        {
+          "episode_id": "b:libero_10:task09:ep0000",
+          "init_id": 0,
+          "success": true,
+          "policy_status": "succeeded",
+          "steps": 353,
+          "failure": null,
+          "source_record_sha256": "700ee0c9f5ab72bfbe882eefb27aef0e3ad8b18bd28825ed613ee5f18544ee8c"
+        },
+        {
+          "episode_id": "b:libero_10:task09:ep0001",
+          "init_id": 1,
+          "success": false,
+          "policy_status": "failed",
+          "steps": 434,
+          "failure": "phase 'microwave_face_sweep' timed out (position_error=0.0660 m; rotation_error=0.4514 rad; current=[-0.0466, 0.0455, 1.0962]; target=[-0.0417, 0.1023, 1.0628])",
+          "source_record_sha256": "58b2da71baee0f137d428a9bf473c2066dda023282e2377a877e7239f216794d"
+        },
+        {
+          "episode_id": "b:libero_10:task09:ep0002",
+          "init_id": 2,
+          "success": true,
+          "policy_status": "succeeded",
+          "steps": 352,
+          "failure": null,
+          "source_record_sha256": "6c8dff285198c356a6a9fd97ac818f26241b448c5f47a4c069b74d20fffecb93"
+        },
+        {
+          "episode_id": "b:libero_10:task09:ep0003",
+          "init_id": 3,
+          "success": false,
+          "policy_status": "failed",
+          "steps": 187,
+          "failure": "phase 'approach' timed out",
+          "source_record_sha256": "8ca605579643ae094f48acbc0734c5cdfc9a19cbb06870c5be4f5be0cfd540f1"
+        },
+        {
+          "episode_id": "b:libero_10:task09:ep0004",
+          "init_id": 4,
+          "success": true,
+          "policy_status": "succeeded",
+          "steps": 376,
+          "failure": null,
+          "source_record_sha256": "ecc39a102132571a3d3124642572db798795aa6a3ccfe00e6b3aafbd9f8ae7ff"
+        },
+        {
+          "episode_id": "b:libero_10:task09:ep0005",
+          "init_id": 5,
+          "success": false,
+          "policy_status": "failed",
+          "steps": 432,
+          "failure": "phase 'microwave_face_sweep' timed out (position_error=0.0871 m; rotation_error=0.9025 rad; current=[-0.0391, 0.0146, 1.087]; target=[-0.0387, 0.0983, 1.0628])",
+          "source_record_sha256": "29912053a876734601afa0ed9297d2610be7ed2f56e1c401bb1c5ff0b975b218"
+        },
+        {
+          "episode_id": "b:libero_10:task09:ep0006",
+          "init_id": 6,
+          "success": true,
+          "policy_status": "succeeded",
+          "steps": 358,
+          "failure": null,
+          "source_record_sha256": "ced84b1df4f7e4005e8ea601fd6ca6a90400d2241e9fc7519486c6fd2ecf886a"
+        },
+        {
+          "episode_id": "b:libero_10:task09:ep0007",
+          "init_id": 7,
+          "success": true,
+          "policy_status": "failed",
+          "steps": 460,
+          "failure": "microwave panel remained open at observed angle -0.3400 rad",
+          "source_record_sha256": "0f87bbdf901618661f21f1a2e7cdcb8dea5d4758a4e9211e7daf46346d0aabb7"
+        },
+        {
+          "episode_id": "b:libero_10:task09:ep0008",
+          "init_id": 8,
+          "success": true,
+          "policy_status": "succeeded",
+          "steps": 353,
+          "failure": null,
+          "source_record_sha256": "f294d325efaf1c3617896e2fe9d6e3e04718e355fea720baf78cd5db48a558a6"
+        },
+        {
+          "episode_id": "b:libero_10:task09:ep0009",
+          "init_id": 9,
+          "success": false,
+          "policy_status": "failed",
+          "steps": 329,
+          "failure": "phase 'lower_to_shelf_entry' timed out",
+          "source_record_sha256": "1316b7f015d0710b9535e92bd2df6b6a53deab6dff676e418a7346ef9afd74a6"
+        }
+      ],
+      "validation": {
+        "coverage_passed": true,
+        "issues": [],
+        "episodes": 10,
+        "source_tree_sha256": "b80d6ec07237c56c9e8f5cbb9bd97e689d905ea6e1f5e42fe1e1d723aaefea97",
+        "episodes_jsonl_sha256": "c58241bb4dea62e320aec0218ff10b184018354a92112417a28a4c5daf8dfd21",
+        "validated_at": "2026-09-14T07:22:22+00:00"
+      }
+    },
+    {
+      "batch": "long09_final_02",
+      "state": "completed",
+      "source_tree_sha256": "da1e0b8603977522e81cd9b4fd51837c10345a11566f89744018bb689230618a",
+      "protocol": {
+        "tasks": 1,
+        "episodes_per_task": 10,
+        "official_init_ids": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ],
+        "seed": 7,
+        "step_caps": {
+          "spatial": 220,
+          "object": 280,
+          "goal": 300,
+          "long": 520
+        },
+        "scoring": "external_sticky_any_success",
+        "expected_episodes": 10,
+        "new_episodes": 10,
+        "reused_episodes": 0
+      },
+      "episodes": 10,
+      "successes": 8,
+      "records": [
+        {
+          "episode_id": "b:libero_10:task09:ep0000",
+          "init_id": 0,
+          "success": true,
+          "policy_status": "succeeded",
+          "steps": 380,
+          "failure": null,
+          "source_record_sha256": "852ecb95f625de8a48233b5605de22562f8d77d9ec8c5a4e4f6c5bb5812afd31"
+        },
+        {
+          "episode_id": "b:libero_10:task09:ep0001",
+          "init_id": 1,
+          "success": true,
+          "policy_status": "succeeded",
+          "steps": 361,
+          "failure": null,
+          "source_record_sha256": "3911139e6f8ef5b08190e53297688ec284384712cbe12cedc3d31553011d1903"
+        },
+        {
+          "episode_id": "b:libero_10:task09:ep0002",
+          "init_id": 2,
+          "success": true,
+          "policy_status": "succeeded",
+          "steps": 379,
+          "failure": null,
+          "source_record_sha256": "3674aac9aeb485d0d0d058f29da0c0f8c7a79e89fed91c8ed23dc4c28aa56799"
+        },
+        {
+          "episode_id": "b:libero_10:task09:ep0003",
+          "init_id": 3,
+          "success": false,
+          "policy_status": "failed",
+          "steps": 187,
+          "failure": "phase 'approach' timed out",
+          "source_record_sha256": "bf033fea28ca0e348789699555d4910b3ccca3c7acc9bdf1595cdd36a889141f"
+        },
+        {
+          "episode_id": "b:libero_10:task09:ep0004",
+          "init_id": 4,
+          "success": true,
+          "policy_status": "succeeded",
+          "steps": 408,
+          "failure": null,
+          "source_record_sha256": "a608fdec6b7ce019630c56b604b37db3484db900669ad5248b24c13cff956ee7"
+        },
+        {
+          "episode_id": "b:libero_10:task09:ep0005",
+          "init_id": 5,
+          "success": true,
+          "policy_status": "succeeded",
+          "steps": 366,
+          "failure": null,
+          "source_record_sha256": "187a5479e160d95c985468837aed54d79a914fca97f64a4359181afb8958a63b"
+        },
+        {
+          "episode_id": "b:libero_10:task09:ep0006",
+          "init_id": 6,
+          "success": true,
+          "policy_status": "succeeded",
+          "steps": 381,
+          "failure": null,
+          "source_record_sha256": "b78a3f23ea64ab8aa545163b1b2e11833def686be8d0c31bc91c5cdad13d09ab"
+        },
+        {
+          "episode_id": "b:libero_10:task09:ep0007",
+          "init_id": 7,
+          "success": true,
+          "policy_status": "failed",
+          "steps": 492,
+          "failure": "microwave panel remained open at observed angle -0.3400 rad",
+          "source_record_sha256": "116303e42f37cac231bd0ac38e3436ec2f5414966f1317e1f07dfd6cab7aa715"
+        },
+        {
+          "episode_id": "b:libero_10:task09:ep0008",
+          "init_id": 8,
+          "success": true,
+          "policy_status": "succeeded",
+          "steps": 382,
+          "failure": null,
+          "source_record_sha256": "fc7e5580c3de235d86e4115749a406dedf9d7825c9d3fcee3e03640e2f8ae874"
+        },
+        {
+          "episode_id": "b:libero_10:task09:ep0009",
+          "init_id": 9,
+          "success": false,
+          "policy_status": "failed",
+          "steps": 329,
+          "failure": "phase 'lower_to_shelf_entry' timed out",
+          "source_record_sha256": "a6d7b02d4bc7f921688f0fbe02a9e49cd5bddc84fca01b17d284b781ee3dfa12"
+        }
+      ],
+      "validation": {
+        "coverage_passed": true,
+        "issues": [],
+        "episodes": 10,
+        "source_tree_sha256": "da1e0b8603977522e81cd9b4fd51837c10345a11566f89744018bb689230618a",
+        "episodes_jsonl_sha256": "5e99b101a91a04e97fc430d059f2862499ca27d6e3de03724fc9befe0ffc2be2",
+        "validated_at": "2026-09-14T07:36:12+00:00"
+      }
+    },
+    {
+      "batch": "long09_release_05_init5",
+      "state": "completed",
+      "source_tree_sha256": "da1e0b8603977522e81cd9b4fd51837c10345a11566f89744018bb689230618a",
+      "protocol": {
+        "tasks": 1,
+        "episodes_per_task": 1,
+        "official_init_ids": [
+          5
+        ],
+        "seed": 7,
+        "step_caps": {
+          "spatial": 220,
+          "object": 280,
+          "goal": 300,
+          "long": 520
+        },
+        "scoring": "external_sticky_any_success",
+        "expected_episodes": 1,
+        "new_episodes": 1,
+        "reused_episodes": 0
+      },
+      "episodes": 1,
+      "successes": 1,
+      "records": [
+        {
+          "episode_id": "b:libero_10:task09:ep0005",
+          "init_id": 5,
+          "success": true,
+          "policy_status": "succeeded",
+          "steps": 366,
+          "failure": null,
+          "source_record_sha256": "db291a71054daaf7806f8190917ea189479cb0f26aeb30402f52270dc3e88935"
+        }
+      ],
+      "validation": {
+        "coverage_passed": true,
+        "issues": [],
+        "episodes": 1,
+        "source_tree_sha256": "da1e0b8603977522e81cd9b4fd51837c10345a11566f89744018bb689230618a",
+        "episodes_jsonl_sha256": "2071d37a6b1241c30336e6e2a4d4701fcae6d32d1cf0c5cbaba22c823e89d086",
+        "validated_at": "2026-09-14T07:23:07+00:00"
+      }
+    }
+  ]
+}

@@ -2,9 +2,12 @@
   "passed": true,
   "pages": 7,
   "episodes": 400,
-  "successes": 360,
+  "successes": 368,
   "tasks": 40,
-  "controller_source_sha256": "c954f817fb7dd2b046a961a13a9acc9f7f2f0ad87da97eba1f6c0da995eff4e6",
+  "controller_source_sha256": null,
+  "evaluation_kind": "task_replacement",
+  "fresh_episodes": 10,
+  "historical_episodes": 390,
   "raw_record_archive_verified": true,
   "raw_records_verified": 400,
   "references": 13,
@@ -16,6 +19,6 @@
   "type3_fonts": false,
   "overfull_boxes": false,
   "undefined_references": false,
-  "pdf_sha256": "2d0307990105d7dd1e183c29e78b368015c2eecf7eabcf9fc7d7f26a9f5ff3ce",
+  "pdf_sha256": "b83a1b7316e1faf3e7b00541fd24fa70884477f62453337c3cc8027be7b18c27",
   "scope": "Local build, format and data checks; not PaperPlaza compliance certification or human scientific review."
 }

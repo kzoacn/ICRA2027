@@ -5418,7 +5418,8 @@ class RouteBController:
                 )
                 if (self._grasp_mode is GraspMode.PINCH
                         and step.kind is SkillKind.PLACE_IN
-                        and step.target == "basket"):
+                        and (step.target == "basket"
+                             or self._place_destination_grounding == "sensor-local microwave cavity")):
                     # Clear the solid payload before withdrawing. Ten mm
                     # beyond the engaged width can leave a tilted package
                     # supported on a finger even after an internal check.
@@ -7964,8 +7965,11 @@ class RouteBController:
                       2.0 * available / (len(slots) - 1))
         return direction * spacing * (slots.index(self._skill_index) - (len(slots) - 1) / 2.0)
 
-    @staticmethod
-    def _shelf_release_command(observation: SensorObservation) -> float:
+    def _shelf_release_command(self, observation: SensorObservation) -> float:
+        if self._place_destination_grounding == "sensor-local microwave cavity":
+            # A sideways mug can remain hooked on the inner finger at the
+            # narrow book-release aperture. Clear the rim before withdrawal.
+            return GRIPPER_OPEN
         # Release a thin book without opening both vertical fingers through
         # the shelf floor and ceiling; withdraw before fully opening the hand.
         return GRIPPER_CLOSE if observation.robot.gripper_width_m > 0.045 else GRIPPER_OPEN

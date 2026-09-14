@@ -5,7 +5,7 @@ The project builds on the original Route B v170 implementation. Source code is i
 [`route-b-v170-cloud/`](route-b-v170-cloud/), including the controller, perception
 and LIBERO evaluation code, pinned dependencies, resource checksums, and deployment scripts.
 
-The current frozen version achieves **360/400 (90.0%)** in a fresh 400-episode run,
+The original frozen full evaluation achieves **360/400 (90.0%)** in 400 fresh episodes,
 compared with the 347/400 baseline. Spatial / Object / Goal / Long have
 **93 / 98 / 91 / 78** successes, respectively, out of 100 episodes each.
 The run preserves all 40 tasks, official initial-state indices 0–9, seed 7,
@@ -13,6 +13,13 @@ the original action budgets, and external ever-success scoring.
 Thirteen previous failures become successes, with no previously successful episode regressing.
 See [accepted_result.json](experiments/route_b_90/accepted_result.json) for the
 complete validation and task-by-task comparison.
+
+The [Long 09 follow-up](experiments/long09/README.md) revises mug release and
+microwave door closure and improves the task from **0/10 to 8/10**. The combined
+summary is **368/400 (92.0%)**, with Long at **86/100**. It combines the ten new
+Long 09 episodes with the other 390 historical records from the
+original controller. These records come from two controller versions; they do
+not establish a new full-suite score for the updated controller.
 
 ## Getting started
 
@@ -45,6 +52,7 @@ outputs, and videos remain on the execution host and are excluded from Git.
 - [Original 2,000-episode campaign record](FULL_TEST.md)
 - [LIBERO evaluation protocol review](LIBERO_EVALUATION_PROTOCOLS.md)
 - [90% improvement objective, development records, and full reevaluation](experiments/route_b_90/README.md)
+- [Targeted Long 09 improvement and evaluation](experiments/long09/README.md)
 
 Absolute paths and process information in these records refer to the original
 deployment server. `route-b-v170-cloud/runtime/jobs/` retains that server's dispatcher
@@ -57,7 +65,8 @@ current source. `SHA256SUMS` and `SHA256SUMS.deployed` preserve the historical c
 and filenames of the uploaded package and original server deployment, respectively.
 Use `SHA256SUMS.current` to verify the current files. Provenance and source differences
 are in [`provenance/`](route-b-v170-cloud/provenance/); improvement records are in
-[`experiments/route_b_90/`](experiments/route_b_90/).
+[`experiments/route_b_90/`](experiments/route_b_90/) and
+[`experiments/long09/`](experiments/long09/).
 
 ## ICRA 2027 manuscript
 

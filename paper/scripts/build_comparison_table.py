@@ -49,7 +49,7 @@ def render_table():
     rates = [100 * sum(r["success"] for r in episodes if r["suite"] == suite)
              / sum(r["suite"] == suite for r in episodes) for suite in SUITES]
     rates.append(100 * sum(r["success"] for r in episodes) / len(episodes))
-    lines.append(r"\method{} & Two RGB-D views + state; asset priors, fixed controller & "
+    lines.append(r"\method{} & Two RGB-D views + state; asset priors, geometric skills & "
                  + " & ".join(f"{value:.1f}" for value in rates) + r" \\")
     lines += [r"\bottomrule", r"\end{tabular*}"]
     return "\n".join(lines) + "\n"
