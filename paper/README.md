@@ -1,6 +1,8 @@
 # ICRA 2027 匿名论文初稿
 
-标题：**Route B: An Asset-Informed Geometric Baseline for Language-Conditioned Manipulation**
+标题：**ANCHOR: Asset-Informed Geometric Skills for Language-Conditioned Manipulation**
+
+ANCHOR 是方法的论文名称；实现目录与历史实验中的 Route B 标识保留，以对应冻结的源码和记录。
 
 - [论文 PDF](main.pdf)
 - [LaTeX 源文件](main.tex)
@@ -71,9 +73,15 @@ capture_results.py 默认要求评测完成且校验通过，防止把未完成�
 
     python3 scripts/make_rollout_figure.py --source-root /path/to/route-b-v170-cloud
 
-图像来自真实仿真录像，只提取原始双视图中固定相机的一半。
-选用的回合、帧号与原录像 SHA256 记录在 data/figure_provenance.json。
+图像来自真实仿真录像，提取原始双视图中固定相机的一半，再沿竖直轴翻转，
+修正原始相机帧的上下朝向；左右方向和场景内容保持原样。
+选用的回合、帧号、原录像及导出 PNG 的 SHA256 记录在 data/figure_provenance.json。
+八张正向帧保存在 figures/recorded/，用于重建 Fig. 1 的画面插图与 Fig. 3。
 重建录像图需要原服务器录像；正常编译使用已经提交的 figures/rollouts.pdf。
+
+首页 Fig. 1 的可编辑矢量源为 figures/architecture.tex，展示语言编译、场景感知、
+携物几何、技能执行与观测反馈。几何绘图为示意，照片插图来自上述真实录像。
+main.tex 使用模板的标题后内容接口将 Fig. 1 放在首页标题下，并保留正式图号和引用。
 
 ## 公开结果对比
 
@@ -124,7 +132,8 @@ data/published_comparisons.json 保存原论文版本、表号、PDF 页码、PD
 
 [ICRA 2027 官方征稿说明](https://2027.ieee-icra.org/contribute/call-for-icra-2027-papers-now-accepting-submissions/)
 要求全文含参考文献最多八页、双栏和双匿名；生成式 AI 生成的内容需在致谢中披露。
-稿件已经加入说明，包含实际使用的工具名称与用途。
+稿件已在致谢中标明 **OpenAI GPT-6-Astra (via Codex)**，并说明其在文字、LaTeX
+和图表脚本方面的用途。
 按照同页 FAQ，PDF 中保留可读网址文本，不加入可点击链接注释。
 
 本地检查覆盖页数、Letter 纸型、匿名元数据、字体嵌入、未定义引用、

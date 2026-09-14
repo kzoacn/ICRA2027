@@ -5,7 +5,7 @@
   "verified_on": "2026-09-14",
   "verification": "Checked the specified versions' HTML tables and original PDF tables. PDFs are identified by SHA256 and are not redistributed.",
   "display": "Published means only; source-reported averages are preserved rather than recomputed from rounded suite values. Available source standard errors are retained below.",
-  "interpretation": "Published rows are literature results, not reruns by this project. Route B is generated separately from data/episodes.jsonl. Information, training and evaluation conditions differ.",
+  "interpretation": "Published rows are literature results, not reruns by this project. ANCHOR is generated separately from data/episodes.jsonl. Information, training and evaluation conditions differ.",
   "sources": {
     "openvla": {
       "title": "OpenVLA: An Open-Source Vision-Language-Action Model",

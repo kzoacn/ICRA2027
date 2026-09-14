@@ -25,10 +25,11 @@ The manuscript is a system study of the existing implementation, not a claim of 
 | Software-boundary counters | _ExternalStickyScore.audit | Several zero counters are constructed by implementation; not independent process attestation |
 | 400 episodes and declared record provenance | paper/data/provenance.json; paper/scripts/capture_results.py | Exact reuse/fresh counts, official IDs, seeds, budgets, source hashes and validation are preserved in the dataset provenance |
 | Success, runtime and status tables | paper/data/episodes.jsonl; paper/data/raw_episodes.jsonl.gz; paper/scripts/analyze_results.py | 360/400, with all records freshly executed; projected fields and original lines are checked against each other |
-| Published policy comparison | paper/data/published_comparisons.json; paper/scripts/build_comparison_table.py | Five externally reported mean rows with source versions, table numbers and PDF hashes; the Route B row is computed from its own episode records |
+| Published policy comparison | paper/data/published_comparisons.json; paper/scripts/build_comparison_table.py | Five externally reported mean rows with source versions, table numbers and PDF hashes; the ANCHOR row is computed from its own episode records |
 | Failure groups | failure_group in paper/scripts/analyze_results.py | Message-based terminal categories, not independently verified physical causes |
 | Per-task examples in text | paper/generated/numbers.tex: TopDrawerSuccess, DrawerPickSuccess, BottomDrawerSuccess, MokaSuccess, MicrowaveSuccess | Each macro is independently checked against the frozen episode projection by paper/scripts/check_paper.py |
-| Qualitative rollouts | paper/data/figure_provenance.json | Selected recorded episodes, with video hashes and exact frame indices |
+| First-page overview | paper/figures/architecture.tex; paper/figures/recorded/; paper/data/figure_provenance.json | Editable vector data-flow and carried-object schematic with actual Object 00 frames 0 and 45; schematic geometry is not a measured reconstruction |
+| Qualitative rollouts | paper/data/figure_provenance.json | Selected recorded episodes, video hashes and exact frame indices; fixed-camera crop is flipped vertically for upright display, preserving left/right; exported image hashes are recorded |
 | Historical 85.9% over 2000 episodes | provenance/source.json only | Excluded from current measured results because raw historical records are unavailable in the uploaded package |
 
 ## Primary references checked

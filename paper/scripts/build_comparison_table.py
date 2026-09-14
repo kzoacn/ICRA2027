@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Combine cited literature means with measured Route B episode outcomes."""
+"""Combine cited literature means with measured ANCHOR episode outcomes."""
 import argparse
 import collections
 import hashlib

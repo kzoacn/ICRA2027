@@ -11,14 +11,33 @@
 \usepackage{tikz}
 \usetikzlibrary{arrows.meta,positioning}
 \pdfminorversion=4
-\pdfinfo{/Title (Route B: An Asset-Informed Geometric Baseline for Language-Conditioned Manipulation)
+\pdfinfo{/Title (ANCHOR: Asset-Informed Geometric Skills for Language-Conditioned Manipulation)
  /Author (Anonymous) /Subject (ICRA 2027 anonymous manuscript)}
 \input{generated/numbers}
-\newcommand{\method}{Route B}
+\newcommand{\method}{ANCHOR}
 \newcommand{\R}{\mathbb{R}}
-\title{\LARGE\bf Route B: An Asset-Informed Geometric Baseline\\
+\title{\LARGE\bf ANCHOR: Asset-Informed Geometric Skills\\
 for Language-Conditioned Manipulation}
 \author{Anonymous Authors}
+
+% Place Fig. 1 in the title block so it appears on the first page.
+% Keep the class's caption style and the original two-column text geometry.
+\makeatletter
+\newcommand{\overviewcaption}[1]{\def\@captype{figure}\caption{#1}}
+\makeatother
+\IEEEaftertitletext{%
+\begin{minipage}{\textwidth}
+\centering
+\resizebox{\textwidth}{!}{\input{figures/architecture}}
+\overviewcaption{\method{} grounds language in calibrated observations and
+asset priors, maintains carried-object geometry, and composes grasp--place
+and contact skills in a feedback loop. Insets are upright frames from an
+actual Object 00 rollout; the geometry drawing is schematic.
+Benchmark success is recorded externally and is not fed back to the policy.}
+\label{fig:architecture}
+\vspace{3mm}
+\end{minipage}%
+}
 
 \begin{document}
 \maketitle
@@ -80,18 +99,6 @@ gallery derived from public simulator assets. A dispatcher preserves state
 across grasp--place segments and invokes specialized contact controllers for
 drawers, doors, knobs, and pushing. Robot actions are bounded Cartesian pose
 increments with a gripper command.
-
-\begin{figure*}[t]
-\centering
-\resizebox{\textwidth}{!}{\input{figures/architecture}}
-\caption{System organization. Language selects the ordered skill program;
-calibrated observations and offline asset priors support geometric grounding.
-The dispatcher invokes grasp--place or contact control and receives subsequent
-observations. The external evaluator records task success without returning
-it to the policy. The diagram summarizes software data flow, not a verified
-process-security boundary.}
-\label{fig:architecture}
-\end{figure*}
 
 The central engineering issue is continuity across physical stages. A
 semantically correct target can still be unreachable with the current wrist
@@ -612,12 +619,12 @@ sampling estimate or evidence of a particular failure mechanism.
 \begin{figure*}[t]
 \centering
 \includegraphics[width=.90\textwidth]{figures/rollouts.pdf}
-\caption{Actual fixed-camera frames from two recorded episodes. Top:
+\caption{Actual fixed-camera frames. Top:
 \emph{pick up the alphabet soup and place it in the basket} (Object 00,
 initial state 00). Bottom: \emph{open the top drawer and put the bowl inside}
-(Goal 03, initial state 02). Four uniformly spaced recorder indices are shown;
-recording uses a stride of two actions. Images are crops of the fixed-camera
-half of the original dual-view video, with no synthetic image content.}
+(Goal 03, initial state 02). Four uniformly spaced recorder indices are shown
+(two-action recording stride). Frames are vertically flipped for upright
+display; left/right is preserved.}
 \label{fig:rollouts}
 \end{figure*}
 
@@ -667,7 +674,7 @@ analysis make the system's information requirements, contact behavior, and
 policy-evaluation interface available for inspection and reproduction.
 
 \section*{Acknowledgments and AI Disclosure}
-OpenAI Codex assisted in drafting and editing the text in all sections,
+OpenAI GPT-6-Astra (via Codex) assisted in drafting and editing the text in all sections,
 preparing the LaTeX source, and writing scripts for the numerical tables and
 figures. Results for \method{} are computed from existing simulator evaluation
 records; comparison values are taken from the cited publications.

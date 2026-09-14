@@ -13,7 +13,33 @@
       45,
       68
     ],
-    "transformation": "Left half of original dual-view frame (agentview); no retouching."
+    "display_frames": [
+      {
+        "index": 0,
+        "file": "figures/recorded/object_task00_init00_frame000.png",
+        "sha256": "5e843199c5124f023b3b2bb61db35f9205e0030595dc95eae5172702e60573ea",
+        "pixel_sha256": "89d679238d00896ff52ee939e66972ef99f9deb268f7fdc40debe2c4b1910232"
+      },
+      {
+        "index": 23,
+        "file": "figures/recorded/object_task00_init00_frame023.png",
+        "sha256": "95650f3d0fc3719686a1d77087af52e0648fdd2258c75a5a42253f6f5d17d718",
+        "pixel_sha256": "feed4ed27b8fc09e07b78fc11fdc62121693a534a124792b8ec2e75a0c422ad8"
+      },
+      {
+        "index": 45,
+        "file": "figures/recorded/object_task00_init00_frame045.png",
+        "sha256": "c495ab935c03357a25ca190d844f795211e1cf108d62afd45d0eaf5436e75c65",
+        "pixel_sha256": "9abb89c23f0efca223174ff4e58067f6f9755f26c8d6c7b289cc7607cacca7c7"
+      },
+      {
+        "index": 68,
+        "file": "figures/recorded/object_task00_init00_frame068.png",
+        "sha256": "9130773a55b7b94727b5aa4ab261b80a38b8da508f2813c4e0cdf692c5233968",
+        "pixel_sha256": "d3f20083f072852270fbd18cd7bd9b18ea00df7e37a30b15050eb72a5f8663bf"
+      }
+    ],
+    "transformation": "Left half of the original dual-view frame (agentview), then vertical-axis flip to correct display orientation; left/right preserved; no retouching."
   },
   {
     "episode_id": "b:libero_goal:task03:ep0002",
@@ -29,6 +55,32 @@
       100,
       150
     ],
-    "transformation": "Left half of original dual-view frame (agentview); no retouching."
+    "display_frames": [
+      {
+        "index": 0,
+        "file": "figures/recorded/goal_task03_init02_frame000.png",
+        "sha256": "068b1da8ee89eb4f16c2aa2fad02b55c0a6f7b0b059ca2c99920a3339d63d1f2",
+        "pixel_sha256": "23f885820b548eee1fcba80676c1d6f67e712193d48e6fd187ff2239e4fcf6c9"
+      },
+      {
+        "index": 50,
+        "file": "figures/recorded/goal_task03_init02_frame050.png",
+        "sha256": "a62a9791b98a61c1262a010e903d043d8b2000b55e23a0a26023f6206417910a",
+        "pixel_sha256": "f4cc53485b75e9532ba0fc3ee89cbffc9c666c80d2ee46498431340fad1fe36c"
+      },
+      {
+        "index": 100,
+        "file": "figures/recorded/goal_task03_init02_frame100.png",
+        "sha256": "7f92040d7d4e12948f90c635bfdd77fbdf1fe96b97b0e41c66d7510fc60307b2",
+        "pixel_sha256": "c383d3a360094b7f3f01004f04f66da2ef5ef308ef70c35f6662048ae30241e1"
+      },
+      {
+        "index": 150,
+        "file": "figures/recorded/goal_task03_init02_frame150.png",
+        "sha256": "4064a2fbd56eafcef38df052eee71291367336b378d8a7bd425bd1f86657e825",
+        "pixel_sha256": "223396857fd64f3bed5b3ace6ebdc5985964a5147851dccabc4afde4aea63ba7"
+      }
+    ],
+    "transformation": "Left half of the original dual-view frame (agentview), then vertical-axis flip to correct display orientation; left/right preserved; no retouching."
   }
 ]

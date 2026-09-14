@@ -10,12 +10,12 @@
   "references": 13,
   "author_metadata": "Anonymous",
   "published_comparison_rows": 5,
-  "published_comparisons_sha256": "85a4c48a8c6b8df0efdc08ec991abc410e9647aae17b9518416b37553b9a0881",
+  "published_comparisons_sha256": "647f882d0327245db1bb8a4fcf3049a6b26d2878427d520ef291bc3cb70c16a4",
   "letter_paper": true,
   "all_fonts_embedded": true,
   "type3_fonts": false,
   "overfull_boxes": false,
   "undefined_references": false,
-  "pdf_sha256": "8672ba7e85bb87f28d5c53b665046f2bd7849a6290c67a35cf181a3698e52b1b",
+  "pdf_sha256": "2d0307990105d7dd1e183c29e78b368015c2eecf7eabcf9fc7d7f26a9f5ff3ce",
   "scope": "Local build, format and data checks; not PaperPlaza compliance certification or human scientific review."
 }

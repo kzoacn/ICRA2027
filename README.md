@@ -1,6 +1,7 @@
-# ICRA2027
+# ANCHOR · ICRA 2027
 
-基于 Route B v170 的 LIBERO 仿真评测项目，源码位于 [`route-b-v170-cloud/`](route-b-v170-cloud/)。包含控制器、感知与评测代码、依赖版本、资源校验清单和部署脚本。
+**ANCHOR: Asset-Informed Geometric Skills for Language-Conditioned Manipulation**。
+本项目基于原 Route B v170 实现，源码位于 [`route-b-v170-cloud/`](route-b-v170-cloud/)。包含控制器、感知与 LIBERO 评测代码、依赖版本、资源校验清单和部署脚本。
 
 当前冻结版本在全新 400 回合中实测 **360/400（90.0%）**，基线为 347/400。
 Spatial / Object / Goal / Long 分别为 **93 / 98 / 91 / 78** 次成功（各 100 回合）。
