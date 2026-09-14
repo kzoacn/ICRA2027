@@ -1,32 +1,32 @@
-**LIBERO 评测口径核查（2026-09-13）**
+# LIBERO evaluation protocol review (2026-09-13)
 
-2000 次有主流论文依据，但不是 LIBERO 强制规定。这里的四套指 Spatial、Object、Goal、Long（代码中 Long 也叫 libero_10），各 10 个任务。评测次数、随机种子、初始状态、步数预算和输入模态需要分别对齐。
+A 2,000-episode evaluation has precedent in widely used papers, but LIBERO does not require this sample count. The four suites discussed here are Spatial, Object, Goal, and Long (`libero_10` in the code), each containing 10 tasks. Episode counts, random seeds, initial states, action budgets, and input modalities must be compared separately.
 
-| 论文 | 每任务评测次数 | 重复与报告方式 |
+| Paper | Evaluation episodes per task | Repetition and reporting |
 | --- | ---: | --- |
-| [LIBERO 原论文，附录 D](https://arxiv.org/html/2306.03310) | 20 | 每 5 个训练 epoch 评估一次，单次上限 600 步，选择最佳 checkpoint；整个持续学习实验用 100、200、300 三个种子重复。还评估知识迁移与遗忘，不能把其完整实验简单算成一次四套成功率测试。 |
-| [OpenVLA，附录 E.1](https://arxiv.org/html/2406.09246v3) | 50 | 每套 500 次，三个随机种子，每套论文统计量对应 1500 次；四套单个种子合计 2000 次，三个种子合计 6000 次。 |
-| [OpenVLA-OFT 官方评测说明](https://github.com/moojink/openvla-oft/blob/main/LIBERO.md) | 50 | 默认每套 500 次；官方说明明确论文结果对三个随机种子取平均。四套单个种子同样是 2000 次。 |
-| [SmolVLA，§4.1](https://arxiv.org/html/2506.01844v1) | 10 | 四套共 40 个任务，每任务 10 次，合计 400 次，按任务是否完整完成计算二元成功率；这一段没有声明三个种子的重复设置。 |
+| [Original LIBERO paper, Appendix D](https://arxiv.org/html/2306.03310) | 20 | Evaluate every 5 training epochs, with a 600-step episode limit, and select the best checkpoint. Repeat the full continual-learning experiment with seeds 100, 200, and 300. The study also evaluates knowledge transfer and forgetting, so its full experiment cannot be reduced to a single four-suite success-rate evaluation. |
+| [OpenVLA, Appendix E.1](https://arxiv.org/html/2406.09246v3) | 50 | 500 episodes per suite and three random seeds: each reported suite statistic covers 1,500 episodes. All four suites total 2,000 episodes for one seed or 6,000 for three seeds. |
+| [OpenVLA-OFT official evaluation instructions](https://github.com/moojink/openvla-oft/blob/main/LIBERO.md) | 50 | The default is 500 episodes per suite. The official instructions explicitly state that the paper averages results over three random seeds. All four suites likewise total 2,000 episodes for one seed. |
+| [SmolVLA, Section 4.1](https://arxiv.org/html/2506.01844v1) | 10 | 40 tasks across four suites, with 10 episodes per task, totaling 400 episodes. Binary success reflects completion of the entire task; this paragraph does not state a three-seed repetition setup. |
 
-论文中的 50 条训练示范与每任务 50 次评测不是同一概念。50 个官方初态也不等于 50 个随机种子。原论文的训练重复、评测脚本的全局种子和模拟器种子不能混写成一个参数。
+The 50 training demonstrations mentioned in papers are distinct from 50 evaluation episodes per task. Likewise, 50 official initial states are not 50 random seeds. Training repetitions, the evaluation script's global seed, and the simulator seed must not be conflated into a single parameter.
 
-[OpenVLA 官方评测脚本](https://github.com/openvla/openvla/blob/main/experiments/robot/libero/run_libero_eval.py)采用官方初态列表，按 episode 索引逐个设置初态，先执行 10 步稳定动作，然后给 Spatial / Object / Goal / Long 分别 220 / 280 / 300 / 520 步动作预算。环境返回成功后结束该回合。模拟评测的核心统计是成功次数除以计划评测次数；长任务需要达到完整任务目标。建议同时报告每任务、每套和四套平均成功率，并列出实际样本数及重复种子的误差，而不是只给总分。
+The [official OpenVLA evaluation script](https://github.com/openvla/openvla/blob/main/experiments/robot/libero/run_libero_eval.py) uses the official initial-state list, sets each state by episode index, executes 10 settling steps, and then allows 220 / 280 / 300 / 520 action steps for Spatial / Object / Goal / Long, respectively. It ends the episode when the environment reports success. The central simulation metric is successful episodes divided by planned episodes; long-horizon tasks must satisfy the complete task objective. Reporting per-task, per-suite, and four-suite average success rates, together with actual sample counts and variation across repeated seeds, provides more information than an aggregate score alone.
 
-当前 Route B 使用四套 × 10 任务 × 50 初态、一个 seed=7，步数预算和 10 步稳定期与上述 OpenVLA 脚本相同。采样规模相近不意味着完整协议相同：
+At the time of this review, Route B used four suites × 10 tasks × 50 initial states and one seed=7. Its action budgets and 10-step settling period matched the OpenVLA script above. A similar sample count does not imply an identical protocol:
 
-- **模拟器种子不同。** 当前适配器调用 env.seed(7)；[OpenVLA 环境辅助代码](https://github.com/openvla/openvla/blob/main/experiments/robot/libero/libero_utils.py)显式调用 env.seed(0)，它与评测脚本默认的全局 seed=7 是两个设置。官方代码还提示固定初态下种子仍可能影响物体位置。
-- **终止方式不同。** 当前评测器记录整个回合内曾经出现的官方成功信号，但不会据此提前停下控制器，而是等控制器主动停止或到步数上限。OpenVLA 的外部评测循环在成功时结束回合。因此当前录像和耗时包含的动作范围可能更长，尚未测量这部分时间占比。对应本地代码：libero_system/integration/evaluator.py 的 _ExternalStickyScore 和 _run_b。
-- **输入信息不同。** 当前 Route B 使用双路 RGB-D 等输入；OpenVLA 原论文比较限制为第三人称 RGB，OFT 另有双相机及本体状态设置。对照论文分数时应明确这些条件。[OpenVLA 附录 E.1](https://arxiv.org/html/2406.09246v3)、[OFT 实验设置](https://arxiv.org/html/2502.19645v2)
+- **Different simulator seed.** The adapter calls `env.seed(7)`, whereas the [OpenVLA environment helper](https://github.com/openvla/openvla/blob/main/experiments/robot/libero/libero_utils.py) explicitly calls `env.seed(0)`. This is separate from the evaluation script's default global seed=7. The official code also notes that the seed can affect object positions even with fixed initial states.
+- **Different stopping rule.** The evaluator records whether the official success signal occurs at any point in the episode, but does not stop the controller in response. Execution continues until the controller requests stopping or reaches the action budget. OpenVLA's external evaluation loop ends the episode on success. The recorded videos and timings here can therefore cover a longer action sequence; the fraction of time attributable to this difference has not been measured. Relevant local code: `_ExternalStickyScore` and `_run_b` in `libero_system/integration/evaluator.py`.
+- **Different input information.** Route B uses inputs including two RGB-D streams. The original OpenVLA comparison is restricted to third-person RGB, while OFT also considers two-camera and proprioceptive inputs. These conditions need to be stated when comparing published scores. See [OpenVLA Appendix E.1](https://arxiv.org/html/2406.09246v3) and the [OFT experimental setup](https://arxiv.org/html/2502.19645v2).
 
-串行不是评测要求。[LIBERO 官方配置](https://github.com/Lifelong-Robot-Learning/LIBERO/blob/master/libero/configs/eval/default.yaml)默认 n_eval=20、use_mp=true、num_procs=20；[其评测实现](https://github.com/Lifelong-Robot-Learning/LIBERO/blob/master/libero/lifelong/metric.py)使用多个子进程环境。当前 Route B 的 campaign 则依次运行各套任务。这个证据支持尝试并行，但不能据此承诺当前模型开 20 个进程或获得 20 倍加速。
+Sequential execution is not an evaluation requirement. The [official LIBERO configuration](https://github.com/Lifelong-Robot-Learning/LIBERO/blob/master/libero/configs/eval/default.yaml) defaults to `n_eval=20`, `use_mp=true`, and `num_procs=20`; its [evaluation implementation](https://github.com/Lifelong-Robot-Learning/LIBERO/blob/master/libero/lifelong/metric.py) uses multiple subprocess environments. Route B's campaign entry point executes suites sequentially. This evidence supports investigating parallel execution, but does not establish that the current model can run with 20 processes or achieve a 20-fold speedup.
 
-针对当前速度，建议下一轮采用以下安排：
+The following steps were recommended based on the runtime observed at the time:
 
-1. **开发验证先覆盖全部 40 个任务，每任务 10 次，共 400 次。** 这是借鉴 SmolVLA 的采样规模，不宣称复现其全部协议。提前固定初态 ID，例如各任务官方列表 0–9；保留失败样本和逐回合记录。每任务 10 次时，一次成败改变该任务成功率 10 个百分点；50 次时为 2 个百分点，不能把两者视作相同统计精度。
-2. **需要最终对照时再跑每任务 50 次。** 对照 OpenVLA 系列论文还需说明三个随机种子如何重复，以及种子实际控制哪些随机性；固定策略和固定场景的完全相同重跑不能冒充独立样本。
-3. **先测 2 个、4 个进程的吞吐与一致性，再确定并发度。** 保持策略、步数预算、初态和逐回合随机状态一致。并行模拟是计算调度变化；更改动作分块、终止条件或步数预算则需要另立实验配置。
+1. **Cover all 40 tasks with 10 episodes per task, totaling 400 episodes, during development validation.** This borrows SmolVLA's sample count without claiming to reproduce its entire protocol. Fix initial-state IDs in advance, such as official indices 0–9 for every task, and retain failures and episode records. With 10 episodes per task, one outcome changes that task's success rate by 10 percentage points; with 50 episodes, the change is 2 percentage points. These sample counts do not provide the same statistical precision.
+2. **Run 50 episodes per task when a final comparison requires it.** Comparisons with the OpenVLA papers also need to explain how three random seeds are repeated and which sources of randomness those seeds control. Identical reruns of a fixed policy in an unchanged scene must not be presented as independent samples.
+3. **Measure throughput and consistency with 2 and 4 processes before choosing concurrency.** Preserve the policy, action budgets, initial states, and per-episode random state. Parallel simulation changes compute scheduling; changing action chunking, stopping conditions, or action budgets requires a separate experimental configuration.
 
-单纯把 2000 次减至 400 次，评测工作量约为原来的五分之一。按此前单个 Spatial 任务约 59 秒/回合的实测速度，400 次粗算约 6.6 小时；这不是完成时间承诺，因为其他任务尤其 Long 尚未取样，真实均值可能更高。并行能节省多少时间需要本机实测。
+Reducing the episode count from 2,000 to 400 reduces the evaluation workload to roughly one fifth. At the previously measured rate of approximately 59 seconds per episode for one Spatial task, 400 episodes would take roughly 6.6 hours. This was not a completion-time guarantee: other tasks, especially Long, had not yet been sampled, and the actual mean could be higher. Parallel speedup required measurement on this host.
 
-本次仅核查论文与代码并记录建议，运行中的 full_2000_20260913 沿用原配置。
+This review examined papers and code and recorded recommendations only. The then-running `full_2000_20260913` campaign retained its original configuration.

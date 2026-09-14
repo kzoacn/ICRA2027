@@ -1,36 +1,53 @@
-原全量评测任务：`full_2000_20260913`
+# Original 2,000-episode campaign
 
-已按用户要求于 2026-09-13 停止，保留 18 次完整结果。当前改跑 [400 次并行评测](./RUN_400_PARALLEL.md)，其中复用本任务符合官方初态 0–9 的 10 次结果。以下为原任务的历史运行说明。
+Run name: `full_2000_20260913`
 
-已于 2026-09-13 14:45:45 UTC 在后台启动。实际进度以状态文件和进程为准。
+This campaign was stopped at the user's request on 2026-09-13, retaining 18 completed
+episodes. Work then switched to the [400-episode parallel evaluation](./RUN_400_PARALLEL.md),
+which reused 10 results from this campaign matching official initial-state indices 0–9.
+The following instructions document the original run.
 
-执行 Spatial、Object、Goal、Long 四套任务，每套 10 个任务、每任务使用官方初态 0–49，共 2000 次。使用 RTX 5090、seed=7、256×256 双相机，保存录像。四套步数上限分别为 220、280、300、520，顺序运行，控制器源码与部署验证版本一致。
+It was launched in the background at 2026-09-13 14:45:45 UTC. The status file and
+running processes were the authoritative sources for progress.
+
+The planned evaluation covered Spatial, Object, Goal, and Long: 10 tasks per suite,
+official initial-state indices 0–49 per task, and 2,000 episodes in total. It used an
+RTX 5090, seed=7, and two 256×256 cameras, with video recording enabled. The suite
+action budgets were 220, 280, 300, and 520 steps, respectively. Execution was sequential,
+using the same controller source as the deployment validation.
 
 ```bash
 cd /root/route-b-upload/route-b-v170-cloud
 
-# 查看运行状态，每 15 秒更新。
+# Inspect run status, updated every 15 seconds.
 cat runtime/jobs/full_2000_20260913/status.json
 
-# 持续查看每次评测的完成记录。
+# Follow episode completion records.
 tail -f logs/full_2000_20260913.log
 
-# 查看评测进程是否仍在运行。
+# Check whether the evaluation process is still running.
 ps -p "$(cat runtime/jobs/full_2000_20260913/campaign.pid)" -o pid,etime,pcpu,pmem,args
 ```
 
-运行目录：
+Run directories:
 
 - `outputs/full_2000_20260913_spatial/`
 - `outputs/full_2000_20260913_object/`
 - `outputs/full_2000_20260913_goal/`
 - `outputs/full_2000_20260913_long/`
 
-每个目录持续保存 `episodes.jsonl`、`summary.json` 和 `videos/`。完成后生成 `outputs/full_2000_20260913_campaign.json`，后台管理进程还会生成 `runtime/jobs/full_2000_20260913/final-validation.json`，核对覆盖的初态、重复记录、配置、汇总计数、录像文件和源码校验值，并统计异常次数。
+Each directory incrementally stores `episodes.jsonl`, `summary.json`, and `videos/`.
+On completion, the campaign generates `outputs/full_2000_20260913_campaign.json`.
+The background manager also writes `runtime/jobs/full_2000_20260913/final-validation.json`,
+checking initial-state coverage, duplicate records, configuration, summary counts,
+video files, and source checksums, and counting exceptions.
 
-状态中的 `success_rate_so_far` 是已完成样本的阶段成功率。最终结果需等待状态变为 `completed` 并检查全量汇总；`failed` 或 `completed_with_exceptions` 需要查看日志和校验结果。
+The status field `success_rate_so_far` is the interim success rate over completed
+samples. Final results require a `completed` state and inspection of the full summary.
+A `failed` or `completed_with_exceptions` state requires reviewing the logs and validation report.
 
-任务已脱离当前终端运行。若评测中断，可在确认原评测进程已停止后，用相同配置续跑：
+The job was detached from the launching terminal. To resume an interrupted evaluation,
+first confirm that the original evaluation process has stopped, then use the same configuration:
 
 ```bash
 cd /root/route-b-upload/route-b-v170-cloud
@@ -38,4 +55,7 @@ nohup .venv/bin/python runtime/jobs/full_2000_20260913/runner.py --resume \
   > runtime/jobs/full_2000_20260913/runner-resume.log 2>&1 < /dev/null &
 ```
 
-续跑会保留已完成记录，并跳过已经评测的初态。后台管理进程使用文件锁防止重复启动；进程退出或机器重启后，原状态文件可能是退出前的记录，需要结合进程检查判断。
+Resuming preserves completed records and skips initial states already evaluated.
+The background manager uses a file lock to prevent duplicate launches. After a process
+exits or the host restarts, the status file may reflect the last state before exit;
+inspect the processes as well to determine the actual state.

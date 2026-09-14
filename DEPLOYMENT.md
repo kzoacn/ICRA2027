@@ -1,4 +1,6 @@
-Route B v170 已部署到当前服务器的数据盘，可通过以下路径使用：
+# Original server deployment
+
+Route B v170 was deployed to the server's data disk and can be accessed through:
 
 ```bash
 cd /root/route-b-upload/route-b-v170-cloud
@@ -6,46 +8,55 @@ cd /root/route-b-upload/route-b-v170-cloud
 ./run.sh smoke --device cuda
 ```
 
-实际目录为 `/root/autodl-tmp/route-b-v170-cloud`；上传目录下的 `route-b-v170-cloud` 是指向它的符号链接。Python 环境、资源及评测输出均在数据盘，部署后约占 9.3 GiB。通过 `run.sh` 启动即可，无需手动激活虚拟环境。
+The actual directory is `/root/autodl-tmp/route-b-v170-cloud`; `route-b-v170-cloud`
+in the upload directory is a symbolic link to it. The Python environment, resources,
+and evaluation outputs are all on the data disk, occupying approximately 9.3 GiB
+after deployment. Launch through `run.sh`; manual virtual-environment activation is unnecessary.
 
-本次验证结果（2026-09-13 UTC）：
+Deployment validation results (2026-09-13 UTC):
 
-- Ubuntu 22.04，Python 3.12.3，PyTorch 2.11.0+cu128，RTX 5090；CUDA 实际运算通过。
-- 27 个项目固定版本依赖匹配，585 个仿真资产和 8 个模型文件全部通过 SHA256 校验。
-- 四套共 40 条任务指令编译通过；固定相机和腕部相机均为 256×256 RGB。
-- `deployment_smoke_20260913`：LIBERO Object task 0 / init 0，成功 1/1，127 步，39.571 秒。
-- 双相机视频：512×256，20 fps，共 64 帧，全部可解码。
-- 部署阶段仅执行了单任务验证；后续全量任务见 [FULL_TEST.md](FULL_TEST.md)。
+- Ubuntu 22.04, Python 3.12.3, PyTorch 2.11.0+cu128, and an RTX 5090; actual CUDA computation passed.
+- All 27 pinned project dependencies matched; all 585 simulator assets and 8 model files passed SHA256 verification.
+- All 40 task instructions across the four suites compiled successfully; both fixed and wrist cameras provided 256×256 RGB images.
+- `deployment_smoke_20260913`: LIBERO Object task 0 / init 0, 1/1 success, 127 steps, 39.571 seconds.
+- Dual-camera video: 512×256 at 20 fps, with all 64 frames decodable.
+- Deployment validation covered one task only; see [FULL_TEST.md](FULL_TEST.md) for the subsequent full campaign.
 
-结果和日志（以下路径相对于实际部署目录）：
+Results and logs (paths are relative to the actual deployment directory):
 
-- `outputs/deployment_smoke_20260913/summary.json`：评测汇总。
-- `outputs/deployment_smoke_20260913/episodes.jsonl`：单次评测记录。
-- `outputs/deployment_smoke_20260913/videos/route-b_libero_object_task-00_ep-0000.mp4`：双相机录像。
-- `logs/doctor-render.json`、`logs/cuda-check.json`、`logs/video-check.json`：环境与录像检查。
-- `logs/environment-freeze.txt`：已安装 Python 包的完整版本记录。
-- `provenance/server-deployment.json`：本机部署记录。
+- `outputs/deployment_smoke_20260913/summary.json`: evaluation summary.
+- `outputs/deployment_smoke_20260913/episodes.jsonl`: episode record.
+- `outputs/deployment_smoke_20260913/videos/route-b_libero_object_task-00_ep-0000.mp4`: dual-camera video.
+- `logs/doctor-render.json`, `logs/cuda-check.json`, and `logs/video-check.json`: environment and video checks.
+- `logs/environment-freeze.txt`: complete version record of installed Python packages.
+- `provenance/server-deployment.json`: deployment record for this host.
 
-本机兼容调整：
+Host compatibility adjustments:
 
-- 安装系统 OSMesa 库及相关运行依赖。
-- 在 `.venv/lib/libstdc++.so.6` 建立指向 `/usr/lib/x86_64-linux-gnu/libstdc++.so.6` 的链接，并让 `run.sh` 优先预加载该环境的 C++ 库，解决基础 Conda Python 的旧库与 OSMesa/LLVM 的 `GLIBCXX_3.4.30` 冲突。
-- 在项目虚拟环境中补充 `httpx[socks]==0.28.1` 所需的 `socksio==1.0.0`，支持服务器已有的代理设置。
-- `.venv/pip.conf` 使用 `https://pypi.org/simple`，PyTorch 按安装脚本使用官方 cu128 源；全局 Python 和 pip 配置未修改。
+- Installed the system OSMesa library and related runtime dependencies.
+- Linked `.venv/lib/libstdc++.so.6` to `/usr/lib/x86_64-linux-gnu/libstdc++.so.6` and configured `run.sh` to preload that environment's C++ library. This resolves the `GLIBCXX_3.4.30` conflict between the base Conda Python's older library and OSMesa/LLVM.
+- Added `socksio==1.0.0`, required by `httpx[socks]==0.28.1`, to the project virtual environment to support the server's existing proxy configuration.
+- Configured `.venv/pip.conf` to use `https://pypi.org/simple`; PyTorch uses the official cu128 index specified by the installer. Global Python and pip settings were not modified.
 
-控制器源码指纹仍为 `67c93be1df7da7572ecbb8faff53d01a47aea42ec36affb07ac54ba36e59edba`，与上传包一致。上传包中的 104 个文件仅 `run.sh` 有上述环境兼容调整，原文件保存在 `provenance/run.sh.uploaded`，差异见 `provenance/SERVER_RUNTIME.patch`。原始 `SHA256SUMS` 保留，可用 `sha256sum -c SHA256SUMS.deployed` 校验部署后的文件。
+At deployment, the controller source fingerprint remained
+`67c93be1df7da7572ecbb8faff53d01a47aea42ec36affb07ac54ba36e59edba`, matching the uploaded
+package. Of its 104 files, only `run.sh` received the compatibility adjustments above.
+The original is saved as `provenance/run.sh.uploaded`, with the diff in
+`provenance/SERVER_RUNTIME.patch`. The original `SHA256SUMS` is retained;
+`sha256sum -c SHA256SUMS.deployed` verifies the files of that historical server deployment.
 
-后续运行示例：
+Examples for subsequent runs:
 
 ```bash
-# Spatial：10 个任务，每个任务 5 个初态，共 50 次。
+# Spatial: 10 tasks, 5 initial states per task, 50 episodes in total.
 ./run.sh run --suite spatial --episodes-per-task 5 --device cuda
 
-# 四套完整评测：共 2000 次，运行名须为新名称。
+# Full four-suite evaluation: 2,000 episodes; use a new run name.
 ./run.sh campaign --episodes-per-task 50 --device cuda --run-name cloud_2000_01
 
-# 中断后，用相同参数和原运行名续跑。
+# Resume an interrupted run with the same arguments and original run name.
 ./run.sh campaign --episodes-per-task 50 --device cuda --run-name cloud_2000_01 --resume
 ```
 
-资源准备完毕后，评测入口使用本地模型和资产。新实验会写入 `outputs/<运行名>/`；省略运行名会自动生成唯一名称。
+Once resources are prepared, evaluation uses local models and assets. New experiments
+write to `outputs/<run_name>/`; omitting the run name generates a unique name automatically.
