@@ -14,6 +14,7 @@
 \pdfinfo{/Title (ANCHOR: Asset-Informed Geometric Skills for Language-Conditioned Manipulation)
  /Author (Anonymous) /Subject (ICRA 2027 anonymous manuscript)}
 \input{generated/numbers}
+\input{generated/model_numbers}
 \newcommand{\method}{ANCHOR}
 \newcommand{\R}{\mathbb{R}}
 \title{\LARGE\bf ANCHOR: Asset-Informed Geometric Skills\\
@@ -29,9 +30,10 @@ for Language-Conditioned Manipulation}
 \begin{minipage}{\textwidth}
 \centering
 \resizebox{\textwidth}{!}{\input{figures/architecture}}
-\overviewcaption{\method{} grounds language in calibrated observations and
-asset priors, maintains carried-object geometry, and composes grasp--place
-and contact skills in a feedback loop. Insets are upright frames from an
+\overviewcaption{\method{} uses a frozen \NeuralMillion{}M-parameter detector
+to ground objects and explicit geometric skills to control robot actions.
+Calibrated RGB-D and asset priors support each execution stage and its checks.
+Insets are upright frames from an
 actual Object 00 rollout; the geometry drawing is schematic.
 Benchmark success is recorded externally and is not fed back to the policy.}
 \label{fig:architecture}
@@ -46,17 +48,16 @@ Benchmark success is recorded externally and is not fed back to the policy.}
 
 \begin{abstract}
 Language-conditioned manipulation requires semantic grounding, geometric
-reasoning, and reliable transitions between physical interactions. We study
-how far an explicit, asset-informed system can address these requirements
-without training an action policy on robot demonstrations.
-\method{} combines a constrained language compiler, frozen visual grounding,
-calibrated RGB-D reconstruction, and a sequential dispatcher for grasp--place
-and contact skills. Its geometric state distinguishes observed surfaces from
-offline object priors and maintains the displacement between the gripper and
-the carried object during placement. Contact skills use robot measurements
-and visual checks to manage articulation and recovery. The policy interface
-excludes task-success feedback, while an external evaluator records whether
-the official predicate is ever satisfied.
+reasoning, and reliable transitions between physical interactions.
+\method{} uses a frozen \NeuralMillion{}M-parameter model to detect objects
+and geometric rules to control robot actions. It requires no robot
+demonstrations for action-policy training. Each execution step can be
+inspected, making failures easier to locate and fix.
+The system compiles supported instructions into grasp--place and contact
+skills using two calibrated RGB-D views and public asset priors. Explicit
+state tracks the carried object, and local checks manage release, articulation,
+and recovery. Benchmark success is recorded externally and is unavailable
+to the policy.
 \ifRunComplete
 \ifTaskRefresh
 A combined set of 400 task records, comprising 390 historical episodes and
@@ -73,9 +74,9 @@ In a preliminary snapshot of an ongoing 400-trial evaluation, it succeeds in
 \fi
 Controller completion and external success disagree in
 \DisagreementCount{} trials, demonstrating why these outcomes must be
-reported separately. The study characterizes a reproducible geometric
-baseline with explicit asset and calibration assumptions and places its
-measured outcomes alongside published action-policy results.
+reported separately. Comparisons with published vision-language-action
+models describe model size, action-policy training, and task outcomes under
+the stated sensing and prior assumptions.
 \end{abstract}
 
 \section{Introduction}
@@ -88,21 +89,23 @@ difficulty: the robot must distinguish productive motion from mechanical
 resistance and decide when to release or reacquire contact. A plausible
 semantic interpretation alone does not resolve these questions.
 
-Large vision-language-action policies offer one route to this capability.
+Vision-language-action (VLA) policies offer one route to this capability.
 OpenVLA~\cite{openvla} adapts pretrained representations to action prediction,
 while SmolVLA~\cite{smolvla} studies a more compact architecture and efficient
-execution. These approaches motivate an accompanying question: what performance
-can an explicit system achieve when visual grounding is pretrained but the
-action policy is constructed from geometry and hand-engineered skills?
-Answering this question requires disclosing the information available to the
-system, including asset knowledge and calibration, rather than equating the
-absence of policy training with the absence of prior information.
+execution. Both learn robot actions from demonstrations. We study a system
+that uses pretrained perception to identify objects and computes actions from
+their geometry. This design avoids training an action network and makes the
+targets and transition checks of each skill available for inspection.
+Its requirements include calibrated depth, asset knowledge, and manually
+designed skills; these provide information that a learned policy may instead
+acquire from robot data.
 
 We present \method{} (Fig.~\ref{fig:architecture}), an asset-informed baseline for language-conditioned
 tabletop manipulation. The system compiles supported instructions into
 ordered skill programs and binds their entities to geometry reconstructed
-from two calibrated RGB-D views. It uses a frozen detector together with a
-gallery derived from public simulator assets. A dispatcher preserves state
+from two calibrated RGB-D views. Its only neural model is a frozen
+\NeuralMillion{}M-parameter detector, used together with a gallery derived
+from public simulator assets. A dispatcher preserves state
 across grasp--place segments and invokes specialized contact controllers for
 drawers, doors, knobs, and pushing. Robot actions are bounded Cartesian pose
 increments with a gripper command.
@@ -123,17 +126,21 @@ versions; its scope is a system study on
 known benchmark assets and instruction forms. We make three contributions:
 
 \begin{enumerate}
-\item An integrated language-to-geometry execution architecture that declares
-      its offline priors and separates policy observations from external scoring.
-\item A documented account of how carried-object geometry, visual checks, and
-      contact-specific controllers are composed in the deployed system.
-\item A record-based evaluation reporting task-level outcomes, execution costs,
-      and disagreement between internal completion and external success.
+\item A language-to-geometry manipulation system that requires no robot
+      demonstrations for action-policy training, with its sensing, asset
+      priors, and manually designed skills explicitly specified.
+\item A compact deployment using one frozen \NeuralMillion{}M-parameter
+      detector, with model-size and task-outcome comparisons to representative
+      VLAs on the four LIBERO suites.
+\item Inspectable skill execution with explicit geometric targets and local
+      checks, illustrated by a microwave release-and-close revision that
+      improves Long 09 from $0/10$ to $\MicrowaveSuccess/10$ without updating
+      neural weights.
 \end{enumerate}
 
-The contribution is the integrated baseline and its empirical characterization,
-including the relationship between the controller's local decisions and the
-benchmark's externally observed outcomes.
+The contribution is the integrated system and its empirical characterization.
+The Long 09 revision is a task-specific development result; its records and
+those of the original full evaluation retain their controller versions.
 
 \section{Related Work}
 \subsection{Language, Programs, and Geometric Planning}
@@ -157,7 +164,7 @@ and calibration of its manually implemented skills.
 
 \subsection{Pretrained Perception and Action Policies}
 Grounding DINO supports text-conditioned object detection~\cite{groundingdino}.
-\method{} uses a frozen local checkpoint as one source of region proposals;
+\method{} uses a frozen local Tiny checkpoint as one source of region proposals;
 the downstream geometric and gallery components remain essential to the
 implemented pipeline. In particular, public object textures and collision
 dimensions provide priors that are stronger than an image-only input setting.
@@ -168,9 +175,9 @@ decoding, continuous action prediction, and additional sensor inputs.
 \method{} provides a complementary, explicitly engineered control
 baseline. The distinction concerns how actions are obtained; it does not imply
 an absence of learning in the pretrained detector or an absence of development
-on benchmark scenarios. Section~\ref{sec:comparison} compares reported
-success rates while identifying differences in sensing, asset access, and
-evaluation conditions.
+on benchmark scenarios. Section~\ref{sec:comparison} compares model size,
+policy-training requirements, and reported success rates while identifying
+differences in sensing, asset access, and evaluation conditions.
 
 \subsection{Benchmark Interpretation}
 LIBERO was introduced to study knowledge transfer in lifelong robot
@@ -238,6 +245,14 @@ phrases and an allow-listed entity vocabulary. An optional semantic-resolver
 interface exists, but no language-model resolver is configured in this run.
 
 \subsection{Visual Grounding and Geometric State}
+The deployed Grounding DINO Tiny checkpoint contains
+\NeuralParameters{} unique parameters, including its visual and text
+encoders. All weights are frozen, and one detector instance serves both
+camera views in each evaluation process. The asset gallery, language
+compiler, and geometric controllers add no neural model parameters.
+The pinned checkpoint and a reproducible parameter count are recorded
+with the manuscript artifacts.
+
 Each calibrated pixel $\tilde u=(u,v,1)^\top$ with valid depth contributes
 \begin{equation}
  x_W=R_{WC}\big(D(u,v)K^{-1}\tilde u\big)+p_{WC}.
@@ -382,7 +397,8 @@ Property & Setting \\
 Policy observations & Fixed and wrist RGB-D, camera calibration, robot measurements \\
 Offline priors & Public asset textures/dimensions, robot geometry, hand-written skill rules \\
 Action generation & Geometric state machines and clipped Cartesian increments \\
-Learning during run & None; frozen Grounding DINO checkpoint \\
+Neural model & One frozen Grounding DINO Tiny (\NeuralMillion{}M parameters) \\
+Action-policy training & None; skills and thresholds are designed manually \\
 Scene truth in policy & No object pose labels, segmentation IDs, or BDDL predicates in observation types \\
 Success feedback & External latch; no score-driven policy stopping \\
 Coverage & Known benchmark assets and implemented instruction grammar \\
@@ -507,6 +523,34 @@ reused records. Times include execution overhead under concurrent evaluation.
 \section{Results and Analysis}
 \subsection{Comparison with Published Policy Results}
 \label{sec:comparison}
+Table~\ref{tab:models} reports neural model size and whether robot
+demonstrations are used to train or fine-tune action generation.
+\method{} uses \NeuralBillion{}B parameters in one frozen detector and
+has no learned action network. Its FP32 weight file occupies
+\DetectorWeightMB{}\,MB (decimal). The selected SmolVLA model is about
+\SmolParameterRatio{} times larger, and the reported 7B OpenVLA model
+class is about \OpenVLAParameterRatio{} times larger. These comparisons
+count the full detector, including its text encoder. Published VLA sizes
+are the source descriptions, not new counts of their deployed checkpoints.
+
+Robot-demonstration training and general pretraining are distinct:
+\method{} relies on pretrained perception and manually developed skills.
+The selected SmolVLA simulation model starts from a VLM without robotics
+pretraining, but still trains its action policy on LIBERO demonstrations
+\cite{smolvla}. Thus the table's training column concerns learning robot
+actions, not whether a model has ever been pretrained.
+
+\begin{table}[t]
+\caption{Model size and robot-demonstration use for action-policy training.
+VLA sizes are rounded values from the cited papers; \method{} counts all
+unique parameters in its deployed detector. ``None'' refers to action-policy
+training, not to perception pretraining or manual skill development.}
+\label{tab:models}
+\centering
+\footnotesize
+\input{generated/model_table}
+\end{table}
+
 Table~\ref{tab:published} compares our measurements with published LIBERO
 success rates, retaining the original papers' reported averages.
 Our implementation is the only system evaluated in the present study.
@@ -521,8 +565,12 @@ Eq.~\eqref{eq:score}. These differences make the table a comparison of
 reported system outcomes under their stated conditions, rather than a
 controlled ranking.
 
-Long has the lowest success rate for every listed method, including
-\method{}, motivating a closer examination of our multi-stage failures.
+OpenVLA-OFT reports a higher average success rate than our combined record
+set. Our results support the value of a smaller neural component and the
+absence of demonstration-based action training in this declared setting;
+they do not establish a success-rate advantage over all VLAs. Long has the
+lowest success rate for every listed method, including \method{}, motivating
+a closer examination of multi-stage failures.
 
 \begin{table*}[t]
 \caption{LIBERO success rates (\%). Published rows contain the reported
@@ -587,6 +635,25 @@ original full-campaign records.\fi}
 \label{fig:tasks}
 \end{figure*}
 
+\ifTaskRefresh
+\subsection{Inspecting and Revising a Failed Skill}
+Long 09 provides a concrete example of modifying execution without changing
+neural weights. Its program separates mug placement, hand withdrawal,
+door contact, and closure verification. Inspection identified a release
+case in which a mug rim remained hooked on a finger during withdrawal.
+The revision checks a measured 78-mm jaw opening and waits for settling
+before retreat. Door closure uses a separately revised controller that
+estimates the visible panel and pushes its exterior face through bounded
+hinge-frame waypoints.
+
+With these changes together, all ten original Long 09 initializations were
+retested, yielding $\MicrowaveSuccess/10$ successes compared with $0/10$
+in the original campaign. The detector checkpoint was unchanged. This
+development case illustrates how explicit stages support targeted code
+revisions. The two remaining failures stop during grasp approach and
+cavity-entry staging, respectively.
+\fi
+
 \subsection{Controller Completion Is a Different Outcome}
 \label{sec:outcomes}
 Table~\ref{tab:status} crosses terminal controller state with external
@@ -615,6 +682,18 @@ ever-success. A controller failure can follow an earlier benchmark success.}
 \footnotesize
 \input{generated/status_table}
 \end{table}
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=.90\textwidth]{figures/rollouts.pdf}
+\caption{Actual fixed-camera frames. Top:
+\emph{pick up the alphabet soup and place it in the basket} (Object 00,
+initial state 00). Bottom: \emph{open the top drawer and put the bowl inside}
+(Goal 03, initial state 02). Four uniformly spaced recorder indices are shown
+(two-action recording stride). Frames are vertically flipped for upright
+display; left/right is preserved.}
+\label{fig:rollouts}
+\end{figure*}
 
 \subsection{Recorded Failure Categories}
 Table~\ref{tab:failures} groups the \FailureCount{} externally unsuccessful
@@ -671,23 +750,22 @@ The upper row shows a successful Object task-00 episode; the lower row is
 the first unsuccessful Goal task-03 initialization, which exhausts its
 budget. These selected examples illustrate execution, not failure prevalence.
 
-\begin{figure*}[t]
-\centering
-\includegraphics[width=.90\textwidth]{figures/rollouts.pdf}
-\caption{Actual fixed-camera frames. Top:
-\emph{pick up the alphabet soup and place it in the basket} (Object 00,
-initial state 00). Bottom: \emph{open the top drawer and put the bowl inside}
-(Goal 03, initial state 02). Four uniformly spaced recorder indices are shown
-(two-action recording stride). Frames are vertically flipped for upright
-display; left/right is preserved.}
-\label{fig:rollouts}
-\end{figure*}
-
 \section{Discussion and Limitations}
-Explicit geometry and specialized skills solve a substantial fraction of the
-selected episodes under declared asset and calibration assumptions.
-Object priors, grammar rules, and manually developed skills are part of
-these conditions.
+The evaluated system combines a small neural model, no demonstration-based
+action-policy training, and inspectable execution stages. These properties
+depend on calibrated RGB-D, object priors, a constrained grammar, and
+manually developed skills. They describe a useful operating point for known
+environments, with task performance and development effort both dependent
+on the coverage of those skills.
+
+\paragraph{Resources and development effort.}
+The parameter count and weight-file size quantify the neural component.
+They do not establish proportional savings in end-to-end latency or peak
+memory, which also depend on perception processing, control, and simulation.
+Avoiding action-policy fitting does not remove detector pretraining or the
+engineering effort required to build and revise geometric skills. The
+recorded stages support inspection, but debugging effort was not measured
+against a learned policy.
 
 \paragraph{Generalization and novelty.}
 The run covers known assets, language forms, and one simulated embodiment
@@ -715,9 +793,11 @@ Boundary counters are implementation-generated records, not independent
 attestations.
 
 \section{Conclusion}
-We presented \method{}, an asset-informed geometric manipulation baseline
-that compiles supported language into closed-loop grasp--place and contact
-skills. Under the declared sensing and prior assumptions, the
+\method{} uses a frozen \NeuralMillion{}M-parameter model to detect objects
+and geometric rules to control robot actions. It requires no robot
+demonstrations for action-policy training, and its explicit execution steps
+support inspection and targeted repair. Under the declared sensing and
+asset assumptions, the
 \ifTaskRefresh
 combined records contain \SuccessRate{}\% external successes across
 \EpisodeCount{} episodes, with Long 09 updated to $\MicrowaveSuccess/10$.
@@ -727,8 +807,9 @@ performance of the updated controller remains unmeasured.
 system achieves \SuccessRate{}\% external success across
 \EpisodeCount{} recorded episodes.
 \fi
-Task-level outcomes and completion disagreements expose limitations hidden
-by aggregate rates; the source and records support inspection and reproduction.
+The study documents model requirements, task outcomes, and a concrete skill
+revision while preserving the distinction between local completion and
+external success.
 
 \section*{Acknowledgments and AI Disclosure}
 OpenAI GPT-6-Astra (via Codex) assisted in drafting and editing the text in all sections,
@@ -738,6 +819,8 @@ records; comparison values are taken from the cited publications.
 The rollout images are extracted from our recordings; no
 generative image model was used.
 
+% Start the references in the final page's right column.
+\newpage
 \bibliographystyle{IEEEtran}
 \bibliography{references}
 \end{document}

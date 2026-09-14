@@ -99,7 +99,10 @@ def main():
                    check=True)
     published_data = (PAPER / "data/published_comparisons.json").read_bytes()
     published = json.loads(published_data)
+    model_data = (PAPER / "data/model_audit.json").read_bytes()
+    model_audit = json.loads(model_data)
     tex += "\n" + (PAPER / "generated/comparison_table.tex").read_text()
+    tex += "\n" + (PAPER / "generated/model_table.tex").read_text()
     bib = (PAPER / "references.bib").read_text()
     keys = set(re.findall(r"@\w+\{([^,]+),", bib))
     cited = {key.strip() for group in re.findall(r"\\cite\{([^}]+)\}",tex) for key in group.split(",")}
@@ -139,6 +142,9 @@ def main():
         "references":len(cited), "author_metadata":"Anonymous",
         "published_comparison_rows":len(published["rows"]),
         "published_comparisons_sha256":hashlib.sha256(published_data).hexdigest(),
+        "neural_parameters":model_audit["parameters"],
+        "runtime_trainable_neural_parameters":model_audit["runtime_trainable_parameters"],
+        "model_audit_sha256":hashlib.sha256(model_data).hexdigest(),
         "letter_paper":True, "all_fonts_embedded":True,"type3_fonts":False,
         "overfull_boxes":False,"undefined_references":False,
         "pdf_sha256":hashlib.sha256((PAPER/"main.pdf").read_bytes()).hexdigest(),

@@ -1,6 +1,6 @@
 {
   "passed": true,
-  "pages": 7,
+  "pages": 8,
   "episodes": 400,
   "successes": 368,
   "tasks": 40,
@@ -13,12 +13,15 @@
   "references": 13,
   "author_metadata": "Anonymous",
   "published_comparison_rows": 5,
-  "published_comparisons_sha256": "647f882d0327245db1bb8a4fcf3049a6b26d2878427d520ef291bc3cb70c16a4",
+  "published_comparisons_sha256": "53509a569d1d9736655ea6f190d18bd74423ecaa09e8d04d03c9926cf17e5074",
+  "neural_parameters": 172249090,
+  "runtime_trainable_neural_parameters": 0,
+  "model_audit_sha256": "ea2a43a7ccf1cb56c0119a867c6d330981dd0782b9c5107c8dc977ba09a1d492",
   "letter_paper": true,
   "all_fonts_embedded": true,
   "type3_fonts": false,
   "overfull_boxes": false,
   "undefined_references": false,
-  "pdf_sha256": "b83a1b7316e1faf3e7b00541fd24fa70884477f62453337c3cc8027be7b18c27",
+  "pdf_sha256": "1fb9aaf9836d30e59f064a1737de221345812273e8061bb8e5a084b9b4e81455",
   "scope": "Local build, format and data checks; not PaperPlaza compliance certification or human scientific review."
 }

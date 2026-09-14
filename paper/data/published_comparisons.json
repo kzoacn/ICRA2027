@@ -15,6 +15,12 @@
       "pdf_sha256": "353c37df34458f12f969b14dfd8b77175b727b9cddea7bb891759beddeefe1be",
       "table": "12",
       "pdf_page": 37,
+      "model_size": {
+        "parameters": 7000000000,
+        "count_kind": "Source-reported rounded model size; not a local checkpoint count",
+        "location": "Abstract and Section 3",
+        "robot_demonstrations_for_action_policy": true
+      },
       "input_setting": "Third-person RGB image and language instruction; no wrist image.",
       "training_setting": "Separate policy per suite; successful demonstrations with near-zero actions removed. Diffusion Policy is trained from scratch; Octo and OpenVLA are fine-tuned.",
       "evaluation_setting": "500 trials per suite per run, with reported means and standard errors over the three runs described in Appendix E.1.",
@@ -29,6 +35,12 @@
       "table": "2",
       "pdf_page": 11,
       "selected_variant": "SmolVLA (0.45B), VLA Pt. = No",
+      "model_size": {
+        "parameters": 450000000,
+        "count_kind": "Source-reported rounded size of the selected simulation model",
+        "location": "Table 2; Sections 4.1 and 4.5 describe demonstration-based policy training",
+        "robot_demonstrations_for_action_policy": true
+      },
       "input_setting": "RGB images, robot state and language in the model architecture; Table 2 does not enumerate the LIBERO camera count.",
       "training_setting": "VLM initialization; no robotics-data pretraining for this selected simulation row; multitask policy trained on a 1693-episode LIBERO dataset covering the 40 tasks.",
       "evaluation_setting": "10 trials per task; binary task completion. Section 4.3 describes a new action prediction after each executed simulation action.",
@@ -43,6 +55,12 @@
       "table": "I",
       "pdf_page": 6,
       "selected_variant": "Full OpenVLA-OFT, PD&AC and Cont-L1, additional inputs, modified training dataset",
+      "model_size": {
+        "parameters": 7000000000,
+        "count_kind": "Reported 7B base model class; not a local count of the adapted checkpoint",
+        "location": "Section III; Appendix A-A describes the architecture",
+        "robot_demonstrations_for_action_policy": true
+      },
       "input_setting": "Third-person RGB, wrist RGB, robot proprioceptive state and language.",
       "training_setting": "Pretrained OpenVLA fine-tuned independently per suite; unsuccessful demonstrations and near-zero actions filtered out.",
       "evaluation_setting": "500 trials per suite (10 tasks x 50 episodes); checkpoint selected by the source's reported evaluation procedure.",

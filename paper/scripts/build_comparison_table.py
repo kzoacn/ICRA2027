@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Combine cited literature means with measured ANCHOR episode outcomes."""
+"""Build cited policy comparisons and model-size tables from recorded evidence."""
 import argparse
 import collections
 import hashlib
@@ -55,18 +55,65 @@ def render_table():
     return "\n".join(lines) + "\n"
 
 
+def render_model_artifacts():
+    published = json.loads((PAPER / "data/published_comparisons.json").read_text())
+    audit = json.loads((PAPER / "data/model_audit.json").read_text())
+    implementation = PAPER.parent / "route-b-v170-cloud"
+    lock = json.loads((implementation / "resources.lock.json").read_text())["model"]
+    assert audit["schema"] == 1 and audit["checkpoint"] == lock
+    source = PAPER.parent / audit["implementation"]["file"]
+    assert hashlib.sha256(source.read_bytes()).hexdigest() == audit["implementation"]["sha256"]
+    count = audit["parameters"]
+    assert count > 0 and audit["runtime_trainable_parameters"] == 0
+    assert audit["parameter_elements_by_dtype"] == {"torch.float32": count}
+    assert audit["parameter_bytes"] == 4 * count
+    assert audit["weight_file"] == next(item for item in lock["files"]
+                                      if item["path"] == "model.safetensors")
+    sizes = {key: published["sources"][key]["model_size"]
+             for key in ["smolvla", "openvla", "openvlaoft"]}
+    numbers = {
+        "NeuralParameters": f"{count:,}",
+        "NeuralMillion": f"{count / 1e6:.0f}",
+        "NeuralBillion": f"{count / 1e9:.3f}",
+        "DetectorWeightMB": f"{audit['weight_file']['size'] / 1e6:.0f}",
+        "SmolParameterRatio": f"{sizes['smolvla']['parameters'] / count:.1f}",
+        "OpenVLAParameterRatio": f"{sizes['openvla']['parameters'] / count:.1f}",
+    }
+    macros = "% Generated from model_audit.json and published_comparisons.json; do not edit.\n"
+    macros += "".join("\\newcommand{\\" + name + "}{" + value + "}\n"
+                      for name, value in numbers.items())
+    lines = [
+        "% Generated from model_audit.json and published_comparisons.json; do not edit.",
+        r"\begin{tabular*}{\columnwidth}{@{\extracolsep{\fill}}lrc@{}}",
+        r"\toprule",
+        r"Method & Parameters & Policy training \\",
+        r"\midrule",
+    ]
+    for label, key in [("SmolVLA", "smolvla"), ("OpenVLA", "openvla"),
+                       ("OpenVLA-OFT", "openvlaoft")]:
+        size = sizes[key]
+        assert size["parameters"] > 0 and size["robot_demonstrations_for_action_policy"] is True
+        lines.append(label + r"~\cite{" + key + "} & "
+                     + f"{size['parameters'] / 1e9:g}B" + r" & Robot demos \\")
+    lines += [r"\midrule", r"\method{} & \NeuralBillion{}B & None \\",
+              r"\bottomrule", r"\end{tabular*}"]
+    return {"model_table.tex": "\n".join(lines) + "\n", "model_numbers.tex": macros}
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--check", action="store_true", help="Check that the saved table is current.")
     args = parser.parse_args()
-    rendered = render_table()
-    path = PAPER / "generated/comparison_table.tex"
+    artifacts = {"comparison_table.tex": render_table(), **render_model_artifacts()}
+    for name, rendered in artifacts.items():
+        path = PAPER / "generated" / name
+        if args.check:
+            assert path.read_text() == rendered, f"Generated artifact is stale: {name}"
+        else:
+            path.write_text(rendered)
+            print(f"Wrote {path.relative_to(PAPER)}")
     if args.check:
-        assert path.read_text() == rendered, "Published comparison table is stale."
-        print("Comparison table matches cited values and measured episodes.")
-    else:
-        path.write_text(rendered)
-        print(f"Wrote {path.relative_to(PAPER)}")
+        print("Comparison tables match cited values, measured episodes, and the model audit.")
 
 
 if __name__ == "__main__":

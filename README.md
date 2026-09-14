@@ -5,6 +5,13 @@ The project builds on the original Route B v170 implementation. Source code is i
 [`route-b-v170-cloud/`](route-b-v170-cloud/), including the controller, perception
 and LIBERO evaluation code, pinned dependencies, resource checksums, and deployment scripts.
 
+ANCHOR uses a frozen **172M-parameter** model to detect objects and geometric
+rules to control robot actions. It requires no robot demonstrations for
+action-policy training. Each execution step can be inspected, making failures
+easier to locate and fix. The system uses calibrated RGB-D, public asset priors,
+and manually designed skills. See the [model audit](paper/data/model_audit.json)
+and [paper](paper/main.pdf) for the measured model size and comparison with VLAs.
+
 The original frozen full evaluation achieves **360/400 (90.0%)** in 400 fresh episodes,
 compared with the 347/400 baseline. Spatial / Object / Goal / Long have
 **93 / 98 / 91 / 78** successes, respectively, out of 100 episodes each.
