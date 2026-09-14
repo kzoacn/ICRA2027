@@ -1,0 +1,212 @@
+{
+  "objective": "At least 7/10 external successes on Goal 03, without a new full-suite campaign.",
+  "accepted": true,
+  "batch": "goal03_final_02",
+  "completed_at": "2026-09-14T09:02:27+00:00",
+  "source_tree_sha256": "7bdcb97a7b847debeb0bd47c951455934701f81d7b561ad097fe5b41269de256",
+  "current_source_matches_snapshot": true,
+  "protocol": {
+    "tasks": 1,
+    "episodes_per_task": 10,
+    "official_init_ids": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9
+    ],
+    "seed": 7,
+    "step_caps": {
+      "spatial": 220,
+      "object": 280,
+      "goal": 300,
+      "long": 520
+    },
+    "scoring": "external_sticky_any_success",
+    "expected_episodes": 10,
+    "new_episodes": 10,
+    "reused_episodes": 0
+  },
+  "baseline": {
+    "batch": "full400_candidate_01",
+    "controller_source_sha256": "c954f817fb7dd2b046a961a13a9acc9f7f2f0ad87da97eba1f6c0da995eff4e6",
+    "goal03_successes": 3,
+    "goal03_episodes": 10,
+    "full_campaign_successes": 360,
+    "full_campaign_episodes": 400
+  },
+  "targeted_result": {
+    "successes": 9,
+    "episodes": 10,
+    "rate": 90,
+    "dispatcher_wall_s": 696.7321261605248,
+    "previous_failures_repaired": 7,
+    "previous_successes_regressed": 1,
+    "median_pregrasp_steps_before": 113.0,
+    "median_pregrasp_steps_after": 43.5,
+    "step_summary_scope": "Pregrasp-stage actions across all ten episodes, including timed-out stages."
+  },
+  "combined_records": {
+    "successes": 374,
+    "episodes": 400,
+    "rate": 93.5,
+    "targeted_episodes": 20,
+    "historical_episodes": 380,
+    "controller_versions": 3,
+    "scope": "380 original episodes plus complete Long 09 and Goal 03 retests. Not a fresh full-suite evaluation of the latest controller."
+  },
+  "per_initial_state": [
+    {
+      "init_id": 0,
+      "baseline_success": true,
+      "success": false,
+      "steps": 272,
+      "policy_status": "failed",
+      "failure": "phase 'move_pregrasp' timed out",
+      "baseline_pregrasp_steps": 37,
+      "pregrasp_steps": 161,
+      "source_record_sha256": "df3d5d91efd2bba187131bcae541223ef2ff5f16daefcf7031311bd2083b83c4"
+    },
+    {
+      "init_id": 1,
+      "baseline_success": true,
+      "success": true,
+      "steps": 282,
+      "policy_status": "succeeded",
+      "failure": null,
+      "baseline_pregrasp_steps": 45,
+      "pregrasp_steps": 43,
+      "source_record_sha256": "81d85cd3668bdfe2db89d0a4f5b402576dc4ec296a25aa41ebffd3d68697e862"
+    },
+    {
+      "init_id": 2,
+      "baseline_success": false,
+      "success": true,
+      "steps": 272,
+      "policy_status": "succeeded",
+      "failure": null,
+      "baseline_pregrasp_steps": 92,
+      "pregrasp_steps": 44,
+      "source_record_sha256": "08f42bee344b5ceace0e4dd0a80a8258a710847aaca4d1d508a6e74a3828d2f5"
+    },
+    {
+      "init_id": 3,
+      "baseline_success": false,
+      "success": true,
+      "steps": 278,
+      "policy_status": "succeeded",
+      "failure": null,
+      "baseline_pregrasp_steps": 114,
+      "pregrasp_steps": 43,
+      "source_record_sha256": "8333f9caf8f6a737dcab94d869aa3eb05369085c5cb6426571e3fdc594e3b510"
+    },
+    {
+      "init_id": 4,
+      "baseline_success": false,
+      "success": true,
+      "steps": 295,
+      "policy_status": "succeeded",
+      "failure": null,
+      "baseline_pregrasp_steps": 161,
+      "pregrasp_steps": 45,
+      "source_record_sha256": "09c7fede016f90b362e3cb76d8007590cf8ea450a22afb3a56628e93455c4db9"
+    },
+    {
+      "init_id": 5,
+      "baseline_success": false,
+      "success": true,
+      "steps": 273,
+      "policy_status": "succeeded",
+      "failure": null,
+      "baseline_pregrasp_steps": 119,
+      "pregrasp_steps": 43,
+      "source_record_sha256": "3d12cda75a772d9368b9314d2f7e26eb0064ac0dd1a0cf0d26df15d41f679bcf"
+    },
+    {
+      "init_id": 6,
+      "baseline_success": false,
+      "success": true,
+      "steps": 277,
+      "policy_status": "succeeded",
+      "failure": null,
+      "baseline_pregrasp_steps": 112,
+      "pregrasp_steps": 44,
+      "source_record_sha256": "b2e9aead3f487189ecd9ebd02bcdb2afe22197afc01d65ca5d96729e54d69706"
+    },
+    {
+      "init_id": 7,
+      "baseline_success": false,
+      "success": true,
+      "steps": 280,
+      "policy_status": "succeeded",
+      "failure": null,
+      "baseline_pregrasp_steps": 161,
+      "pregrasp_steps": 42,
+      "source_record_sha256": "4cbd81ab98d1e393488695879392efc538c2925c375c13c92088d5c0f0024805"
+    },
+    {
+      "init_id": 8,
+      "baseline_success": true,
+      "success": true,
+      "steps": 271,
+      "policy_status": "succeeded",
+      "failure": null,
+      "baseline_pregrasp_steps": 32,
+      "pregrasp_steps": 38,
+      "source_record_sha256": "58f691603a20761703c886f78885d0cae1978d54a0d49cc26102739ffe22c583"
+    },
+    {
+      "init_id": 9,
+      "baseline_success": false,
+      "success": true,
+      "steps": 286,
+      "policy_status": "succeeded",
+      "failure": null,
+      "baseline_pregrasp_steps": 161,
+      "pregrasp_steps": 46,
+      "source_record_sha256": "d7e85161623d442eeb90b86bd180d3f7db7bf97311cac60333fadd7a5f8fa2fd"
+    }
+  ],
+  "validation": {
+    "coverage_passed": true,
+    "issues": [],
+    "episodes": 10,
+    "source_tree_sha256": "7bdcb97a7b847debeb0bd47c951455934701f81d7b561ad097fe5b41269de256",
+    "episodes_jsonl_sha256": "358143b752f4f27404f675b124119102ce70ab35736796c3de2ae6d2dc9c83e7",
+    "validated_at": "2026-09-14T09:02:27+00:00"
+  },
+  "related_regression_check": {
+    "batch": "goal03_related_long03_02",
+    "task": "libero_10:task03",
+    "official_init_ids": [
+      0,
+      1
+    ],
+    "successes": 2,
+    "episodes": 2,
+    "baseline_successes": 2,
+    "validation": {
+      "coverage_passed": true,
+      "issues": [],
+      "episodes": 2,
+      "source_tree_sha256": "7bdcb97a7b847debeb0bd47c951455934701f81d7b561ad097fe5b41269de256",
+      "episodes_jsonl_sha256": "94387433d57c978bf2bdc0957fba1953c6c0854f14edd65cd3c333f2e9e8c08f",
+      "validated_at": "2026-09-14T08:53:41+00:00"
+    },
+    "scope": "Two related-task examples; these records do not replace the full task in the paper."
+  },
+  "evidence": {
+    "source_files": "accepted_source_files.json",
+    "projected_records": "../../paper/data/episodes.jsonl",
+    "raw_records": "../../paper/data/raw_episodes.jsonl.gz",
+    "historical_reference": "../../paper/data/full400_reference/",
+    "development_attempts": "development_record.json",
+    "environment": "environment.json",
+    "related_raw_records": "related_long03_records.jsonl"
+  }
+}

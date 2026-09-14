@@ -1,0 +1,555 @@
+{
+  "scope": "Development and complete targeted retests; each candidate retains its own outcomes. No new full-suite campaign is included.",
+  "batches": [
+    {
+      "batch": "goal03_bounded_01",
+      "state": "completed",
+      "source_tree_sha256": "24700d0e7459841218bb5cb05cb33572dd2339706e78853cb4a29d8dc20eb502",
+      "protocol": {
+        "tasks": 1,
+        "episodes_per_task": 2,
+        "official_init_ids": [
+          3,
+          4
+        ],
+        "seed": 7,
+        "step_caps": {
+          "spatial": 220,
+          "object": 280,
+          "goal": 300,
+          "long": 520
+        },
+        "scoring": "external_sticky_any_success",
+        "expected_episodes": 2,
+        "new_episodes": 2,
+        "reused_episodes": 0
+      },
+      "episodes": 2,
+      "successes": 0,
+      "records": [
+        {
+          "episode_id": "b:libero_goal:task03:ep0003",
+          "init_id": 3,
+          "success": false,
+          "policy_status": "failed",
+          "steps": 298,
+          "failure": "sensor verification rejected place_in(bowl, top drawer)",
+          "source_record_sha256": "ce0fda54cbb8e5a88ca204c2be1972638ef8ac35282aa1ce560fbd1337cb9dc1"
+        },
+        {
+          "episode_id": "b:libero_goal:task03:ep0004",
+          "init_id": 4,
+          "success": false,
+          "policy_status": "timeout",
+          "steps": 300,
+          "failure": "policy remained running at the 300-step limit",
+          "source_record_sha256": "6f9fb05a834d3b2156229a4e9559405131fe9305a5b0ba5cd6830ee86febd53e"
+        }
+      ],
+      "validation": {
+        "coverage_passed": true,
+        "issues": [],
+        "episodes": 2,
+        "source_tree_sha256": "24700d0e7459841218bb5cb05cb33572dd2339706e78853cb4a29d8dc20eb502",
+        "episodes_jsonl_sha256": "43cb2facc379669791eb0daa656cc8d073fbbcf0dc5aef9119b6712fa3c1750c",
+        "validated_at": "2026-09-14T08:29:56+00:00"
+      }
+    },
+    {
+      "batch": "goal03_clearance_02",
+      "state": "completed",
+      "source_tree_sha256": "dc5e123ba9aaf6dcf23c6033f51af7494cec9a6dba1d3027afb7534cef74d4e6",
+      "protocol": {
+        "tasks": 1,
+        "episodes_per_task": 2,
+        "official_init_ids": [
+          3,
+          4
+        ],
+        "seed": 7,
+        "step_caps": {
+          "spatial": 220,
+          "object": 280,
+          "goal": 300,
+          "long": 520
+        },
+        "scoring": "external_sticky_any_success",
+        "expected_episodes": 2,
+        "new_episodes": 2,
+        "reused_episodes": 0
+      },
+      "episodes": 2,
+      "successes": 1,
+      "records": [
+        {
+          "episode_id": "b:libero_goal:task03:ep0003",
+          "init_id": 3,
+          "success": true,
+          "policy_status": "timeout",
+          "steps": 300,
+          "failure": "policy remained running at the 300-step limit",
+          "source_record_sha256": "cc63fa73ccc16ee3133d2deba9a4aa9db6490b7a49517635327716a809e8226d"
+        },
+        {
+          "episode_id": "b:libero_goal:task03:ep0004",
+          "init_id": 4,
+          "success": false,
+          "policy_status": "timeout",
+          "steps": 300,
+          "failure": "policy remained running at the 300-step limit",
+          "source_record_sha256": "d0443c88ea0fdfd27fb0baed26ac7db6b72f75a93c52a88ada320dc028763d32"
+        }
+      ],
+      "validation": {
+        "coverage_passed": true,
+        "issues": [],
+        "episodes": 2,
+        "source_tree_sha256": "dc5e123ba9aaf6dcf23c6033f51af7494cec9a6dba1d3027afb7534cef74d4e6",
+        "episodes_jsonl_sha256": "9bd6f476644f78f27f0d15ec438f4f2677dcca7cb1631b82cab0066175cf3f78",
+        "validated_at": "2026-09-14T08:36:54+00:00"
+      }
+    },
+    {
+      "batch": "goal03_final_01",
+      "state": "interrupted",
+      "source_tree_sha256": "cd6d71281edeeece142311501e8bffd365095a54fd564028df714cfe48d776d1",
+      "protocol": {
+        "tasks": 1,
+        "episodes_per_task": 10,
+        "official_init_ids": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ],
+        "seed": 7,
+        "step_caps": {
+          "spatial": 220,
+          "object": 280,
+          "goal": 300,
+          "long": 520
+        },
+        "scoring": "external_sticky_any_success",
+        "expected_episodes": 10,
+        "new_episodes": 10,
+        "reused_episodes": 0
+      },
+      "episodes": 3,
+      "successes": 2,
+      "records": [
+        {
+          "episode_id": "b:libero_goal:task03:ep0000",
+          "init_id": 0,
+          "success": false,
+          "policy_status": "failed",
+          "steps": 272,
+          "failure": "phase 'move_pregrasp' timed out",
+          "source_record_sha256": "d285721803335d92d6da40e6c377a0429d270eb13af89f144f602cdd7c9c5756"
+        },
+        {
+          "episode_id": "b:libero_goal:task03:ep0001",
+          "init_id": 1,
+          "success": true,
+          "policy_status": "succeeded",
+          "steps": 282,
+          "failure": null,
+          "source_record_sha256": "5c3e23564f7eea755e45774a0fd311302b828bd27766de886b253f088605bdb7"
+        },
+        {
+          "episode_id": "b:libero_goal:task03:ep0002",
+          "init_id": 2,
+          "success": true,
+          "policy_status": "succeeded",
+          "steps": 272,
+          "failure": null,
+          "source_record_sha256": "24fc6492e8dc26b14c6d5fbc59b04b575c4fb44076a7c221727fb209e3f79f88"
+        }
+      ],
+      "validation": null
+    },
+    {
+      "batch": "goal03_final_02",
+      "state": "completed",
+      "source_tree_sha256": "7bdcb97a7b847debeb0bd47c951455934701f81d7b561ad097fe5b41269de256",
+      "protocol": {
+        "tasks": 1,
+        "episodes_per_task": 10,
+        "official_init_ids": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ],
+        "seed": 7,
+        "step_caps": {
+          "spatial": 220,
+          "object": 280,
+          "goal": 300,
+          "long": 520
+        },
+        "scoring": "external_sticky_any_success",
+        "expected_episodes": 10,
+        "new_episodes": 10,
+        "reused_episodes": 0
+      },
+      "episodes": 10,
+      "successes": 9,
+      "records": [
+        {
+          "episode_id": "b:libero_goal:task03:ep0000",
+          "init_id": 0,
+          "success": false,
+          "policy_status": "failed",
+          "steps": 272,
+          "failure": "phase 'move_pregrasp' timed out",
+          "source_record_sha256": "df3d5d91efd2bba187131bcae541223ef2ff5f16daefcf7031311bd2083b83c4"
+        },
+        {
+          "episode_id": "b:libero_goal:task03:ep0001",
+          "init_id": 1,
+          "success": true,
+          "policy_status": "succeeded",
+          "steps": 282,
+          "failure": null,
+          "source_record_sha256": "81d85cd3668bdfe2db89d0a4f5b402576dc4ec296a25aa41ebffd3d68697e862"
+        },
+        {
+          "episode_id": "b:libero_goal:task03:ep0002",
+          "init_id": 2,
+          "success": true,
+          "policy_status": "succeeded",
+          "steps": 272,
+          "failure": null,
+          "source_record_sha256": "08f42bee344b5ceace0e4dd0a80a8258a710847aaca4d1d508a6e74a3828d2f5"
+        },
+        {
+          "episode_id": "b:libero_goal:task03:ep0003",
+          "init_id": 3,
+          "success": true,
+          "policy_status": "succeeded",
+          "steps": 278,
+          "failure": null,
+          "source_record_sha256": "8333f9caf8f6a737dcab94d869aa3eb05369085c5cb6426571e3fdc594e3b510"
+        },
+        {
+          "episode_id": "b:libero_goal:task03:ep0004",
+          "init_id": 4,
+          "success": true,
+          "policy_status": "succeeded",
+          "steps": 295,
+          "failure": null,
+          "source_record_sha256": "09c7fede016f90b362e3cb76d8007590cf8ea450a22afb3a56628e93455c4db9"
+        },
+        {
+          "episode_id": "b:libero_goal:task03:ep0005",
+          "init_id": 5,
+          "success": true,
+          "policy_status": "succeeded",
+          "steps": 273,
+          "failure": null,
+          "source_record_sha256": "3d12cda75a772d9368b9314d2f7e26eb0064ac0dd1a0cf0d26df15d41f679bcf"
+        },
+        {
+          "episode_id": "b:libero_goal:task03:ep0006",
+          "init_id": 6,
+          "success": true,
+          "policy_status": "succeeded",
+          "steps": 277,
+          "failure": null,
+          "source_record_sha256": "b2e9aead3f487189ecd9ebd02bcdb2afe22197afc01d65ca5d96729e54d69706"
+        },
+        {
+          "episode_id": "b:libero_goal:task03:ep0007",
+          "init_id": 7,
+          "success": true,
+          "policy_status": "succeeded",
+          "steps": 280,
+          "failure": null,
+          "source_record_sha256": "4cbd81ab98d1e393488695879392efc538c2925c375c13c92088d5c0f0024805"
+        },
+        {
+          "episode_id": "b:libero_goal:task03:ep0008",
+          "init_id": 8,
+          "success": true,
+          "policy_status": "succeeded",
+          "steps": 271,
+          "failure": null,
+          "source_record_sha256": "58f691603a20761703c886f78885d0cae1978d54a0d49cc26102739ffe22c583"
+        },
+        {
+          "episode_id": "b:libero_goal:task03:ep0009",
+          "init_id": 9,
+          "success": true,
+          "policy_status": "succeeded",
+          "steps": 286,
+          "failure": null,
+          "source_record_sha256": "d7e85161623d442eeb90b86bd180d3f7db7bf97311cac60333fadd7a5f8fa2fd"
+        }
+      ],
+      "validation": {
+        "coverage_passed": true,
+        "issues": [],
+        "episodes": 10,
+        "source_tree_sha256": "7bdcb97a7b847debeb0bd47c951455934701f81d7b561ad097fe5b41269de256",
+        "episodes_jsonl_sha256": "358143b752f4f27404f675b124119102ce70ab35736796c3de2ae6d2dc9c83e7",
+        "validated_at": "2026-09-14T09:02:27+00:00"
+      }
+    },
+    {
+      "batch": "goal03_frame_03",
+      "state": "completed",
+      "source_tree_sha256": "cd6d71281edeeece142311501e8bffd365095a54fd564028df714cfe48d776d1",
+      "protocol": {
+        "tasks": 1,
+        "episodes_per_task": 2,
+        "official_init_ids": [
+          3,
+          4
+        ],
+        "seed": 7,
+        "step_caps": {
+          "spatial": 220,
+          "object": 280,
+          "goal": 300,
+          "long": 520
+        },
+        "scoring": "external_sticky_any_success",
+        "expected_episodes": 2,
+        "new_episodes": 2,
+        "reused_episodes": 0
+      },
+      "episodes": 2,
+      "successes": 2,
+      "records": [
+        {
+          "episode_id": "b:libero_goal:task03:ep0003",
+          "init_id": 3,
+          "success": true,
+          "policy_status": "succeeded",
+          "steps": 278,
+          "failure": null,
+          "source_record_sha256": "93a3410f420c675ea717f14b4dd78543d30591502ea343793198cfa87364066e"
+        },
+        {
+          "episode_id": "b:libero_goal:task03:ep0004",
+          "init_id": 4,
+          "success": true,
+          "policy_status": "succeeded",
+          "steps": 295,
+          "failure": null,
+          "source_record_sha256": "87fcf6884cdad9795616ebe5adc5786416323049ea13d41770c6936367c6c21c"
+        }
+      ],
+      "validation": {
+        "coverage_passed": true,
+        "issues": [],
+        "episodes": 2,
+        "source_tree_sha256": "cd6d71281edeeece142311501e8bffd365095a54fd564028df714cfe48d776d1",
+        "episodes_jsonl_sha256": "9fb2be311ddd0b642a72556139dc1d98683a06a61e727c8b0ecad063633a6411",
+        "validated_at": "2026-09-14T08:43:52+00:00"
+      }
+    },
+    {
+      "batch": "goal03_related_long03_01",
+      "state": "completed",
+      "source_tree_sha256": "cd6d71281edeeece142311501e8bffd365095a54fd564028df714cfe48d776d1",
+      "protocol": {
+        "tasks": 1,
+        "episodes_per_task": 2,
+        "official_init_ids": [
+          0,
+          1
+        ],
+        "seed": 7,
+        "step_caps": {
+          "spatial": 220,
+          "object": 280,
+          "goal": 300,
+          "long": 520
+        },
+        "scoring": "external_sticky_any_success",
+        "expected_episodes": 2,
+        "new_episodes": 2,
+        "reused_episodes": 0
+      },
+      "episodes": 2,
+      "successes": 1,
+      "records": [
+        {
+          "episode_id": "b:libero_10:task03:ep0000",
+          "init_id": 0,
+          "success": false,
+          "policy_status": "failed",
+          "steps": 260,
+          "failure": "phase 'descend' timed out",
+          "source_record_sha256": "701af54007a7418651cd3a2dcf8f872bc5de410bfaaeb8f597b15e53db772daf"
+        },
+        {
+          "episode_id": "b:libero_10:task03:ep0001",
+          "init_id": 1,
+          "success": true,
+          "policy_status": "succeeded",
+          "steps": 216,
+          "failure": null,
+          "source_record_sha256": "f27cc996ed0c94e342ab23222ff32bb8e4c6ef2a9fd7233f59a245c294ed7068"
+        }
+      ],
+      "validation": {
+        "coverage_passed": true,
+        "issues": [],
+        "episodes": 2,
+        "source_tree_sha256": "cd6d71281edeeece142311501e8bffd365095a54fd564028df714cfe48d776d1",
+        "episodes_jsonl_sha256": "742b9486778439201e1766f37c38ee521097f3e5a2b9b750b841b5d2261b8dc2",
+        "validated_at": "2026-09-14T08:46:50+00:00"
+      }
+    },
+    {
+      "batch": "goal03_related_long03_02",
+      "state": "completed",
+      "source_tree_sha256": "7bdcb97a7b847debeb0bd47c951455934701f81d7b561ad097fe5b41269de256",
+      "protocol": {
+        "tasks": 1,
+        "episodes_per_task": 2,
+        "official_init_ids": [
+          0,
+          1
+        ],
+        "seed": 7,
+        "step_caps": {
+          "spatial": 220,
+          "object": 280,
+          "goal": 300,
+          "long": 520
+        },
+        "scoring": "external_sticky_any_success",
+        "expected_episodes": 2,
+        "new_episodes": 2,
+        "reused_episodes": 0
+      },
+      "episodes": 2,
+      "successes": 2,
+      "records": [
+        {
+          "episode_id": "b:libero_10:task03:ep0000",
+          "init_id": 0,
+          "success": true,
+          "policy_status": "failed",
+          "steps": 472,
+          "failure": "phase 'close_release' timed out (position_error=0.0139 m; rotation_error=0.0032 rad; current=[0.0865, 0.2015, 0.9524]; target=[0.0809, 0.2143, 0.9531])",
+          "source_record_sha256": "7bd400c2ba488509f5bd10028c22437d0a7c6f9fbdcd9aa1429ffdb1585b76b3"
+        },
+        {
+          "episode_id": "b:libero_10:task03:ep0001",
+          "init_id": 1,
+          "success": true,
+          "policy_status": "failed",
+          "steps": 384,
+          "failure": "phase 'close_release' timed out (position_error=0.0138 m; rotation_error=0.0058 rad; current=[-0.0734, 0.2154, 0.9537]; target=[-0.0713, 0.229, 0.9546])",
+          "source_record_sha256": "94a0af9f0af03bb32b1421221bad4ff20bf554eaec82be4534d89882d022677f"
+        }
+      ],
+      "validation": {
+        "coverage_passed": true,
+        "issues": [],
+        "episodes": 2,
+        "source_tree_sha256": "7bdcb97a7b847debeb0bd47c951455934701f81d7b561ad097fe5b41269de256",
+        "episodes_jsonl_sha256": "94387433d57c978bf2bdc0957fba1953c6c0854f14edd65cd3c333f2e9e8c08f",
+        "validated_at": "2026-09-14T08:53:41+00:00"
+      }
+    },
+    {
+      "batch": "goal03_trace_01",
+      "state": "completed",
+      "source_tree_sha256": "7effa76e8db5edf63b5bc37b082788d5d1c9741382b678ad040a23741bad4050",
+      "protocol": {
+        "tasks": 1,
+        "episodes_per_task": 1,
+        "official_init_ids": [
+          4
+        ],
+        "seed": 7,
+        "step_caps": {
+          "spatial": 220,
+          "object": 280,
+          "goal": 300,
+          "long": 520
+        },
+        "scoring": "external_sticky_any_success",
+        "expected_episodes": 1,
+        "new_episodes": 1,
+        "reused_episodes": 0
+      },
+      "episodes": 1,
+      "successes": 0,
+      "records": [
+        {
+          "episode_id": "b:libero_goal:task03:ep0004",
+          "init_id": 4,
+          "success": false,
+          "policy_status": "failed",
+          "steps": 279,
+          "failure": "phase 'move_pregrasp' timed out",
+          "source_record_sha256": "52d16166731c9f18dd88931712250a7519b4cccd6faf49eb181152e4a9781b5a"
+        }
+      ],
+      "validation": {
+        "coverage_passed": true,
+        "issues": [],
+        "episodes": 1,
+        "source_tree_sha256": "7effa76e8db5edf63b5bc37b082788d5d1c9741382b678ad040a23741bad4050",
+        "episodes_jsonl_sha256": "a0c930d7265a3450adf5882e44b0805fa750073b0b7dd92405b4f87bec20e5ff",
+        "validated_at": "2026-09-14T08:25:07+00:00"
+      }
+    },
+    {
+      "batch": "goal03_traverse_04",
+      "state": "interrupted",
+      "source_tree_sha256": "c76ff074bc4a377cd8f2f7aabcfccdde66ae3a9dd0753c9172713149d97e8652",
+      "protocol": {
+        "tasks": 1,
+        "episodes_per_task": 2,
+        "official_init_ids": [
+          0,
+          1
+        ],
+        "seed": 7,
+        "step_caps": {
+          "spatial": 220,
+          "object": 280,
+          "goal": 300,
+          "long": 520
+        },
+        "scoring": "external_sticky_any_success",
+        "expected_episodes": 2,
+        "new_episodes": 2,
+        "reused_episodes": 0
+      },
+      "episodes": 1,
+      "successes": 0,
+      "records": [
+        {
+          "episode_id": "b:libero_goal:task03:ep0000",
+          "init_id": 0,
+          "success": false,
+          "policy_status": "failed",
+          "steps": 272,
+          "failure": "phase 'move_pregrasp' timed out",
+          "source_record_sha256": "238ab1569e1c1f4a650d3301598bb061bc0febe53f5f3f39551d5e2f5345aa04"
+        }
+      ],
+      "validation": null
+    }
+  ]
+}

@@ -99,7 +99,12 @@ def main():
         "RunMinutes": f"{meta['wall_elapsed_s']/60:.1f}",
         "RuntimeExceptionCount": sum(r["policy_status"] == "exception" for r in rows),
         "PerfectTaskCount": sum(s["all_success_tasks"] for s in summaries),
-        "BaselineSuccessCount": meta.get("task_replacement", {}).get("baseline_total_successes", successes),
+        "BaselineSuccessCount": meta.get("baseline_total_successes",
+            meta.get("task_replacement", {}).get("baseline_total_successes", successes)),
+        "ControllerVersionCount": len({r.get("controller_source_sha256", meta["controller_source_sha256"])
+                                        for r in rows}),
+        "HistoricalTaskCount": sum(all(r["reused"] for r in rows if r["suite"] == suite and r["task_id"] == task)
+                                   for suite, _ in SUITES for task in range(10)),
     }
     for s in summaries:
         macros[s["label"] + "Rate"] = f"{s['rate']:.1f}"

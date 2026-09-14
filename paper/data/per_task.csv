@@ -22,7 +22,7 @@ libero_object,9,10,10,pick up the orange juice and place it in the basket
 libero_goal,0,10,10,open the middle drawer of the cabinet
 libero_goal,1,10,10,put the bowl on the stove
 libero_goal,2,10,10,put the wine bottle on top of the cabinet
-libero_goal,3,10,3,open the top drawer and put the bowl inside
+libero_goal,3,10,9,open the top drawer and put the bowl inside
 libero_goal,4,10,10,put the bowl on top of the cabinet
 libero_goal,5,10,10,push the plate to the front of the stove
 libero_goal,6,10,8,put the cream cheese in the bowl

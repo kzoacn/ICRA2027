@@ -60,10 +60,11 @@ and recovery. Benchmark success is recorded externally and is unavailable
 to the policy.
 \ifRunComplete
 \ifTaskRefresh
-A combined set of 400 task records, comprising 390 historical episodes and
-10 newly executed Long 09 episodes, contains \SuccessCount{} successes
-(\SuccessRate{}\%). It includes two controller versions; the updated
-controller has not been reevaluated on the other 39 tasks.
+A combined set of 400 task records, comprising \ReusedCount{} historical
+episodes and \FreshCount{} targeted retest episodes, contains
+\SuccessCount{} successes (\SuccessRate{}\%). It includes
+\ControllerVersionCount{} controller versions; the latest controller has
+not been evaluated across all 40 tasks.
 \else
 On 400 fixed initializations spanning 40 LIBERO tasks, the deployed system
 succeeds in \SuccessCount{} trials (\SuccessRate{}\%).
@@ -133,14 +134,13 @@ known benchmark assets and instruction forms. We make three contributions:
       detector, with model-size and task-outcome comparisons to representative
       VLAs on the four LIBERO suites.
 \item Inspectable skill execution with explicit geometric targets and local
-      checks, illustrated by a microwave release-and-close revision that
-      improves Long 09 from $0/10$ to $\MicrowaveSuccess/10$ without updating
-      neural weights.
+      checks, illustrated by targeted revisions to microwave and drawer
+      execution that improve Long 09 and Goal 03 without updating neural weights.
 \end{enumerate}
 
 The contribution is the integrated system and its empirical characterization.
-The Long 09 revision is a task-specific development result; its records and
-those of the original full evaluation retain their controller versions.
+The targeted revisions are development results; their records and those
+of the original full evaluation retain their controller versions.
 
 \section{Related Work}
 \subsection{Language, Programs, and Geometric Planning}
@@ -427,20 +427,21 @@ The original full run uses Ubuntu 22.04, Python 3.12, PyTorch 2.11.0 with CUDA 1
 MuJoCo 3.3.2~\cite{mujoco}, robosuite 1.4.0~\cite{robosuite}, and
 hf-libero 0.1.4 on one RTX 5090.
 \ifTaskRefresh
-The targeted Long 09 retest uses the same software environment on an RTX 4090.
+The targeted retests use the same software environment on an RTX 4090.
 \fi
 
 \ifTaskRefresh
 The original full campaign records \BaselineSuccessCount/400 successes with
-one frozen controller. We subsequently revise microwave release and closure and execute
-all ten Long 09 initializations with one updated source snapshot, in index
-order. The updated task succeeds in $\MicrowaveSuccess/10$ episodes.
-The combined statistics retain the original 390 episodes for the other
-39 tasks and replace all ten Long 09 records, including failures.
-They therefore contain two controller versions and do not establish a
-full-suite result for the updated controller. The original complete campaign,
-both source manifests, and each record's source version are preserved.
-These initializations also informed development; this follow-up is not held out.
+one frozen controller. We subsequently revise Long 09 microwave execution,
+then Goal 03 drawer execution. Each task is retested on all ten official
+initializations, in index order, with one frozen source snapshot. The retests
+record $\MicrowaveSuccess/10$ and $\TopDrawerSuccess/10$ successes, respectively.
+The combined statistics retain \ReusedCount{} original episodes for the
+other \HistoricalTaskCount{} tasks and replace both complete task records,
+including failures. They contain \ControllerVersionCount{} controller versions
+and do not establish a full-suite result for the latest controller.
+The original campaign, all source manifests, and each record's source version
+are preserved. These initializations informed development; the retests are not held out.
 \else
 \ifAllFresh
 All 400 episodes are newly executed against one immutable source snapshot.
@@ -486,7 +487,7 @@ mixed within a task. Controller-internal retries remain within one episode.
 \subsection{Scope of the Evidence}
 \ifRunComplete
 \ifTaskRefresh
-Both source runs pass their respective coverage checks. The combined
+All three source runs pass their respective coverage checks. The combined
 record set contains 400 unique task/initial-state pairs with the declared
 configuration; original record hashes identify the retained and replaced
 episodes independently.
@@ -507,9 +508,9 @@ sample size behind each rate.
 \begin{table}[t]
 \caption{Observed success and execution cost. SR uses external ever-success.
 \ifTaskRefresh
-The combined records retain 390 historical episodes and replace Long 09 with
-10 new episodes. $^\dagger$Medians use recorded elapsed times from both runs;
-hardware and concurrency differ.
+The combined records retain \ReusedCount{} historical episodes and use
+\FreshCount{} targeted retest episodes. $^\dagger$Medians pool source-run
+elapsed times; hardware and concurrency differ.
 \else
 $^\dagger$Elapsed-time medians use newly executed episodes only; steps include
 reused records. Times include execution overhead under concurrent evaluation.
@@ -578,8 +579,9 @@ means from OpenVLA Table~12~\cite{openvla}, SmolVLA Table~2~\cite{smolvla},
 and OpenVLA-OFT Table~I~\cite{openvlaoft}; they are not reruns by us.
 OpenVLA-OFT uses its full setting. The final row is measured in this work.
 \ifTaskRefresh
-It combines 390 historical episodes and 10 new Long 09 episodes from two
-controller versions; it is not a full rerun of the updated controller.
+It combines \ReusedCount{} historical episodes and \FreshCount{} targeted
+retest episodes from \ControllerVersionCount{} controller versions; it is
+not a full rerun of the latest controller.
 \fi
 All methods receive language; their sensing, training, and protocols differ.}
 \label{tab:published}
@@ -617,7 +619,7 @@ $\MicrowaveSuccess/10$ trials. Long 08, placing both moka pots on the stove,
 succeeds in $\MokaSuccess/10$ trials. These tasks combine placement with
 confined access, shared supports, or fixture interaction.
 
-Drawer-related tasks also remain difficult: Goal task 03, opening the top
+Drawer tasks show varied outcomes: Goal task 03, opening the top
 drawer and placing a bowl inside, succeeds in $\TopDrawerSuccess/10$ trials;
 Spatial task 04, retrieving a bowl from a top drawer, succeeds in
 $\DrawerPickSuccess/10$; and Long task 03, placing a bowl in a bottom drawer
@@ -630,28 +632,29 @@ reasons; they do not establish articulation as the cause of failure.
 \includegraphics[width=\textwidth]{figures/per_task.pdf}
 \caption{External successes per ten trials. Columns identify different tasks
 in each suite; darker cells indicate higher success.
-\ifTaskRefresh Long 09 uses the targeted retest; other cells retain the
-original full-campaign records.\fi}
+\ifTaskRefresh Goal 03 and Long 09 use complete targeted retests;
+other cells retain the original full-campaign records.\fi}
 \label{fig:tasks}
 \end{figure*}
 
 \ifTaskRefresh
-\subsection{Inspecting and Revising a Failed Skill}
-Long 09 provides a concrete example of modifying execution without changing
-neural weights. Its program separates mug placement, hand withdrawal,
-door contact, and closure verification. Inspection identified a release
-case in which a mug rim remained hooked on a finger during withdrawal.
-The revision checks a measured 78-mm jaw opening and waits for settling
-before retreat. Door closure uses a separately revised controller that
-estimates the visible panel and pushes its exterior face through bounded
-hinge-frame waypoints.
+\subsection{Inspecting and Revising Failed Skills}
+Long 09 separates mug placement, withdrawal, door contact, and closure
+verification. Inspection found a mug rim remaining hooked on a finger.
+The revision checks a measured 78-mm jaw opening and waits for settling;
+closure estimates the visible door panel and pushes its exterior face
+through bounded hinge-frame waypoints. A complete retest records
+$\MicrowaveSuccess/10$ successes, compared with $0/10$ originally.
 
-With these changes together, all ten original Long 09 initializations were
-retested, yielding $\MicrowaveSuccess/10$ successes compared with $0/10$
-in the original campaign. The detector checkpoint was unchanged. This
-development case illustrates how explicit stages support targeted code
-revisions. The two remaining failures stop during grasp approach and
-cavity-entry staging, respectively.
+Goal 03 originally records $3/10$. Traces expose excessive motion after
+handle release, including wrist and elbow joint-limit encounters. The
+revision compares equivalent jaw frames using continuous public-model IK
+and bounds simultaneous translation and rotation. It also moves a held
+bowl outside the observed drawer front before lifting, to avoid the lip.
+A complete retest records $\TopDrawerSuccess/10$. Both revisions preserve
+the detector weights, official initializations, action budgets, and scoring.
+These development cases show how explicit geometry and stages support
+localized code changes; remaining failures are retained in the records.
 \fi
 
 \subsection{Controller Completion Is a Different Outcome}
@@ -689,7 +692,8 @@ ever-success. A controller failure can follow an earlier benchmark success.}
 \caption{Actual fixed-camera frames. Top:
 \emph{pick up the alphabet soup and place it in the basket} (Object 00,
 initial state 00). Bottom: \emph{open the top drawer and put the bowl inside}
-(Goal 03, initial state 02). Four uniformly spaced recorder indices are shown
+(Goal 03, initial state 02). Both episodes come from the original full
+campaign, before the targeted revisions. Four uniformly spaced recorder indices are shown
 (two-action recording stride). Frames are vertically flipped for upright
 display; left/right is preserved.}
 \label{fig:rollouts}
@@ -720,7 +724,7 @@ recorded controller messages with a fixed precedence rule.}
 
 \subsection{Execution Cost and Qualitative Context}
 \ifTaskRefresh
-The median Long 09 retest episode takes \FreshMedianSeconds{} seconds.
+The median episode across the targeted retests takes \FreshMedianSeconds{} seconds.
 \else
 The median newly executed episode takes \FreshMedianSeconds{} seconds.
 \fi
@@ -735,8 +739,8 @@ They should not be interpreted as real-robot control frequency.
 The run reports \RuntimeExceptionCount{} runtime exceptions.
 \ifRunComplete
 \ifTaskRefresh
-The ten-episode targeted retest takes \RunMinutes{} minutes of dispatcher
-wall time. There is no single wall-time measurement for the combined
+The targeted retest dispatcher durations sum to \RunMinutes{} minutes.
+There is no single wall-time measurement for the combined
 400-episode record set.
 \else
 Dispatcher wall time is \RunMinutes{} minutes for the campaign containing
@@ -747,8 +751,8 @@ Dispatcher wall time at the snapshot is \RunMinutes{} minutes.
 \fi
 Figure~\ref{fig:rollouts} provides visual context from actual recordings.
 The upper row shows a successful Object task-00 episode; the lower row is
-the first unsuccessful Goal task-03 initialization, which exhausts its
-budget. These selected examples illustrate execution, not failure prevalence.
+an unsuccessful Goal task-03 initialization in the original campaign.
+These historical examples illustrate execution, not current failure prevalence.
 
 \section{Discussion and Limitations}
 The evaluated system combines a small neural model, no demonstration-based
@@ -800,15 +804,16 @@ support inspection and targeted repair. Under the declared sensing and
 asset assumptions, the
 \ifTaskRefresh
 combined records contain \SuccessRate{}\% external successes across
-\EpisodeCount{} episodes, with Long 09 updated to $\MicrowaveSuccess/10$.
-This task-specific update combines two controller versions; broader
-performance of the updated controller remains unmeasured.
+\EpisodeCount{} episodes, with Long 09 at $\MicrowaveSuccess/10$ and
+Goal 03 at $\TopDrawerSuccess/10$. The combined records contain
+\ControllerVersionCount{} controller versions; broader performance of the
+latest controller remains unmeasured.
 \else
 system achieves \SuccessRate{}\% external success across
 \EpisodeCount{} recorded episodes.
 \fi
-The study documents model requirements, task outcomes, and a concrete skill
-revision while preserving the distinction between local completion and
+The study documents model requirements, task outcomes, and targeted skill
+revisions while preserving the distinction between local completion and
 external success.
 
 \section*{Acknowledgments and AI Disclosure}

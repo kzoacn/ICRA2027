@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-"""Replace one complete task in a historical result with a validated fresh retest.
+"""Replace complete tasks in a historical result with validated targeted retests.
 
-The output is explicitly a combined record set from two controller versions,
+The output is explicitly a combined record set with explicit controller provenance,
 not a fresh 400-episode evaluation of the updated controller.
 """
 import argparse
@@ -47,13 +47,10 @@ def project(row, line, campaign, source):
     }
 
 
-def main():
-    parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--baseline-batch', required=True, type=Path)
-    parser.add_argument('--task-batch', required=True, type=Path)
-    parser.add_argument('--output-dir', type=Path, default=PAPER/'data')
-    args = parser.parse_args()
-    task_root = args.task_batch.resolve()
+CAPS = {"libero_spatial": 220, "libero_object": 280, "libero_goal": 300, "libero_10": 520}
+
+
+def validate_task(task_root):
     manifest = read(task_root/'manifest.json')
     status = read(task_root/'status.json')
     assert status['state']=='completed', 'The targeted retest is not complete.'
@@ -61,13 +58,13 @@ def main():
     assert validation['coverage_passed'] and not validation['issues']
     assert len(manifest['tasks'])==1
     task = manifest['tasks'][0]
-    assert (task['suite'], task['task_id'])==('libero_10', 9)
+    assert task['suite'] in CAPS and 0 <= task['task_id'] < 10
     protocol = manifest['protocol']
     assert protocol['official_init_ids']==list(range(10))
     assert protocol['seed']==7 and protocol['episodes_per_task']==10
     assert protocol['new_episodes']==10 and protocol['reused_episodes']==0
     assert protocol['scoring']=='external_sticky_any_success'
-    assert task['config']['max_steps']==520
+    assert task['config']['max_steps']==CAPS[task['suite']]
     assert read(Path(task['summary']))['run_config']==task['config']
     frozen = read(task_root/'source_files.json')
     source = Path(manifest['source_snapshot'])/'libero_system'
@@ -80,14 +77,39 @@ def main():
     assert set(originals)==set(task['episodes'])
     new_rows = []
     for row, line in originals.values():
-        assert row['key']['suite']=='libero_10' and row['key']['task_id']==9
-        assert row['seed']==7 and 0<=row['steps']<=520
-        assert row['policy_status']!='exception'
+        assert (row['key']['suite'], row['key']['task_id']) == (task['suite'], task['task_id'])
+        assert row['seed']==7 and 0<=row['steps']<=CAPS[task['suite']]
+        assert row['policy_status']!='exception' and type(row['evaluator_success']) is bool
         assert row['route_trace']['evaluator_isolation']['scoring']=='external_sticky_any_success'
         assert all(Path(path).is_file() for path in row['video_paths'].values())
         new_rows.append(project(row, line, manifest['run_name'], manifest['source_tree_sha256']))
     assert {row['init_id'] for row in new_rows}==set(range(10))
     assert sum(row['success'] for row in new_rows)==status['overall']['successes']
+    detail = {'suite': task['suite'], 'task_id': task['task_id'], 'episodes': 10,
+              'successes': sum(row['success'] for row in new_rows),
+              'batch_manifest': manifest, 'batch_validation': validation,
+              'batch_manifest_sha256': sha((task_root/'manifest.json').read_bytes()),
+              'batch_elapsed_wall_s': status['elapsed_wall_s'],
+              'baseline_reference': 'full400_reference/provenance.json'}
+    return new_rows, originals, detail
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--baseline-batch', required=True, type=Path)
+    parser.add_argument('--task-batch', required=True, action='append', type=Path,
+                        help='Repeat for every retained targeted retest, including earlier task updates.')
+    parser.add_argument('--output-dir', type=Path, default=PAPER/'data')
+    args = parser.parse_args()
+    new_rows, originals, replacements = [], {}, []
+    for task_root in args.task_batch:
+        rows, lines, detail = validate_task(task_root.resolve())
+        assert not (originals.keys() & lines.keys()), 'A task may be replaced only once.'
+        new_rows.extend(rows)
+        originals.update(lines)
+        replacements.append(detail)
+    refreshed_count = len(new_rows)
+    retained_count = 400 - refreshed_count
 
     with tempfile.TemporaryDirectory(prefix='anchor-reference-') as temp:
         reference = Path(temp)
@@ -99,7 +121,7 @@ def main():
         base_raw = gzip.decompress((reference/'raw_episodes.jsonl.gz').read_bytes())
         base_originals = {json.loads(line)['episode_id']: line for line in base_raw.splitlines()}
         unchanged = [row for row in base_rows if row['episode_id'] not in originals]
-        assert len(unchanged)==390
+        assert len(unchanged)==retained_count
         assert all(row['instruction']==next(old['instruction'] for old in base_rows
                    if old['episode_id']==row['episode_id']) for row in new_rows)
         for row in unchanged:
@@ -123,37 +145,43 @@ def main():
                 shutil.copy2(reference/name,saved/name)
         (out/'episodes.jsonl').write_bytes(payload)
         (out/'raw_episodes.jsonl.gz').write_bytes(archive)
+        for detail in replacements:
+            detail['baseline_successes'] = sum(row['success'] for row in base_rows
+                if (row['suite'], row['task_id']) == (detail['suite'], detail['task_id']))
+        source_counts = Counter(row['controller_source_sha256'] for row in combined)
+        source_campaigns = {}
+        for row in combined:
+            source_campaigns.setdefault(row['controller_source_sha256'], set()).add(row['source_campaign'])
+        version_count = len(source_counts)
+        latest_validation = max(item['batch_validation']['validated_at'] for item in replacements)
         provenance = {
-            'run_name': 'full400_reference_plus_long09_retest', 'state':'completed', 'complete':True,
-            'evaluation_kind':'task_replacement', 'status_updated_at': status['updated_at'],
+            'run_name': 'full400_reference_plus_targeted_retests', 'state':'completed', 'complete':True,
+            'evaluation_kind':'task_replacement', 'status_updated_at': latest_validation,
             'recorded_episodes':400, 'expected_episodes':400,
-            'protocol':{**base_meta['protocol'],'new_episodes':10,'reused_episodes':390},
+            'protocol':{**base_meta['protocol'],'new_episodes':refreshed_count,'reused_episodes':retained_count},
             'controller_source_sha256':None,
             'controller_sources':[
-                {'run_name':base_meta['run_name'],'source_tree_sha256':base_meta['controller_source_sha256'],'included_episodes':390},
-                {'run_name':manifest['run_name'],'source_tree_sha256':manifest['source_tree_sha256'],'included_episodes':10}],
-            'task_replacement':{'suite':'libero_10','task_id':9,'episodes':10,
-                'successes':sum(row['success'] for row in new_rows),
-                'baseline_total_successes':sum(row['success'] for row in base_rows),
-                'baseline_wall_elapsed_s':base_meta['wall_elapsed_s'],
-                'baseline_successes':sum(row['success'] for row in base_rows if row['episode_id'] in originals),
-                'batch_manifest':manifest, 'batch_validation':validation,
-                'batch_manifest_sha256':sha((task_root/'manifest.json').read_bytes()),
-                'batch_elapsed_wall_s':status['elapsed_wall_s'],
-                'baseline_reference':'full400_reference/provenance.json'},
+                {'run_names': sorted(source_campaigns[source]), 'source_tree_sha256': source,
+                 'included_episodes': count} for source, count in source_counts.items()],
+            'baseline_total_successes':sum(row['success'] for row in base_rows),
+            'baseline_wall_elapsed_s':base_meta['wall_elapsed_s'],
+            'task_replacements':replacements,
             'episodes_projection_sha256':sha(payload),
             'raw_episode_archive':{'file':'raw_episodes.jsonl.gz','sha256':sha(archive),
                 'uncompressed_sha256':sha(combined_raw),'records':400},
-            'projection_note':'Combined task records: 390 historical episodes from the original frozen full campaign and 10 fresh Long 09 episodes from one updated controller. This is not a fresh full-400 evaluation of the updated controller. Each record identifies its source campaign, controller checksum and original JSONL-line hash.',
+            'projection_note':f'Combined task records: {retained_count} historical episodes from the original frozen full campaign and {refreshed_count} targeted retest episodes. The records contain {version_count} controller versions. This is not a fresh full-400 evaluation of the updated controller. Each record identifies its source campaign, controller checksum and original JSONL-line hash.',
             'validation':{'coverage_passed':True,'issues':[],'episodes':400,
-                'episodes_jsonl_sha256':sha(combined_raw),'validated_at':validation['validated_at'],
-                'scope':'Combined coverage and source-record integrity; two controller versions.'},
-            'wall_elapsed_s':status['elapsed_wall_s'],
+                'episodes_jsonl_sha256':sha(combined_raw),'validated_at':latest_validation,
+                'scope':f'Combined coverage and source-record integrity; {version_count} controller versions.'},
+            'wall_elapsed_s':sum(item['batch_elapsed_wall_s'] for item in replacements),
+            'wall_elapsed_scope':'Sum of the targeted retest dispatcher durations; historical campaign excluded.',
         }
         write(out/'provenance.json',provenance)
-        print(json.dumps({'long09_successes':sum(row['success'] for row in new_rows),
-                          'combined_successes':sum(row['success'] for row in combined),
-                          'fresh_episodes':10,'historical_episodes':390},indent=2))
+        print(json.dumps({'targeted_results':[
+            {key: item[key] for key in ('suite','task_id','successes','episodes')} for item in replacements],
+            'combined_successes':sum(row['success'] for row in combined),
+            'fresh_episodes':refreshed_count,'historical_episodes':retained_count},indent=2))
+
 
 
 if __name__=='__main__':

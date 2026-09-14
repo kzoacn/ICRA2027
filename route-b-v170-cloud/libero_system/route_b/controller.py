@@ -1146,6 +1146,7 @@ class RouteBController:
         self._motion_pose: Pose | None = None
         self._secondary_pose: Pose | None = None
         self._transfer_clearance_pose: Pose | None = None
+        self._drawer_lift_clearance_pose: Pose | None = None
         self._transfer_clearance_z_m: float | None = None
         self._rim_transfer_rotation_reference: np.ndarray | None = None
         self._held_subject: str | None = None
@@ -1426,6 +1427,7 @@ class RouteBController:
         self._motion_pose = None
         self._secondary_pose = None
         self._transfer_clearance_pose = None
+        self._drawer_lift_clearance_pose = None
         self._transfer_clearance_z_m = None
         self._rim_transfer_rotation_reference = None
         self._held_subject = None
@@ -1577,6 +1579,8 @@ class RouteBController:
                 target = self._secondary_pose
             elif self._phase == "move_transfer_clearance":
                 target = self._transfer_clearance_pose
+            elif self._phase == "move_drawer_lift_clearance":
+                target = self._drawer_lift_clearance_pose
             records = (self._grasp_target_attempts if step.kind is SkillKind.PICK
                        else self._placement_target_attempts)
             if target is not None and records:
@@ -2163,6 +2167,24 @@ class RouteBController:
 
         if self._phase == "move_pregrasp":
             assert self._secondary_pose is not None
+            if (self._drawer_episode_anchors
+                    and self._grasp_mode is GraspMode.RIM_PINCH
+                    and not self._active_cavity_rim
+                    and self._grasp_target_attempts
+                    and self._phase_ticks % 8 == 0):
+                samples = self._grasp_target_attempts[-1].setdefault(
+                    "post_contact_pregrasp_samples", []
+                )
+                if len(samples) < 24:
+                    samples.append({
+                        "phase_tick": self._phase_ticks,
+                        "ee_pose_world": observation.robot.ee_pose.matrix.tolist(),
+                        "joint_position": (
+                            observation.robot.joint_position.tolist()
+                            if observation.robot.joint_position is not None else None
+                        ),
+                        "target_pose_world": self._secondary_pose.matrix.tolist(),
+                    })
             while self._flat_transfer_waypoints:
                 waypoint = self._flat_transfer_waypoints[0]
                 if self._pose_reached(observation.robot.ee_pose, waypoint):
@@ -5248,7 +5270,9 @@ class RouteBController:
                 observation,
                 destination_grounding=destination_grounding,
             )
-            self._set_phase("move_transfer_clearance")
+            self._set_phase("move_drawer_lift_clearance"
+                            if self._drawer_lift_clearance_pose is not None
+                            else "move_transfer_clearance")
 
         elif self._phase in {
             "move_transfer_clearance",
@@ -5277,6 +5301,18 @@ class RouteBController:
                     observation,
                     retain_phase=True,
                     destination_grounding=destination_grounding,
+                )
+
+        if self._phase == "move_drawer_lift_clearance":
+            assert self._drawer_lift_clearance_pose is not None
+            if self._pose_reached(
+                observation.robot.ee_pose, self._drawer_lift_clearance_pose
+            ):
+                self._set_phase("move_transfer_clearance")
+            else:
+                return self._motion(
+                    self._drawer_lift_clearance_pose, observation,
+                    self._engaged_gripper_command(),
                 )
 
         if self._phase == "move_transfer_clearance":
@@ -6043,6 +6079,16 @@ class RouteBController:
                 "waypoints_world_m": [pregrasp_position.tolist(), grasp_position.tolist()],
             }
             rotation = selected
+            if (self._drawer_episode_anchors
+                    and self._grasp_mode is GraspMode.RIM_PINCH
+                    and not self._active_cavity_rim):
+                from .drawer_transfer import drawer_pregrasp_frame
+
+                rotation, frame_trace = drawer_pregrasp_frame(
+                    observation.robot.ee_pose, observation.robot.joint_position,
+                    (pregrasp_position, grasp_position), rotation,
+                )
+                target_details["post_contact_path_frame"] = frame_trace
             self._motion_pose = Pose(grasp_position, rotation)
         pregrasp_rotation = rotation
         self._cavity_level_pose = None
@@ -7715,6 +7761,7 @@ class RouteBController:
             ),
             semantic_direction_world=semantic_direction,
         )
+        observed_destination = destination
         drawer_landing_trace = None
         if (not retain_phase and step.kind is SkillKind.PLACE_IN
                 and self._grasp_mode is GraspMode.RIM_PINCH
@@ -7901,6 +7948,27 @@ class RouteBController:
                 clearance_z += max(0.0, min(0.050, 1.38 - clearance_z))
             self._transfer_clearance_z_m = clearance_z
             vertical_position = observation.robot.ee_pose.position.copy()
+            self._drawer_lift_clearance_pose = None
+            if (destination_grounding == "sensor-local open drawer floor"
+                    and self._grasp_mode is GraspMode.RIM_PINCH
+                    and not self._held_from_cavity_rim):
+                level = step.target.split(" ", maxsplit=1)[0]
+                anchor = self._drawer_episode_anchors.get(level)
+                if anchor is not None:
+                    from .drawer_transfer import drawer_pre_lift_clearance
+
+                    self._drawer_lift_clearance_pose = drawer_pre_lift_clearance(
+                        observation.robot.ee_pose, placement_source, observed_destination,
+                        planning_held_offset, anchor.target.outward_world,
+                    )
+                    if self._drawer_lift_clearance_pose is not None:
+                        vertical_position[:2] = self._drawer_lift_clearance_pose.position[:2]
+                        if self._placement_target_attempts:
+                            self._placement_target_attempts[-1]["drawer_pre_lift_clearance"] = {
+                                "strategy": "clear_observed_drawer_front_before_lifting",
+                                "waypoint_world_m": self._drawer_lift_clearance_pose.position.tolist(),
+                                "outward_world": anchor.target.outward_world.tolist(),
+                            }
             vertical_position[2] = clearance_z
             self._transfer_clearance_pose = Pose(
                 vertical_position,
@@ -8014,6 +8082,35 @@ class RouteBController:
         self, target: Pose, observation: SensorObservation, gripper: float
     ) -> ControlDecision:
         action = self._cartesian_action(observation.robot.ee_pose, target, gripper)
+        if (self._phase == "move_pregrasp"
+                and self._drawer_episode_anchors
+                and self._grasp_mode is GraspMode.RIM_PINCH
+                and not self._active_cavity_rim
+                and self._held_subject is None):
+            # A simultaneous large translation and wrist turn after handle
+            # release can overshoot into a joint stop. Bound the Cartesian
+            # vector norms while keeping the observed target and strict gate.
+            delta = target.position - observation.robot.ee_pose.position
+            turn = self._rotation_vector(
+                target.rotation @ observation.robot.ee_pose.rotation.T
+            )
+            translation = delta / self.config.position_action_scale_m
+            rotation = turn / self.config.rotation_action_scale_rad
+            translation_limit = .30 if np.linalg.norm(turn) > .35 else .75
+            action[:3] = translation * min(1.0, translation_limit / max(np.linalg.norm(translation), 1e-9))
+            action[3:6] = rotation * min(1.0, .70 / max(np.linalg.norm(rotation), 1e-9))
+            if self._grasp_target_attempts:
+                self._grasp_target_attempts[-1]["post_contact_motion_limits"] = {
+                    "turning_translation_action_norm": .30,
+                    "aligned_translation_action_norm": .75,
+                    "rotation_action_norm": .70,
+                }
+        if (self._held_subject is not None
+                and self._drawer_episode_anchors
+                and self._grasp_mode is GraspMode.RIM_PINCH
+                and self._place_destination_grounding == "sensor-local open drawer floor"):
+            translation = (target.position - observation.robot.ee_pose.position) / self.config.position_action_scale_m
+            action[:3] = translation * min(1.0, .85 / max(np.linalg.norm(translation), 1e-9))
         if self._held_subject is not None and (
             self._grasp_is_marginal
             or self._visual_place_correction_active
@@ -8151,6 +8248,7 @@ class RouteBController:
         self._pick_start_pose_world = None
         self._cavity_reference_from_active_view = False
         self._transfer_clearance_pose = None
+        self._drawer_lift_clearance_pose = None
         self._transfer_clearance_z_m = None
         self._rim_transfer_rotation_reference = None
         self._place_destination_geometry = None

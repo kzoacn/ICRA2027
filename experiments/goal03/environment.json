@@ -1,0 +1,12 @@
+{
+  "python": "3.12.3",
+  "platform": "Linux-5.15.0-136-generic-x86_64-with-glibc2.35",
+  "packages": {
+    "torch": "2.11.0+cu128",
+    "torchvision": "0.26.0+cu128",
+    "mujoco": "3.3.2",
+    "robosuite": "1.4.0",
+    "hf-libero": "0.1.4"
+  },
+  "gpu": "NVIDIA GeForce RTX 4090, 595.71.05, 49140 MiB"
+}

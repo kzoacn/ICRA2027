@@ -20,15 +20,15 @@ the frozen source and records.
 
 This anonymous English draft is based on the current code and measured results.
 It has not been submitted to PaperPlaza. The original complete evaluation records
-**360/400 (90.0%)** with one frozen controller. The Long 09 follow-up uses a new
-controller snapshot for that task's ten official initial states. Updated summary
-statistics combine those ten episodes with 390 retained historical episodes;
-Long 09 improves from **0/10 to 8/10**, and the combined count is
-**368/400 (92.0%)**. This is not a full-suite evaluation of the updated controller.
+**360/400 (90.0%)** with one frozen controller. Complete targeted retests
+improve Long 09 from **0/10 to 8/10**, then Goal 03 from **3/10 to 9/10**.
+The combined statistics use those twenty episodes and 380 retained historical
+episodes, for **374/400 (93.5%)** across three controller versions.
+This is not a full-suite evaluation of the latest controller.
 The paper emphasizes three properties: a frozen 172M-parameter perception model,
 no robot-demonstration training of an action policy, and execution steps that
-can be inspected and revised. Its Long 09 case documents a targeted skill
-revision without changing detector weights. The system uses asset priors,
+can be inspected and revised. Its Long 09 and Goal 03 cases document targeted
+skill revisions without changing detector weights. The system uses asset priors,
 explicit geometry, and manually designed skills.
 The comparison table cites published results and identifies their input, training,
 and evaluation conditions; this project's row comes from actual evaluation records.
@@ -92,17 +92,20 @@ To reproduce the task-specific update used in the current manuscript:
 
     python3 scripts/update_task_results.py \
       --baseline-batch ../runtime/route_b_90/full400_candidate_01 \
-      --task-batch ../runtime/route_b_90/long09_final_02
+      --task-batch ../runtime/route_b_90/long09_final_02 \
+      --task-batch ../runtime/route_b_90/goal03_final_02
     make figures
     make check
 
-This importer requires a completed Long 09 retest of all ten official initial
-states under the original seed, budget, and scoring rule. It replaces the whole
-task, including failures, and retains the original complete dataset under
+Each repeated `--task-batch` requires a complete retest of all ten official
+initial states under the original seed, budget, and scoring rule. Both task
+updates must be supplied to retain both results. It replaces whole tasks, including
+failures, and retains the original complete dataset under
 `data/full400_reference/`. Every projected row records its source campaign and
 controller checksum. The original JSONL lines remain unchanged in the compressed
-archive. Validation also checks that the other 390 records match the historical
-reference. See [the targeted evaluation record](../experiments/long09/README.md).
+archive. Validation also checks that the other 380 records match the historical
+reference. See the [Long 09](../experiments/long09/README.md) and
+[Goal 03](../experiments/goal03/README.md) evaluation records.
 
 The rollout figure uses ImageIO, imageio-ffmpeg, NumPy, and Matplotlib and can be
 regenerated in the deployed virtual environment:
@@ -188,17 +191,20 @@ text statistics:
 ## Data and scope of the conclusions
 
 The combined dataset covers four suites of ten tasks, with official initial-state
-indices 0–9 per task and seed=7. Its 390 retained episodes come from the original
-full evaluation; ten new Long 09 episodes come from the updated controller.
-All failed episodes are retained. The other 39 tasks have not been rerun with the
-updated controller. `data/statistics.json` and the generated tables report the
-combined counts and identify the ten newly executed episodes. Spatial / Object /
-Goal / Long have **93 / 98 / 91 / 86** successes, respectively, out of 100 records each.
+indices 0–9 per task and seed=7. Its 380 retained episodes come from the original
+full evaluation; ten Long 09 and ten Goal 03 episodes come from their respective
+targeted controller snapshots. All failed episodes are retained. The remaining
+38 tasks have not been fully retested with the latest controller; a separate
+two-episode Long 03 regression check is documented in `experiments/goal03/`.
+`data/statistics.json` and generated tables report the combined counts and
+identify the twenty retest episodes. Spatial / Object / Goal / Long have
+**93 / 98 / 97 / 86** successes, respectively, out of 100 records each.
 
-The original run used an RTX 5090. The Long 09 retest uses an RTX 4090 with the
-same pinned software environment; see `experiments/long09/environment.json`.
-Suite timings pool source-run records and therefore reflect both execution
-settings. Targeted elapsed time refers only to the ten-episode retest.
+The original run used an RTX 5090. Targeted retests use an RTX 4090 with the same
+pinned software environment; see `experiments/long09/environment.json` and
+`experiments/goal03/environment.json`. Suite timings pool source-run records
+and reflect their hardware and scheduling. The reported targeted dispatcher
+time is the sum of the two ten-episode batch durations.
 
 The paper uses external ever-success scoring: an episode succeeds if the official
 predicate is satisfied at any point. The controller continues until it requests

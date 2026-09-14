@@ -1,7 +1,7 @@
 {
   "episodes": 400,
-  "successes": 368,
-  "rate": 92.0,
+  "successes": 374,
+  "rate": 93.5,
   "evaluation_kind": "task_replacement",
   "per_suite": [
     {
@@ -28,10 +28,10 @@
       "suite": "libero_goal",
       "label": "Goal",
       "n": 100,
-      "successes": 91,
-      "rate": 91.0,
-      "mean_steps": 180.57,
-      "median_elapsed_s": 71.49968448362779,
+      "successes": 97,
+      "rate": 97.0,
+      "mean_steps": 179.93,
+      "median_elapsed_s": 66.23868568369653,
       "all_success_tasks": 8
     },
     {
@@ -47,20 +47,19 @@
   ],
   "policy_external_disagreement": {
     "controller_completed_external_failed": 7,
-    "external_success_without_controller_completion": 38
+    "external_success_without_controller_completion": 37
   },
   "failure_groups": {
-    "Phase timeout": 15,
+    "Phase timeout": 13,
     "Controller completion / external failure": 7,
     "Sensor verification rejection": 1,
     "Grasp / retention rejection": 3,
-    "Global action budget": 4,
     "Other controller failure": 2
   },
-  "new_episodes": 10,
-  "reused_episodes": 390,
-  "new_successes": 8,
-  "reused_successes": 360,
-  "new_median_elapsed_s": 78.7270416598767,
-  "new_total_episode_elapsed_s": 750.7389521636069
+  "new_episodes": 20,
+  "reused_episodes": 380,
+  "new_successes": 17,
+  "reused_successes": 357,
+  "new_median_elapsed_s": 69.56407636450604,
+  "new_total_episode_elapsed_s": 1423.7784750442952
 }

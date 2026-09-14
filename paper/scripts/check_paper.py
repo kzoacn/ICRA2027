@@ -48,34 +48,43 @@ def main():
     task_refresh = meta.get("evaluation_kind") == "task_replacement"
     if task_refresh:
         assert meta["controller_source_sha256"] is None
-        replacement = meta["task_replacement"]
-        assert (replacement["suite"], replacement["task_id"]) == ("libero_10", 9)
+        replacements = meta.get("task_replacements") or [meta["task_replacement"]]
+        replacement_by_task = {(item["suite"], item["task_id"]): item for item in replacements}
+        assert len(replacement_by_task) == len(replacements)
         reference_dir = PAPER / "data/full400_reference"
         reference_meta = json.loads((reference_dir / "provenance.json").read_text())
         reference_data = (reference_dir / "episodes.jsonl").read_bytes()
         assert hashlib.sha256(reference_data).hexdigest() == reference_meta["episodes_projection_sha256"]
         reference_rows = {r["episode_id"]: r for r in map(json.loads, reference_data.splitlines())}
-        refreshed, retained = [], []
+        refreshed, retained = collections.defaultdict(list), []
         for row in rows:
-            source_line = actual[row["episode_id"]][1]
-            if row["suite"] == replacement["suite"] and row["task_id"] == replacement["task_id"]:
+            key = (row["suite"], row["task_id"])
+            if key in replacement_by_task:
+                replacement = replacement_by_task[key]
                 assert not row["reused"]
                 assert row["controller_source_sha256"] == replacement["batch_manifest"]["source_tree_sha256"]
-                refreshed.append(row)
+                assert row["source_campaign"] == replacement["batch_manifest"]["run_name"]
+                refreshed[key].append(row)
             else:
                 assert row["reused"]
                 assert row["controller_source_sha256"] == reference_meta["controller_source_sha256"]
                 assert row["source_record_sha256"] == reference_rows[row["episode_id"]]["source_record_sha256"]
                 retained.append(row)
-        assert len(refreshed) == 10 and len(retained) == 390
-        assert sum(row["success"] for row in refreshed) == replacement["successes"]
-        refreshed_raw = b"".join(actual[row["episode_id"]][1] + b"\n"
-                                  for row in sorted(refreshed, key=lambda row: row["init_id"]))
-        assert hashlib.sha256(refreshed_raw).hexdigest() == replacement["batch_validation"]["episodes_jsonl_sha256"]
-        assert replacement["batch_validation"]["coverage_passed"]
-        assert not replacement["batch_validation"]["issues"]
-        expected_sources = collections.Counter({item["source_tree_sha256"]: item["included_episodes"]
-                                                for item in meta["controller_sources"]})
+        assert len(retained) == 400 - 10*len(replacements)
+        for key, replacement in replacement_by_task.items():
+            group = refreshed[key]
+            assert len(group) == replacement["episodes"] == 10
+            assert sum(row["success"] for row in group) == replacement["successes"]
+            refreshed_raw = b"".join(actual[row["episode_id"]][1] + b"\n"
+                                      for row in sorted(group, key=lambda row: row["init_id"]))
+            assert hashlib.sha256(refreshed_raw).hexdigest() == replacement["batch_validation"]["episodes_jsonl_sha256"]
+            assert replacement["batch_validation"]["coverage_passed"]
+            assert not replacement["batch_validation"]["issues"]
+            assert replacement["baseline_successes"] == sum(row["success"] for row in reference_rows.values()
+                if (row["suite"], row["task_id"]) == key)
+        expected_sources = collections.Counter()
+        for item in meta["controller_sources"]:
+            expected_sources[item["source_tree_sha256"]] += item["included_episodes"]
         assert collections.Counter(row["controller_source_sha256"] for row in rows) == expected_sources
     caps = {"libero_spatial":220, "libero_object":280, "libero_goal":300, "libero_10":520}
     assert all(0 <= r["steps"] <= caps[r["suite"]] for r in rows)
@@ -122,7 +131,10 @@ def main():
                                      "preliminary snapshot","remaining planned trials are pending"])
     assert "400" in text
     if task_refresh:
-        assert "390" in text and "two controller versions" in text
+        assert str(meta["protocol"]["reused_episodes"]) in text
+        versions = len({item["source_tree_sha256"] for item in meta["controller_sources"]})
+        assert (f"{versions} controller versions" in text
+                or versions == 2 and "two controller versions" in text)
         assert "All 400 episodes are newly executed" not in text
     fonts = subprocess.check_output(["pdffonts", str(PAPER/"main.pdf")], text=True)
     assert "Type 3" not in fonts
