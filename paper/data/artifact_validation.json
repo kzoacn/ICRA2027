@@ -10,7 +10,7 @@
   "historical_episodes": 380,
   "raw_record_archive_verified": true,
   "raw_records_verified": 400,
-  "references": 13,
+  "references": 14,
   "author_metadata": "Anonymous",
   "published_comparison_rows": 5,
   "published_comparisons_sha256": "53509a569d1d9736655ea6f190d18bd74423ecaa09e8d04d03c9926cf17e5074",
@@ -22,6 +22,6 @@
   "type3_fonts": false,
   "overfull_boxes": false,
   "undefined_references": false,
-  "pdf_sha256": "15d8735db6d0e00583084b289d826936fcaa432703aeabe9384864eba55b599d",
+  "pdf_sha256": "5a67b2acc3783a178346ee3dfffacbb33430b0881b3773e31ba40929ff4001cb",
   "scope": "Local build, format and data checks; not PaperPlaza compliance certification or human scientific review."
 }

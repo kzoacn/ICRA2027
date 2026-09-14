@@ -30,12 +30,13 @@ for Language-Conditioned Manipulation}
 \begin{minipage}{\textwidth}
 \centering
 \resizebox{\textwidth}{!}{\input{figures/architecture}}
-\overviewcaption{\method{} uses a frozen \NeuralMillion{}M-parameter detector
-to ground objects and explicit geometric skills to control robot actions.
-Calibrated RGB-D and asset priors support each execution stage and its checks.
-Insets are upright frames from an
-actual Object 00 rollout; the geometry drawing is schematic.
-Benchmark success is recorded externally and is not fed back to the policy.}
+\overviewcaption{From language to physical interaction with \method{}.
+Supported instructions specify a skill sequence; calibrated RGB-D and asset
+priors provide the geometry used to execute it. The controller carries object
+and fixture state across stages and advances using local observation checks.
+The frozen \NeuralMillion{}M-parameter detector is the only neural model.
+Insets show an actual Object 00 rollout; the geometry illustration is schematic.
+External benchmark success is recorded separately from policy execution.}
 \label{fig:architecture}
 \vspace{3mm}
 \end{minipage}%
@@ -47,179 +48,177 @@ Benchmark success is recorded externally and is not fed back to the policy.}
 \pagestyle{empty}
 
 \begin{abstract}
-Language-conditioned manipulation requires semantic grounding, geometric
-reasoning, and reliable transitions between physical interactions.
-\method{} uses a frozen \NeuralMillion{}M-parameter model to detect objects
-and geometric rules to control robot actions. It requires no robot
-demonstrations for action-policy training. Each execution step can be
-inspected, making failures easier to locate and fix.
-The system compiles supported instructions into grasp--place and contact
-skills using two calibrated RGB-D views and public asset priors. Explicit
-state tracks the carried object, and local checks manage release, articulation,
-and recovery. Benchmark success is recorded externally and is unavailable
-to the policy.
+Multi-stage manipulation depends on the geometry left by each interaction:
+a grasp determines the carried-object pose, release changes contact, and
+opening a fixture changes the next approach. We present \method{}, an
+asset-informed manipulation system that makes these dependencies explicit
+in geometric skills. A deterministic compiler maps supported instructions
+to skill sequences, grounded by a frozen \NeuralMillion{}M-parameter detector,
+two calibrated RGB-D views, and public asset priors. The controller maintains
+carried-object offsets, fixture geometry, and local transition checks,
+without training an action policy on robot demonstrations.
 \ifRunComplete
 \ifTaskRefresh
-A combined set of 400 task records, comprising \ReusedCount{} historical
-episodes and \FreshCount{} targeted retest episodes, contains
-\SuccessCount{} successes (\SuccessRate{}\%). It includes
-\ControllerVersionCount{} controller versions; the latest controller has
-not been evaluated across all 40 tasks.
+A frozen controller achieves \BaselineSuccessCount/400 (90.0\%) external
+ever-success across 40 LIBERO tasks. Targeted skill revisions improve
+microwave execution from $0/10$ to $\MicrowaveSuccess/10$ and drawer execution
+from $3/10$ to $\TopDrawerSuccess/10$, with unchanged neural weights.
+Combining the \FreshCount{} retest episodes with \ReusedCount{} retained
+episodes yields \SuccessCount/400 (\SuccessRate{}\%) across
+\ControllerVersionCount{} controller versions; this is not a full-suite
+evaluation of the latest controller.
 \else
-On 400 fixed initializations spanning 40 LIBERO tasks, the deployed system
-succeeds in \SuccessCount{} trials (\SuccessRate{}\%).
+On 400 fixed initializations spanning 40 LIBERO tasks, the system records
+\SuccessCount{} external successes (\SuccessRate{}\%).
 \fi
 \else
-In a preliminary snapshot of an ongoing 400-trial evaluation, it succeeds in
-\SuccessCount{} of \EpisodeCount{} completed trials (\SuccessRate{}\%).
+An ongoing 400-trial evaluation records \SuccessCount{} successes in
+\EpisodeCount{} completed trials (\SuccessRate{}\%).
 \fi
-Controller completion and external success disagree in
-\DisagreementCount{} trials, demonstrating why these outcomes must be
-reported separately. Comparisons with published vision-language-action
-models describe model size, action-policy training, and task outcomes under
-the stated sensing and prior assumptions.
+Separate controller and evaluator outcomes expose \DisagreementCount{}
+disagreements. The study characterizes a compact perception model coupled
+with inspectable geometric control under known-asset and calibrated-sensing
+assumptions.
 \end{abstract}
 
 \section{Introduction}
-Natural-language instructions provide a compact description of a manipulation
-goal, but leave much of the physical procedure unspecified. To place a bowl
-inside a drawer, a robot must identify the intended object, infer accessible
-geometry, establish a stable grasp, maintain clearance during transport, and
-release the object in a suitable region. Articulation introduces an additional
-difficulty: the robot must distinguish productive motion from mechanical
-resistance and decide when to release or reacquire contact. A plausible
-semantic interpretation alone does not resolve these questions.
+Consider the instruction to place a mug inside a microwave and close it.
+Identifying the mug and appliance determines what to manipulate, but leaves
+several physical decisions unresolved. The mug must enter the cavity in its
+grasped configuration, separate from the fingers on release, and remain inside
+as the hand withdraws and engages the door. An error at any transition can
+invalidate the next skill even when the object labels and high-level sequence
+are correct. This dependence on the state left by previous interactions is a
+central challenge in executing multi-stage language instructions.
 
-Vision-language-action (VLA) policies offer one route to this capability.
-OpenVLA~\cite{openvla} adapts pretrained representations to action prediction,
-while SmolVLA~\cite{smolvla} studies a more compact architecture and efficient
-execution. Both learn robot actions from demonstrations. We study a system
-that uses pretrained perception to identify objects and computes actions from
-their geometry. This design avoids training an action network and makes the
-targets and transition checks of each skill available for inspection.
-Its requirements include calibrated depth, asset knowledge, and manually
-designed skills; these provide information that a learned policy may instead
-acquire from robot data.
+Existing approaches connect language to action through several interfaces.
+Vision-language-action (VLA) models learn action prediction from robot
+demonstrations~\cite{openvla,smolvla,openvlaoft}. Program-based systems expose
+perception and control calls~\cite{codepolicies}, while geometric approaches
+express desired behavior through spatial value maps or keypoint
+constraints~\cite{voxposer,rekep}. These approaches motivate a practical
+design question for environments with known assets: how much manipulation
+capability can a compact perception model support when geometric skills
+explicitly represent the state needed by subsequent interactions?
 
-We present \method{} (Fig.~\ref{fig:architecture}), an asset-informed baseline for language-conditioned
-tabletop manipulation. The system compiles supported instructions into
-ordered skill programs and binds their entities to geometry reconstructed
-from two calibrated RGB-D views. Its only neural model is a frozen
-\NeuralMillion{}M-parameter detector, used together with a gallery derived
-from public simulator assets. A dispatcher preserves state
-across grasp--place segments and invokes specialized contact controllers for
-drawers, doors, knobs, and pushing. Robot actions are bounded Cartesian pose
-increments with a gripper command.
+We present \method{} (Fig.~\ref{fig:architecture}), a language-conditioned
+tabletop manipulation system built around this design. A deterministic
+compiler converts supported instructions into ordered skills. A frozen
+\NeuralMillion{}M-parameter Grounding DINO detector, together with an asset
+gallery and two calibrated RGB-D views, grounds the referenced objects and
+fixtures. Geometric controllers then generate bounded Cartesian increments
+and gripper commands. The system uses no robot demonstrations to train an
+action policy; its manipulation knowledge is supplied through public asset
+geometry and manually designed skills.
 
-The central engineering issue is continuity across physical stages. A
-semantically correct target can still be unreachable with the current wrist
-orientation; a successful close command need not establish retention; and a
-gripper placed at a receptacle center need not center the object being carried.
-\method{} therefore maintains explicit object-to-gripper displacement,
-re-observes relevant geometry at selected transitions, and uses local
-completion checks before advancing its program. These checks are fallible
-estimates, separate from benchmark success.
+The design connects perception to execution through three kinds of state.
+Observed surfaces and asset dimensions determine contact and placement
+regions. An estimate of the object-to-gripper displacement translates an
+object goal into an end-effector target. Local checks on pose, gripper width,
+visual geometry, and contact evidence determine when execution can advance.
+For the microwave example, these quantities distinguish reaching a placement
+pose from releasing the mug and clearing the opening. The same explicit
+targets and checks are retained in execution traces, so a failed stage can be
+examined in terms of the geometry and measurements that drove it.
 
-We evaluate the deployed implementation on the Spatial, Object, Goal, and Long
-suites of LIBERO~\cite{libero}. Each suite contains ten evaluated tasks, with
-ten official initial states per task. The evaluation retains fixed task configurations and records controller
-versions; its scope is a system study on
-known benchmark assets and instruction forms. We make three contributions:
+We characterize this system on the Spatial, Object, Goal, and Long suites of
+LIBERO~\cite{libero}, using ten official initial states for each of 40 tasks.
+The evidence consists of one complete frozen-controller evaluation and two
+subsequent task-specific revisions. The latter address microwave release and
+closure, and the transition from drawer opening to bowl manipulation.
+They illustrate changes to geometric execution with unchanged detector
+weights. We make three contributions:
 
 \begin{enumerate}
-\item A language-to-geometry manipulation system that requires no robot
-      demonstrations for action-policy training, with its sensing, asset
-      priors, and manually designed skills explicitly specified.
-\item A compact deployment using one frozen \NeuralMillion{}M-parameter
-      detector, with model-size and task-outcome comparisons to representative
-      VLAs on the four LIBERO suites.
-\item Inspectable skill execution with explicit geometric targets and local
-      checks, illustrated by targeted revisions to microwave and drawer
-      execution that improve Long 09 and Goal 03 without updating neural weights.
+\item An asset-informed manipulation system that combines one frozen
+      \NeuralMillion{}M-parameter detector with geometric action generation,
+      with explicit sensing, prior-knowledge, and language requirements.
+\item A documented integration of carried-object geometry, fixture estimates,
+      and local transition checks across grasp--place and contact skills,
+      with two complete task retests illustrating targeted revision.
+\item A record-based evaluation of task outcomes, neural model requirements,
+      and failure states that distinguishes controller completion from
+      external benchmark success and preserves controller-version provenance.
 \end{enumerate}
 
-The contribution is the integrated system and its empirical characterization.
-The targeted revisions are development results; their records and those
-of the original full evaluation retain their controller versions.
+The contribution is an integrated system study using established geometric
+and state-machine techniques. Its scope is manipulation with known assets,
+implemented instruction forms, and calibrated sensing. The task-specific
+revisions are development results, and their combined statistics are reported
+separately from the original full evaluation.
 
 \section{Related Work}
-\subsection{Language, Programs, and Geometric Planning}
-Task and motion planning combines discrete decisions with continuous geometric
-feasibility~\cite{tamp}. Language-conditioned systems extend this interface:
-SayCan connects language choices to available skills and their affordances
-\cite{saycan}, while Code as Policies generates executable programs that call
-perception and control interfaces~\cite{codepolicies}. \method{} uses a
-deterministic grammar and a fixed skill vocabulary. This makes the represented
-program inspectable, but restricts language coverage to implemented
-constructions and validated entities.
+\subsection{Geometric Representations for Manipulation}
+Task and motion planning couples discrete action choices with continuous
+geometric feasibility~\cite{tamp}. The representation used at this interface
+determines which physical relations the controller can express. kPAM uses
+semantic 3-D keypoints to specify manipulation goals as geometric costs and
+constraints~\cite{kpam}. VoxPoser grounds language in spatial value maps for
+motion planning~\cite{voxposer}, and ReKep optimizes sequences of relational
+keypoint constraints~\cite{rekep}. \method{} shares the use of explicit geometry
+between perception and action. Its representation consists of object bounds,
+support and fixture geometry, and carried-object offsets, consumed by
+specialized finite-state skills. This fixed skill structure defines its
+coverage; it does not optimize a general task-and-motion problem.
 
-VoxPoser constructs spatial value maps to guide motion~\cite{voxposer}.
-ReKep expresses manipulation objectives through relational keypoint
-constraints~\cite{rekep}. These works show the utility of intermediate
-geometric representations. Our implementation uses object and fixture
-geometry, carried-object offsets, and specialized finite-state controllers.
-It does not synthesize arbitrary constraint programs or perform a unified
-optimization over the complete task. Its behavior depends on the coverage
-and calibration of its manually implemented skills.
+\subsection{Language and Executable Skills}
+SayCan combines language-model proposals with learned skill affordances to
+select executable actions~\cite{saycan}. Code as Policies generates programs
+that process perceptual outputs, express control logic, and call robot
+interfaces~\cite{codepolicies}. These systems use language models to construct
+behavior. \method{} uses a deterministic grammar and a checked skill
+vocabulary, binding spatial references to observed entities. This choice
+provides a fixed program whose geometric targets and transitions can be
+inspected, while restricting instructions to the supported constructions.
+Our focus is the physical execution of these programs and the state passed
+between their skills.
 
-\subsection{Pretrained Perception and Action Policies}
-Grounding DINO supports text-conditioned object detection~\cite{groundingdino}.
-\method{} uses a frozen local Tiny checkpoint as one source of region proposals;
-the downstream geometric and gallery components remain essential to the
-implemented pipeline. In particular, public object textures and collision
-dimensions provide priors that are stronger than an image-only input setting.
+\subsection{Pretrained Perception and Learned Action Policies}
+Grounding DINO provides text-conditioned object proposals~\cite{groundingdino}.
+\method{} combines its frozen detector with calibrated depth and asset-derived
+texture and size priors. OpenVLA~\cite{openvla} and SmolVLA~\cite{smolvla}
+learn robot action generation from demonstrations, with SmolVLA
+emphasizing a compact architecture. OpenVLA-OFT studies design choices for
+faster and more successful VLA execution~\cite{openvlaoft}. These methods
+provide context for the model requirements and reported task outcomes of our
+system. Section~\ref{sec:comparison} distinguishes their sensing, training,
+and evaluation conditions. In particular, \method{} exchanges action-policy
+training for asset knowledge and manual skill development; pretrained
+perception remains part of the system.
 
-OpenVLA~\cite{openvla} and SmolVLA~\cite{smolvla} learn action generation from
-robot data. OpenVLA-OFT~\cite{openvlaoft} studies action chunking, parallel
-decoding, continuous action prediction, and additional sensor inputs.
-\method{} provides a complementary, explicitly engineered control
-baseline. The distinction concerns how actions are obtained; it does not imply
-an absence of learning in the pretrained detector or an absence of development
-on benchmark scenarios. Section~\ref{sec:comparison} compares model size,
-policy-training requirements, and reported success rates while identifying
-differences in sensing, asset access, and evaluation conditions.
+\section{Method}
+\label{sec:method}
+\method{} executes a supported instruction by grounding its entities,
+constructing geometric targets, and checking the physical transitions between
+skills. Figure~\ref{fig:architecture} summarizes this data flow, and
+Table~\ref{tab:conditions} lists the information available to the system.
 
-\subsection{Benchmark Interpretation}
-LIBERO was introduced to study knowledge transfer in lifelong robot
-learning~\cite{libero}. We use its four commonly evaluated ten-task suites to
-characterize a fixed manipulation system, rather than measuring continual
-learning or forgetting. The choice of ten trials per task follows the sample
-count used in SmolVLA's simulation study~\cite{smolvla}. Matching that count
-alone does not reproduce its training or evaluation conditions. We specify
-the remaining conditions in Section~\ref{sec:protocol}.
-
-
-
-\section{System}
-\subsection{Observation and Prior Information}
-At step $t$, the policy receives
+\subsection{Task and Information Interface}
+Given an instruction $\ell$, the controller produces actions
+$a_t=\pi(o_{\leq t},\ell;\mathcal{P})$, where $\mathcal{P}$ contains fixed
+prior information and the observation at step $t$ is
 \begin{equation}
- o_t=\left(\{I_t^c,D_t^c,K^c,T_{WC,t}^c\}_{c\in\{a,w\}},r_t\right),
+ o_t=\left(\{I_t^c,D_t^c,K^c,T_{WC,t}^c\}_{c\in\{a,w\}},r_t\right).
 \end{equation}
-where $a$ and $w$ denote the fixed and wrist cameras, $I$ is RGB,
+Here $a$ and $w$ denote the fixed and wrist cameras, $I$ is RGB,
 $D$ is metric depth, $K$ is calibration, and $T_{WC}$ maps camera
 coordinates into the world frame. Robot measurements $r_t$ include
 end-effector pose, joint state, gripper state, and available force/torque
 measurements. The grasp--place adapter uses pose, joint positions, and gripper
 width; contact execution can access the broader robot measurement interface.
 
-These are simulated, calibrated measurements. In particular, camera
-extrinsics and proprioception are supplied by the simulator adapter, and
-depth is not an estimate from monocular RGB. The policy observation types
-contain no object pose labels, segmentation IDs, BDDL predicates, reward,
-or task-success flag. Task identifiers and initial-state indices remain with
-the evaluator; reset passes the instruction and a nonsemantic episode token.
-This is a software interface property supported by code inspection, not a
-claim of adversarial isolation.
+Depth, camera calibration, and robot measurements are supplied by the
+simulator adapter. The policy observation types exclude object pose labels,
+segmentation IDs, BDDL predicates, reward, and task-success flags. Task
+identifiers and initial-state indices remain with the evaluator; reset passes
+the instruction and a nonsemantic episode token.
 
-Offline information is represented by a prior collection $\mathcal{P}$.
-It includes object texture histograms, dimensions derived from public
-collision geometry, robot geometry, class-specific handling rules, and
-motion thresholds. The evaluated controller is therefore
-$a_t=\pi(o_{\leq t},\ell;\mathcal{P})$, where $\ell$ is the instruction.
-No action-policy fitting or demonstration loading occurs in this evaluation.
-The detector's pretraining and the controller's manual development remain
-part of the system's knowledge.
+The prior collection $\mathcal{P}$ contains object texture histograms,
+dimensions derived from public collision geometry, robot geometry,
+class-specific handling rules, and motion thresholds. These priors specify
+how to interpret observations and parameterize skills. The neural detector
+is pretrained; the action controller is designed manually. No action-policy
+fitting or robot-demonstration loading occurs in the evaluation.
 
 \subsection{Constrained Language Compilation}
 The compiler maps supported language to
@@ -230,73 +229,131 @@ The compiler maps supported language to
 Here $k_j$ is a skill, the entity bindings specify source and destination,
 and $\rho_j$ represents a placement relation or instance selector.
 The vocabulary contains pick, place-on, place-in, relative placement,
-stack, open, close, push, turn-on, and turn-off.
-For example, a two-object basket instruction becomes two successive
-pick/place pairs. A drawer instruction can produce an articulation segment
-followed by a manipulation segment.
+stack, open, close, push, turn-on, and turn-off. For example, opening a
+drawer and placing a bowl inside produces an articulation segment followed
+by pick and place-in steps. A two-object basket instruction produces two
+successive pick/place pairs.
 
-Bindings retain relations such as \emph{next to}, \emph{between}, or an ordering
-among visible instances. They do not encode the simulator's object identity.
-The complete program undergoes capability checks before motion, including
-valid skill arguments and consistency of held-object state. Compilation
-success only establishes representational support; it does not establish
-physical executability. The deployed grammar is tailored to known LIBERO
-phrases and an allow-listed entity vocabulary. An optional semantic-resolver
-interface exists, but no language-model resolver is configured in this run.
+Bindings retain relations such as \emph{next to}, \emph{between}, or an
+ordering among visible instances. They do not encode simulator object
+identity. Before motion, the compiler checks skill arguments and held-object
+consistency, including whether each place step refers to the object acquired
+by a preceding pick. Physical executability is assessed during skill
+execution. The grammar covers known LIBERO phrases and an allow-listed entity
+vocabulary; no language-model resolver is configured.
 
-\subsection{Visual Grounding and Geometric State}
+\subsection{Asset-Informed Visual Grounding}
 The deployed Grounding DINO Tiny checkpoint contains
 \NeuralParameters{} unique parameters, including its visual and text
 encoders. All weights are frozen, and one detector instance serves both
 camera views in each evaluation process. The asset gallery, language
 compiler, and geometric controllers add no neural model parameters.
-The pinned checkpoint and a reproducible parameter count are recorded
-with the manuscript artifacts.
+The pinned checkpoint and parameter audit are included in the manuscript
+artifacts.
 
 Each calibrated pixel $\tilde u=(u,v,1)^\top$ with valid depth contributes
 \begin{equation}
  x_W=R_{WC}\big(D(u,v)K^{-1}\tilde u\big)+p_{WC}.
  \label{eq:backproject}
 \end{equation}
-Workspace filtering, support estimation, and connected components yield
-candidate point sets. The pipeline fits observed bounds and uses
-texture/size priors to classify and complete partial observations. The
-gallery computes a color similarity
+Here $R_{WC}$ and $p_{WC}$ are the rotation and translation of $T_{WC}$.
+Workspace filtering, support estimation, and connected components produce
+candidate point sets. Grounding DINO supplies additional language-conditioned
+boxes, which are converted to 3-D hypotheses using depth. These proposals
+are combined with observed bounds and asset-derived texture and size
+evidence. The gallery compares normalized HSV histograms using
 \begin{equation}
- b(h,h_k)=\sum_i\sqrt{h_i h_{k,i}}
+ b(h,h_k)=\sum_i\sqrt{h_i h_{k,i}}.
 \end{equation}
-between normalized HSV histograms. Its score combines color and shape terms,
+Its classification score combines color and shape terms,
 with configured weights $0.4$ and $0.6$, a softmax temperature of $0.13$,
-and additional class-dependent footprint gates. Grounding DINO supplies
-language-conditioned boxes that are converted to 3-D hypotheses using depth.
-Thus a detector box is a proposal, rather than an oracle object mask.
+and additional class-dependent footprint gates. This combination associates
+visual proposals with known asset classes without an oracle object mask.
 
 Cross-camera hypotheses with matching labels are clustered in 3-D. For a
 cluster, the implemented fusion weights are proportional to
 $\max(q_i,0.05)\sqrt{n_i}$, where $q_i$ is confidence and $n_i$ is point
-count. The default center-distance threshold is $4.5$\,cm. These thresholds
-are empirical operating choices; nearby repeated objects can still produce
-ambiguous associations.
+count. The default center-distance threshold is $4.5$\,cm.
+The resulting state distinguishes observed bounds and supports from geometry
+completed using size priors. A prior can stabilize the center of a partly
+visible object without establishing that an unobserved region is free.
 
-The state retains both observed support/bounds and completed geometry.
-This distinction matters when an object is partially visible: a size prior
-can stabilize a center estimate, but should not be mistaken for measured
-free space. Geometric selectors resolve the intended instance from the
-available candidates and reference objects. At selected phase transitions,
-new views are requested and checked against prior observations to reduce
-hand-occlusion-induced jumps. Specialized fixture and cavity routines refine
-support surfaces, opening regions, and admissible approach geometry.
+Geometric selectors bind instruction references to candidate instances.
+At selected phase transitions, fresh views are checked against previous
+estimates to reject abrupt changes caused by hand occlusion. Nearby repeated
+objects can still produce ambiguous associations. Fixture routines further
+refine the selected geometry into support surfaces and opening regions.
 
-\subsection{Grasping, Transport, and Placement}
+\subsection{Carried-Object Geometry and Placement}
 Consecutive manipulation skills share a grasp--place controller. Its phases
 include acquisition, pregrasp motion, approach, finger closure, retention
 checking, lift, transport, descent, release, and retreat. Transitions combine
 pose tolerances, measured gripper width, visual evidence, and bounded retry
 logic. Different grasp modes account for exterior pinch, rim pinch, and
 interior expansion; mode choice depends on the object and observed
-accessibility. These are mechanical templates with specialized branches.
+accessibility.
 
-For target pose $(p^\star,R^\star)$, the basic servo emits
+The chosen grasp also determines the geometry used during placement.
+In particular, the gripper and carried object generally have different
+centers. Let $\hat d_t$ be the estimated world-frame vector from the end
+effector to the carried-object reference point. For desired object location
+$p_o^\star$, placement uses
+\begin{equation}
+ p_{\rm ee}^\star=p_o^\star-\hat d^\star,\qquad
+ \hat d^\star=\Delta R\,\hat d_t
+ \label{eq:offset}
+\end{equation}
+when the planned wrist motion rotates the held geometry by $\Delta R$.
+Centering the gripper at $p_o^\star$ would therefore displace the object from
+its intended location. The implementation supplements Eq.~\eqref{eq:offset}
+with support, release-height, aperture, and fixture-specific corrections.
+The offset is estimated from precontact geometry or refreshed RGB-D evidence;
+its origin is retained in the execution trace.
+
+Placement must also leave room for the hand to withdraw. Microwave entry
+aligns the carried object with the cavity width and uses a lateral approach.
+Repeated basket placements use separate diagonal landing centers. Before
+basket withdrawal, the controller checks measured jaw clearance and can
+apply a bounded wrist tilt to clear a tall object near the palm. Release is
+followed by a geometric observation check before the program advances.
+
+\subsection{Fixture Geometry and Contact Skills}
+The dispatcher separates consecutive grasp--place steps from atomic contact
+skills. Drawer and door interactions use observed fixture geometry to
+construct approach, engagement, motion, release, and retreat stages.
+Knob and push skills use their own target detectors and motion templates.
+Shared episode state includes an initial robot-pose reference and, where
+applicable, an observed drawer anchor for subsequent placement.
+
+Grounded object boxes are refined into surfaces needed for physical
+interaction. A complete visible burner disk anchors the stove support center;
+public plate thickness supplies the offset to the load-bearing surface.
+That unoccluded estimate is retained across sequential placements. For an
+open microwave, visible vertical control-panel and side-wall surfaces,
+together with the roof height, constrain the cavity and hinge frame through
+public physical dimensions. A flat tabletop crop or a roof without supporting
+vertical structure is insufficient for this fit.
+
+\ifTaskRefresh
+For microwave closure, the revised skill estimates a vertical door panel
+within the observed hinge sweep. Initial fitting requires panel evidence
+outside the appliance body to exclude the fixed front frame. The gripper
+approaches the exterior panel face and follows bounded hinge-frame waypoints.
+A fresh panel-angle estimate after a motion plateau can initiate withdrawal;
+a second view after retreat checks closure. Section~\ref{sec:revision}
+describes this revision together with the preceding mug-release check.
+\fi
+
+Contact guards combine position error, measured progress, and changes in
+end-effector force. One guard requires a minimum contact duration and bounded
+position error, plus either stalled error reduction or sufficient force
+change. This provides evidence of contact; a subsequent visual check assesses
+the resulting fixture configuration. The separation allows the controller
+to distinguish a mechanical stop from its estimate of task completion.
+
+\subsection{Action Generation and Transition Checks}
+For a geometric target pose $(p^\star,R^\star)$ and gripper command $g_t$,
+the basic Cartesian servo emits
 \begin{equation}
  a_t=\operatorname{clip}_{[-1,1]}
  \begin{bmatrix}
@@ -306,84 +363,23 @@ For target pose $(p^\star,R^\star)$, the basic servo emits
  \end{bmatrix}.
  \label{eq:servo}
 \end{equation}
-The general grasp--place defaults are $s_p=0.05$\,m and
+The rotation term is the axis-angle error between the current and target
+orientations.
+The general grasp--place scales are $s_p=0.05$\,m and
 $s_R=0.25$\,rad; cavity handling can select another rotation scale.
-The nominal pose tolerances are $8$\,mm and $0.12$\,rad. These are
-normalization scales and transition tolerances, not measured tracking-error
-bounds or a continuous-time stability guarantee.
+Nominal pose tolerances of $8$\,mm and $0.12$\,rad gate transitions between
+motion phases. Specialized branches additionally bound translation or
+rotation during constrained motions.
 
-The gripper and carried object generally have different centers.
-Let $\hat d_t$ be the estimated world-frame vector from the end effector to
-the carried-object reference point. For desired object location
-$p_o^\star$, placement planning uses the geometric relation
-\begin{equation}
- p_{\rm ee}^\star=p_o^\star-\hat d^\star,\qquad
- \hat d^\star=\Delta R\,\hat d_t
- \label{eq:offset}
-\end{equation}
-when the planned wrist motion rotates the held geometry by $\Delta R$.
-The implementation adds support, release-height, aperture, and
-fixture-specific corrections to this relation. Offset estimates may come
-from precontact geometry or refreshed RGB-D evidence; their origin is retained
-in the execution trace. This allows inspection of placement decisions without
-assuming that all offset estimates are equally reliable.
+Phase counters and geometric checks bound local recovery. The controller may
+release a rejected grasp, reacquire a visible handle, or execute a short
+clearance motion after stalled drawer interaction. Each stage supplies
+explicit targets, observations, and stopping reasons for inspection. These
+checks govern execution using the policy's own measurements. The benchmark
+predicate is unavailable to both action selection and stopping, so local
+completion remains a separate outcome, evaluated in
+Section~\ref{sec:outcomes}.
 
-Release is followed by sensor-based verification. A local geometric check can
-reject a placement even when the benchmark predicate has already been true,
-or accept a relation that the benchmark does not recognize. Section
-\ref{sec:outcomes} quantifies this distinction rather than using controller
-completion as the reported success metric.
-
-\subsection{Contact Skills and Sequential Execution}
-The dispatcher separates consecutive grasp--place steps from atomic contact
-skills. Drawer and door interactions use observed fixture geometry to
-construct approach, engagement, motion, release, and retreat stages.
-Knob and push skills use their own target detectors and motion templates.
-Shared episode state includes an initial robot-pose reference and, where
-applicable, an observed drawer anchor for subsequent placement.
-
-Contact evidence combines position error, lack of measured progress, and
-changes in end-effector force. One implemented guard requires a minimum
-contact duration and bounded position error, together with either a stalled
-error reduction or sufficient force change. Such a guard indicates a
-candidate contact condition; it is not the task predicate. Specialized
-post-contact visual checks assess the resulting fixture configuration.
-
-Local recovery is bounded by phase counters and geometric checks.
-Examples include releasing a rejected grasp, reacquiring a visible handle,
-or performing a short clearance motion after stalled drawer interaction.
-These routines preserve the distinction between a robot-side mechanical
-signal and an estimate of task completion. Their hand-selected parameters
-are part of the fixed controller configuration evaluated below.
-
-Several fixture skills refine the grounded object box into physical contact
-geometry. A complete visible burner disk anchors the stove support centre;
-public plate thickness supplies the offset from the visible disk to the
-load-bearing surface. That unoccluded estimate is retained across sequential
-placements. For an open microwave, visible vertical control-panel and side-wall
-surfaces, together with the roof height, constrain the cavity and hinge frame
-through public physical dimensions. A flat tabletop crop or a roof without
-supporting vertical structure is insufficient for this fit.
-
-Placement also accounts for the hand's withdrawal. The microwave approach
-aligns the payload with the cavity width and uses a lateral entry path.
-Repeated basket placements receive separate diagonal landing centres.
-Before withdrawing from a basket, the controller opens the jaws to a measured
-clearance; a bounded open-wrist tilt clears tall bodies near the palm.
-All such proposals use language, RGB-D estimates, and robot measurements;
-the external task predicate is unavailable to their selection or execution.
-
-\ifTaskRefresh
-The revised microwave close skill fits a vertical door slab within the
-sensor-grounded hinge sweep. Initial fitting excludes the fixed front frame
-by requiring panel evidence outside the appliance body. A compact top-down
-gripper approaches the exterior face and follows bounded hinge-frame
-waypoints. After a motion plateau, a fresh panel-angle estimate can initiate
-withdrawal; a second view after retreat verifies closure. Placement remains
-separate and now requires a measured 78-mm jaw opening and a settling dwell
-before withdrawing from the cavity, preventing a mug rim from remaining
-hooked on a finger. A closed door alone need not satisfy the full task.
-\fi
 
 \begin{table}[t]
 \caption{Declared conditions for the evaluated system.}
@@ -522,24 +518,73 @@ reused records. Times include execution overhead under concurrent evaluation.
 \end{table}
 
 \section{Results and Analysis}
-\subsection{Comparison with Published Policy Results}
-\label{sec:comparison}
-Table~\ref{tab:models} reports neural model size and whether robot
-demonstrations are used to train or fine-tune action generation.
-\method{} uses \NeuralBillion{}B parameters in one frozen detector and
-has no learned action network. Its FP32 weight file occupies
-\DetectorWeightMB{}\,MB (decimal). The selected SmolVLA model is about
-\SmolParameterRatio{} times larger, and the reported 7B OpenVLA model
-class is about \OpenVLAParameterRatio{} times larger. These comparisons
-count the full detector, including its text encoder. Published VLA sizes
-are the source descriptions, not new counts of their deployed checkpoints.
+\subsection{Task Outcomes across the Four Suites}
+\ifRunComplete
+\ifTaskRefresh
+The original full evaluation records \BaselineSuccessCount/400 successes
+(90.0\%) with one frozen controller. Replacing the complete Long 09 and
+Goal 03 task records with their respective retests yields \SuccessCount{}
+successes in 400 records (\SuccessRate{}\%; Table~\ref{tab:results}).
+This combined summary contains \ReusedCount{} retained episodes and
+\FreshCount{} retest episodes from \ControllerVersionCount{} controller
+versions. It describes the available task records, not a full-suite
+measurement of the latest controller.
+\else
+The frozen system records \SuccessCount{} successes in 400 episodes
+(\SuccessRate{}\%; Table~\ref{tab:results}).
+\fi
+\else
+The ongoing evaluation records \SuccessCount{} successes in
+\EpisodeCount{} completed episodes (\SuccessRate{}\%); its task coverage
+is incomplete.
+\fi
+The suite rates are \SpatialRate{}\% for Spatial, \ObjectRate{}\% for
+Object, \GoalRate{}\% for Goal, and \LongRate{}\% for Long.
+\ifTaskRefresh\else\ifAllFresh\else
+The newly executed subset contains \FreshSuccessCount{} successes in
+\FreshCount{} trials (\FreshSuccessRate{}\%).
+\fi\fi
 
-Robot-demonstration training and general pretraining are distinct:
-\method{} relies on pretrained perception and manually developed skills.
-The selected SmolVLA simulation model starts from a VLM without robotics
-pretraining, but still trains its action policy on LIBERO demonstrations
-\cite{smolvla}. Thus the table's training column concerns learning robot
-actions, not whether a model has ever been pretrained.
+The task distribution reveals variation hidden by the overall rate
+(Fig.~\ref{fig:tasks}). \PerfectTaskCount{} tasks have ten successful recorded
+trials. Long 09, placing a mug inside a microwave and closing it, records
+$\MicrowaveSuccess/10$; Long 08, placing both moka pots on the stove, records
+$\MokaSuccess/10$. These tasks require confined access, sequential placement,
+or fixture interaction. Drawer-related tasks also differ: Goal 03, opening
+the top drawer and placing a bowl inside, records $\TopDrawerSuccess/10$;
+Spatial 04, retrieving a bowl from a top drawer, records
+$\DrawerPickSuccess/10$; and Long 03, placing a bowl in a bottom drawer and
+closing it, records $\BottomDrawerSuccess/10$. The variation motivates
+examining individual execution stages rather than attributing all failures
+to a task category.
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=\textwidth]{figures/per_task.pdf}
+\caption{External successes per ten trials. Columns identify different tasks
+in each suite; darker cells indicate higher success.
+\ifTaskRefresh Goal 03 and Long 09 use complete targeted retests;
+other cells retain the original full-campaign records.\fi}
+\label{fig:tasks}
+\end{figure*}
+
+\subsection{Model Requirements and Published Results}
+\label{sec:comparison}
+Table~\ref{tab:models} separates neural model size from the use of robot
+demonstrations for action generation. \method{} has \NeuralBillion{}B
+parameters in its frozen detector and no learned action network. The FP32
+weight file occupies \DetectorWeightMB{}\,MB (decimal). The reported
+SmolVLA model is approximately \SmolParameterRatio{} times larger, and the
+7B OpenVLA model class is approximately \OpenVLAParameterRatio{} times larger.
+Our count includes both visual and text encoders; the VLA sizes are rounded
+descriptions from the source papers.
+
+The training distinction concerns robot actions. \method{} uses pretrained
+perception and manually developed skills. The selected SmolVLA simulation
+model starts from a VLM without robotics pretraining but trains its action
+policy on LIBERO demonstrations~\cite{smolvla}. Parameter counts therefore
+describe the neural component of each system; the asset priors and engineering
+effort in \method{} remain separate requirements.
 
 \begin{table}[t]
 \caption{Model size and robot-demonstration use for action-policy training.
@@ -552,26 +597,24 @@ training, not to perception pretraining or manual skill development.}
 \input{generated/model_table}
 \end{table}
 
-Table~\ref{tab:published} compares our measurements with published LIBERO
-success rates, retaining the original papers' reported averages.
-Our implementation is the only system evaluated in the present study.
-
-The table specifies the distinct sensing and policy-training settings.
+Table~\ref{tab:published} places these requirements alongside published
+LIBERO success rates. External rows retain the source papers' reported means
+and averages; \method{} is the only system evaluated in this study.
 The OpenVLA study uses filtered demonstrations~\cite{openvla}.
-SmolVLA trains across all 40 tasks and evaluates ten trials per task
-\cite{smolvla}. The selected OpenVLA-OFT setting uses filtered demonstrations
-and evaluates 500 trials per suite~\cite{openvlaoft}.
-\method{} uses calibrated RGB-D, asset priors, and the scoring rule in
-Eq.~\eqref{eq:score}. These differences make the table a comparison of
-reported system outcomes under their stated conditions, rather than a
-controlled ranking.
+SmolVLA trains across all 40 tasks and evaluates ten trials per
+task~\cite{smolvla}; OpenVLA-OFT uses filtered demonstrations and evaluates
+500 trials per suite in the selected setting~\cite{openvlaoft}.
+Our system uses calibrated RGB-D, public asset priors, ten official
+initializations per task, and the ever-success rule in Eq.~\eqref{eq:score}.
 
-OpenVLA-OFT reports a higher average success rate than our combined record
-set. Our results support the value of a smaller neural component and the
-absence of demonstration-based action training in this declared setting;
-they do not establish a success-rate advantage over all VLAs. Long has the
-lowest success rate for every listed method, including \method{}, motivating
-a closer examination of multi-stage failures.
+These sensing, training, and protocol differences preclude a controlled
+ranking. OpenVLA-OFT reports a higher average than our combined record set.
+The comparison locates \method{} as a system with a smaller neural component
+and geometric action generation under stronger explicit priors.
+It does not measure relative latency or memory consumption.
+Long is the lowest-scoring suite for every listed method, including
+\method{}; the following cases examine how individual stages affect two
+multi-stage tasks in our implementation.
 
 \begin{table*}[t]
 \caption{LIBERO success rates (\%). Published rows contain the reported
@@ -590,101 +633,45 @@ All methods receive language; their sensing, training, and protocols differ.}
 \input{generated/comparison_table}
 \end{table*}
 
-\subsection{Aggregate and Task-Level Performance}
-\ifRunComplete
 \ifTaskRefresh
-The combined records contain \SuccessCount{} successes in 400 episodes
-(\SuccessRate{}\%; Table~\ref{tab:results}).
-\else
-The system succeeds in \SuccessCount{} of 400 episodes, for an overall
-success rate of \SuccessRate{}\% (Table~\ref{tab:results}).
+\subsection{Tracing Failures to Skill Revisions}
+\label{sec:revision}
+The two targeted revisions expose the connection between stored geometric
+state and controller behavior. Each retest uses all ten original task
+initializations under one frozen source snapshot, with unchanged action
+budgets, scoring, and detector weights.
+
+\paragraph{Microwave placement and closure (Long 09)}
+The original controller records $0/10$. Inspection identified a mug rim
+remaining hooked on a finger during withdrawal, despite the release command.
+The revised placement stage waits for a measured 78-mm jaw opening and a
+settling dwell before withdrawing. The subsequent close skill uses the
+observed door panel and bounded hinge-frame waypoints described in
+Section~\ref{sec:method}. Its motion and closure checks refer to the exterior
+panel face. The complete retest records $\MicrowaveSuccess/10$. The two
+remaining failures occur during grasp approach and cavity-entry staging,
+before completion of the placement-and-closure sequence.
+
+\paragraph{From drawer opening to bowl placement (Goal 03)}
+The original controller records $3/10$. Execution traces show prolonged
+motion after handle release, including wrist and elbow joint-limit encounters
+on the approach to the bowl. The revision compares equivalent jaw frames
+along a continuous inverse-kinematics path using the public robot model,
+and bounds simultaneous translation and rotation. During transport, it also
+moves the held bowl beyond the observed drawer front before lifting.
+The complete retest records $\TopDrawerSuccess/10$, with seven previous
+failures becoming successes and one previous success regressing.
+
+Both cases modify the physical transition between otherwise supported
+skills. Their traces expose the target, the measured state, and the local
+check at the point of failure, making the revision concrete without changing
+the perception model. Each result evaluates a bundle of changes on
+initializations used during development; the retests do not isolate the
+effect of each change or measure performance on held-out tasks.
+Figure~\ref{fig:rollouts} supplies historical visual context: a successful
+Object 00 rollout and an unsuccessful Goal 03 rollout from the original
+campaign, before these revisions.
 \fi
-\else
-The current snapshot succeeds in \SuccessCount{} of \EpisodeCount{} completed
-episodes (\SuccessRate{}\%); the remaining planned trials are pending.
-\fi
-Suite success rates are \SpatialRate{}\% for Spatial, \ObjectRate{}\% for
-Object, \GoalRate{}\% for Goal, and \LongRate{}\% for Long.
-\ifTaskRefresh\else\ifAllFresh\else
-The newly executed subset succeeds in \FreshSuccessCount{} of
-\FreshCount{} trials (\FreshSuccessRate{}\%), allowing the effect of
-including the ten reused records to be inspected directly.
-\fi
-\fi
-
-Figure~\ref{fig:tasks} shows the task-level distribution.
-\PerfectTaskCount{} tasks have ten successful recorded trials.
-Long 09, placing a mug inside a microwave and closing it, succeeds in
-$\MicrowaveSuccess/10$ trials. Long 08, placing both moka pots on the stove,
-succeeds in $\MokaSuccess/10$ trials. These tasks combine placement with
-confined access, shared supports, or fixture interaction.
-
-Drawer tasks show varied outcomes: Goal task 03, opening the top
-drawer and placing a bowl inside, succeeds in $\TopDrawerSuccess/10$ trials;
-Spatial task 04, retrieving a bowl from a top drawer, succeeds in
-$\DrawerPickSuccess/10$; and Long task 03, placing a bowl in a bottom drawer
-and closing it, succeeds in $\BottomDrawerSuccess/10$.
-These complete task records identify difficult scenarios and stopping
-reasons; they do not establish articulation as the cause of failure.
-
-\begin{figure*}[t]
-\centering
-\includegraphics[width=\textwidth]{figures/per_task.pdf}
-\caption{External successes per ten trials. Columns identify different tasks
-in each suite; darker cells indicate higher success.
-\ifTaskRefresh Goal 03 and Long 09 use complete targeted retests;
-other cells retain the original full-campaign records.\fi}
-\label{fig:tasks}
-\end{figure*}
-
-\ifTaskRefresh
-\subsection{Inspecting and Revising Failed Skills}
-Long 09 separates mug placement, withdrawal, door contact, and closure
-verification. Inspection found a mug rim remaining hooked on a finger.
-The revision checks a measured 78-mm jaw opening and waits for settling;
-closure estimates the visible door panel and pushes its exterior face
-through bounded hinge-frame waypoints. A complete retest records
-$\MicrowaveSuccess/10$ successes, compared with $0/10$ originally.
-
-Goal 03 originally records $3/10$. Traces expose excessive motion after
-handle release, including wrist and elbow joint-limit encounters. The
-revision compares equivalent jaw frames using continuous public-model IK
-and bounds simultaneous translation and rotation. It also moves a held
-bowl outside the observed drawer front before lifting, to avoid the lip.
-A complete retest records $\TopDrawerSuccess/10$. Both revisions preserve
-the detector weights, official initializations, action budgets, and scoring.
-These development cases show how explicit geometry and stages support
-localized code changes; remaining failures are retained in the records.
-\fi
-
-\subsection{Controller Completion Is a Different Outcome}
-\label{sec:outcomes}
-Table~\ref{tab:status} crosses terminal controller state with external
-success. In \ControllerFalsePositive{} episodes the controller reports
-completion while the evaluator reports failure. Conversely,
-\ControllerMissedSuccess{} episodes receive external success without
-controller completion. The combined disagreement is
-\DisagreementCount{}/\EpisodeCount{} (\DisagreementRate{}\%).
-The latter group includes cases where a predicate is reached before a later
-local failure or budget exhaustion. Because the recorder retains an
-ever-success latch, these records do not imply successful final-state
-verification.
-
-Using local completion as the benchmark label would change the measured
-outcome; feeding external success to the controller would change its
-information interface. We record both values separately.
-The records lack first-success time and a separate final-only label, so they
-cannot quantify changes in final-state success from continued execution
-or the runtime saved by an early-stop evaluator.
-
-\begin{table}[t]
-\caption{Terminal controller state and independently recorded external
-ever-success. A controller failure can follow an earlier benchmark success.}
-\label{tab:status}
-\centering
-\footnotesize
-\input{generated/status_table}
-\end{table}
 
 \begin{figure*}[t]
 \centering
@@ -699,19 +686,52 @@ display; left/right is preserved.}
 \label{fig:rollouts}
 \end{figure*}
 
-\subsection{Recorded Failure Categories}
-Table~\ref{tab:failures} groups the \FailureCount{} externally unsuccessful
-episodes using their persisted status and failure message.
-The grouping gives controller completion/external failure and global-budget
-exhaustion precedence; remaining messages are classified by phase timeout,
-grasp/retention rejection, sensor-verification rejection, or another failure.
-This is a reproducible description of the recorded stopping reason, not a
-manually verified taxonomy of physical root causes.
+\subsection{Local Completion and External Success}
+\label{sec:outcomes}
+Controller completion and benchmark success measure different events.
+Table~\ref{tab:status} crosses the terminal controller state with the external
+ever-success label. In \ControllerFalsePositive{} episodes the controller
+reports completion but the evaluator reports failure.
+Conversely, \ControllerMissedSuccess{} episodes reach external success
+without controller completion. The total disagreement is
+\DisagreementCount{}/\EpisodeCount{} (\DisagreementRate{}\%).
 
-A phase timeout may arise from an inaccessible target, calibration error,
-occlusion, or contact resistance. Likewise, a rejected sensor verification
-may reflect an actual placement error or perception uncertainty.
-Determining these causes requires frame-level or geometric-trace analysis.
+The latter group includes a predicate becoming true before a later local
+failure or budget exhaustion. A local check may continue to demand a
+geometric relation after the benchmark has already registered success.
+Thus the recorded score answers whether the predicate was ever reached
+during the rollout; it does not establish that the controller recognized
+success or preserved it until stopping. Substituting local completion for
+the benchmark label would change the measured outcome. Feeding benchmark
+success back to the policy would change the information available for stopping.
+
+The records retain neither first-success time nor a separate final-state
+label. They therefore cannot determine how continued execution changes
+final-state success or how much runtime an early-stop evaluator would save.
+
+\begin{table}[t]
+\caption{Terminal controller state and independently recorded external
+ever-success. A controller failure can follow an earlier benchmark success.}
+\label{tab:status}
+\centering
+\footnotesize
+\input{generated/status_table}
+\end{table}
+
+\subsection{Remaining Failure Categories}
+The \FailureCount{} external failures are grouped by their recorded terminal
+state and message in Table~\ref{tab:failures}. Phase timeouts form the largest
+group. The grouping first identifies controller completion with external
+failure and global-budget exhaustion, then classifies remaining messages as
+phase timeouts, grasp or retention rejections, sensor-verification rejections,
+or other failures. All unsuccessful episodes remain in the analysis.
+
+These categories locate where execution stopped. They do not identify
+physical root causes: a timeout can arise from an inaccessible target,
+occlusion, calibration error, or contact resistance, and a rejected
+verification can reflect either placement error or uncertain perception.
+The task-specific inspections above use additional geometric traces and
+recordings to examine particular failures.
 
 \begin{table}[t]
 \caption{Outcome groups among external failures. Categories are derived from
@@ -722,99 +742,91 @@ recorded controller messages with a fixed precedence rule.}
 \input{generated/failure_table}
 \end{table}
 
-\subsection{Execution Cost and Qualitative Context}
+\subsection{Execution Cost}
+Long episodes use \LongMeanSteps{} actions on average, compared with
+\ObjectMeanSteps{} for Object (Table~\ref{tab:results}). These counts extend
+to the controller's stopping condition or the budget, so they measure the
+cost of executed behavior rather than time to first success.
 \ifTaskRefresh
-The median episode across the targeted retests takes \FreshMedianSeconds{} seconds.
+The median episode across the targeted retests takes
+\FreshMedianSeconds{} seconds, and the two dispatcher durations sum to
+\RunMinutes{} minutes. The combined record set has no single campaign
+wall time.
 \else
-The median newly executed episode takes \FreshMedianSeconds{} seconds.
+The median newly executed episode takes \FreshMedianSeconds{} seconds;
+dispatcher wall time is \RunMinutes{} minutes.
 \fi
-Mean action counts range across suites as shown in Table~\ref{tab:results}.
-Long episodes average \LongMeanSteps{} actions, compared with
-\ObjectMeanSteps{} for Object. These costs include controller execution
-through its own stopping condition; they are not time-to-first-success.
-Recorded elapsed times mix perception, simulation, rendering, and video
-overhead under each run's hardware and scheduling configuration.
-They should not be interpreted as real-robot control frequency.
-
-The run reports \RuntimeExceptionCount{} runtime exceptions.
-\ifRunComplete
-\ifTaskRefresh
-The targeted retest dispatcher durations sum to \RunMinutes{} minutes.
-There is no single wall-time measurement for the combined
-400-episode record set.
-\else
-Dispatcher wall time is \RunMinutes{} minutes for the campaign containing
-\FreshCount{} new and \ReusedCount{} reused episodes.
-\fi
-\else
-Dispatcher wall time at the snapshot is \RunMinutes{} minutes.
-\fi
-Figure~\ref{fig:rollouts} provides visual context from actual recordings.
-The upper row shows a successful Object task-00 episode; the lower row is
-an unsuccessful Goal task-03 initialization in the original campaign.
-These historical examples illustrate execution, not current failure prevalence.
+The records contain \RuntimeExceptionCount{} runtime exceptions.
+Elapsed times include perception, simulation, rendering, and video overhead,
+with hardware and concurrency differing across source runs. They describe
+this evaluation environment and do not measure real-robot control frequency.
 
 \section{Discussion and Limitations}
-The evaluated system combines a small neural model, no demonstration-based
-action-policy training, and inspectable execution stages. These properties
-depend on calibrated RGB-D, object priors, a constrained grammar, and
-manually developed skills. They describe a useful operating point for known
-environments, with task performance and development effort both dependent
-on the coverage of those skills.
+\method{} makes the information used by each skill explicit. In the two
+revision cases, a release condition and a post-handle motion target became
+specific points for intervention. This is the practical value of the
+representation: it exposes where the controller's geometric assumptions
+meet the observed interaction. The evidence supports this use for inspection
+and targeted revision within the evaluated setting.
 
-\paragraph{Resources and development effort.}
-The parameter count and weight-file size quantify the neural component.
-They do not establish proportional savings in end-to-end latency or peak
-memory, which also depend on perception processing, control, and simulation.
-Avoiding action-policy fitting does not remove detector pretraining or the
-engineering effort required to build and revise geometric skills. The
-recorded stages support inspection, but debugging effort was not measured
-against a learned policy.
+\paragraph{Prior knowledge and development effort}
+The system's compact neural component relies on calibrated RGB-D,
+public asset textures and dimensions, robot geometry, a constrained grammar,
+and manually developed skills. Removing demonstration-based action-policy
+training shifts work to these representations and procedures. Parameter
+count and weight-file size quantify the detector, but do not quantify total
+engineering cost, peak memory, or end-to-end latency. Debugging effort was
+not compared with that of a learned policy.
 
-\paragraph{Generalization and novelty.}
-The run covers known assets, language forms, and one simulated embodiment
-with calibrated depth. It does not evaluate transfer to unseen assets,
-language, perturbed calibration, or physical hardware, and provides no
-held-out history of controller development.
-The rates characterize the deployed benchmark system.
-Its geometric operations and state machines are established techniques;
-the contribution is their documented integration and empirical
-characterization.
+% Balance the final-page columns without changing the template margins.
+\enlargethispage{-2.5cm}
+\paragraph{Evaluation scope}
+The study covers known assets and instruction forms in one simulated
+embodiment. It does not test unseen assets, unrestricted language, perturbed
+calibration, or physical hardware. LIBERO was introduced for lifelong robot
+learning~\cite{libero}; the present evaluation characterizes manipulation
+execution and does not measure transfer, continual learning, or forgetting.
+The targeted initializations informed development. Their complete retests
+document task-specific changes, while the combined result spans
+\ControllerVersionCount{} controller versions. A full-suite result for the
+latest controller remains unmeasured. No component ablations establish the
+individual contribution of the gallery, offset handling, or local guards.
 
-\paragraph{Reliability and interpretation.}
-Bounded actions and local guards limit the implemented commands, but do not
-establish collision safety, contact-force safety, or real-world reliability.
-The narrow ten-trial task samples can also conceal rare failure modes.
-The observed controller/evaluator disagreement points to a specific
-measurement improvement: record first-success time and final predicate
-separately, then evaluate alternative stopping conventions without silently
-changing the policy's observations.
+\paragraph{Execution and measurement limits}
+Clipped commands, pose tolerances, and bounded retries are operational
+controls, not guarantees of tracking accuracy, collision avoidance, or
+contact safety. Small task samples can conceal rare failures, and the
+observed disagreement between controller and evaluator shows why stopping
+conventions matter. Recording first-success time and final-state success
+separately would distinguish goal attainment from goal preservation.
 
-\paragraph{Reproducibility.}
-Source and resource checksums, fixed initial-state identifiers, and
-record-derived figures support reconstruction of this evaluation.
-Boundary counters are implementation-generated records, not independent
-attestations.
+\paragraph{Reproducibility}
+The artifacts preserve source and resource checksums, official initial-state
+identifiers, per-record controller versions, original episode records, and
+the scripts that generate the reported tables and figures. These establish
+the provenance of the measurements. Observation restrictions are supported
+by interface and code inspection; implementation-generated boundary counters
+are not independent attestations of process isolation.
 
 \section{Conclusion}
-\method{} uses a frozen \NeuralMillion{}M-parameter model to detect objects
-and geometric rules to control robot actions. It requires no robot
-demonstrations for action-policy training, and its explicit execution steps
-support inspection and targeted repair. Under the declared sensing and
-asset assumptions, the
+We presented \method{}, an asset-informed system that connects language
+instructions to geometric manipulation skills through observed scene
+geometry, carried-object offsets, and local transition checks. One frozen
+\NeuralMillion{}M-parameter detector supplies its neural component, with
+no robot-demonstration training of an action policy.
 \ifTaskRefresh
-combined records contain \SuccessRate{}\% external successes across
-\EpisodeCount{} episodes, with Long 09 at $\MicrowaveSuccess/10$ and
-Goal 03 at $\TopDrawerSuccess/10$. The combined records contain
-\ControllerVersionCount{} controller versions; broader performance of the
-latest controller remains unmeasured.
+The original complete evaluation records \BaselineSuccessCount/400 successes;
+targeted microwave and drawer revisions record $\MicrowaveSuccess/10$ and
+$\TopDrawerSuccess/10$. The combined \SuccessRate{}\% summary spans
+\ControllerVersionCount{} controller versions and retains that distinction.
 \else
-system achieves \SuccessRate{}\% external success across
-\EpisodeCount{} recorded episodes.
+The complete evaluation records \SuccessCount/\EpisodeCount{} external
+successes (\SuccessRate{}\%).
 \fi
-The study documents model requirements, task outcomes, and targeted skill
-revisions while preserving the distinction between local completion and
-external success.
+These results characterize how explicit geometric execution supports
+manipulation and targeted skill revision under known-asset and calibrated
+RGB-D assumptions.
+
 
 \section*{Acknowledgments and AI Disclosure}
 OpenAI GPT-6-Astra (via Codex) assisted in drafting and editing the text in all sections,
@@ -824,8 +836,6 @@ records; comparison values are taken from the cited publications.
 The rollout images are extracted from our recordings; no
 generative image model was used.
 
-% Start the references in the final page's right column.
-\newpage
 \bibliographystyle{IEEEtran}
 \bibliography{references}
 \end{document}

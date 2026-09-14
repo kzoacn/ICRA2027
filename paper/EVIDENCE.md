@@ -51,7 +51,8 @@ The manuscript is a system study of the existing implementation, not a claim of 
 | tamp | [Integrated Task and Motion Planning](https://arxiv.org/abs/2010.01083) | Discrete/continuous planning context |
 | saycan | [SayCan paper](https://arxiv.org/abs/2204.01691) | Language and skill affordances |
 | codepolicies | [Code as Policies paper](https://arxiv.org/abs/2209.07753) | Language-generated policy programs |
-| voxposer | [VoxPoser paper](https://arxiv.org/abs/2307.05973) | Spatial value-map representation |
+| voxposer | [VoxPoser, CoRL 2023 proceedings](https://proceedings.mlr.press/v229/huang23b.html) | Spatial value-map representation; formal publication metadata |
+| kpam | [kPAM v2](https://arxiv.org/abs/1903.06684v2) | Semantic keypoints and geometric goal specification for category-level manipulation |
 | rekep | [ReKep paper](https://arxiv.org/abs/2409.01652) | Relational keypoint constraints |
 | groundingdino | [ECCV 2024 paper](https://www.ecva.net/papers/eccv_2024/papers_ECCV/papers/06319.pdf) | Frozen open-set region detector |
 | robosuite | [robosuite paper](https://arxiv.org/abs/2009.12293) | Simulation framework, v3 bibliographic metadata |

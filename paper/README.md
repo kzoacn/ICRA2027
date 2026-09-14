@@ -16,6 +16,7 @@ the frozen source and records.
 - [Deployed model parameter audit](data/model_audit.json)
 - [Data provenance and integrity](data/provenance.json)
 - [Evidence map](EVIDENCE.md)
+- [Writing references and revision notes (Chinese)](WRITING_NOTES.md)
 - [Local artifact validation](data/artifact_validation.json)
 
 This anonymous English draft is based on the current code and measured results.
