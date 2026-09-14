@@ -42,22 +42,26 @@ The manuscript is a system study of the existing implementation, not a claim of 
 
 ## Primary references checked
 
+See [CITATION_AUDIT.md](CITATION_AUDIT.md) for the 2026-09-14 bibliography,
+claim, source-table, and pinned-code checks, including publication-year and
+author-order differences between source records.
+
 | BibTeX key | Primary source | Use in manuscript |
 |---|---|---|
-| libero | [LIBERO paper](https://arxiv.org/abs/2306.03310) | Benchmark origin and research setting |
+| libero | [LIBERO, NeurIPS 2023](https://proceedings.nips.cc/paper_files/paper/2023/hash/8c3c666820ea055a77726d66fc7d447f-Abstract-Datasets_and_Benchmarks.html) | Benchmark origin and research setting; published metadata |
 | openvla | [OpenVLA v3, Appendix E, Table 12](https://arxiv.org/html/2406.09246v3) | Learned action-policy context; the authors' measured Diffusion Policy, Octo and OpenVLA results |
 | smolvla | [SmolVLA v1, Sections 4.1/4.3 and Table 2](https://arxiv.org/html/2506.01844v1) | Compact VLA context, 10 trials per task, and the 0.45B simulation result |
-| openvlaoft | [OpenVLA-OFT v2, Section V and Table I](https://arxiv.org/html/2502.19645v2) | Full OpenVLA-OFT result with extra inputs and filtered training demonstrations |
-| tamp | [Integrated Task and Motion Planning](https://arxiv.org/abs/2010.01083) | Discrete/continuous planning context |
-| saycan | [SayCan paper](https://arxiv.org/abs/2204.01691) | Language and skill affordances |
-| codepolicies | [Code as Policies paper](https://arxiv.org/abs/2209.07753) | Language-generated policy programs |
+| openvlaoft | [OpenVLA-OFT v2, Section V and Tables I/IV](https://arxiv.org/html/2502.19645v2); [RSS publication](https://www.roboticsproceedings.org/rss21/p017.html) | Full OpenVLA-OFT result with extra inputs and filtered training demonstrations; numerical source remains v2 |
+| tamp | [Integrated Task and Motion Planning, Annual Reviews](https://www.annualreviews.org/content/journals/10.1146/annurev-control-091420-084139) | Discrete/continuous planning context; published in 2021 |
+| saycan | [SayCan published PDF](https://proceedings.mlr.press/v205/ichter23a/ichter23a.pdf) | Language and skill affordances; author order follows the PDF |
+| codepolicies | [Code as Policies, ICRA 2023](https://doi.org/10.1109/ICRA48891.2023.10160591); [authors' v4](https://arxiv.org/abs/2209.07753v4) | Language-generated policy programs and published metadata |
 | voxposer | [VoxPoser, CoRL 2023 proceedings](https://proceedings.mlr.press/v229/huang23b.html) | Spatial value-map representation; formal publication metadata |
-| kpam | [kPAM v2](https://arxiv.org/abs/1903.06684v2) | Semantic keypoints and geometric goal specification for category-level manipulation |
-| rekep | [ReKep paper](https://arxiv.org/abs/2409.01652) | Relational keypoint constraints |
-| groundingdino | [ECCV 2024 paper](https://www.ecva.net/papers/eccv_2024/papers_ECCV/papers/06319.pdf) | Frozen open-set region detector |
-| robosuite | [robosuite paper](https://arxiv.org/abs/2009.12293) | Simulation framework, v3 bibliographic metadata |
-| mujoco | [MuJoCo paper](https://homes.cs.washington.edu/~todorov/papers/TodorovIROS12.pdf) | Physics engine |
-| openvlacode | [Evaluation loop](https://github.com/openvla/openvla/blob/main/experiments/robot/libero/run_libero_eval.py), [environment helper](https://github.com/openvla/openvla/blob/main/experiments/robot/libero/libero_utils.py) | Numerical horizons and distinct environment seed |
+| kpam | [kPAM published chapter](https://link.springer.com/chapter/10.1007/978-3-030-95459-8_9); [authors' v2](https://arxiv.org/abs/1903.06684v2) | Semantic keypoints and geometric goal specification; ISRR 2019 proceedings published in 2022 |
+| rekep | [ReKep, PMLR 270](https://proceedings.mlr.press/v270/huang25g.html) | Relational keypoint constraints; CoRL 2024 proceedings published in 2025 |
+| groundingdino | [ECCV PDF](https://www.ecva.net/papers/eccv_2024/papers_ECCV/papers/06319.pdf); [Springer record](https://link.springer.com/chapter/10.1007/978-3-031-72970-6_3) | Frozen open-set region detector; Springer citation year 2025 |
+| robosuite | [robosuite v3](https://arxiv.org/abs/2009.12293v3) | Framework attribution and v3 metadata; deployment version is documented separately |
+| mujoco | [MuJoCo author-hosted paper](https://www.roboti.us/lab/papers/TodorovIROS12.pdf); [IEEE record](https://doi.org/10.1109/IROS.2012.6386109) | Physics-engine attribution |
+| openvlacode | [Evaluation loop](https://github.com/openvla/openvla/blob/c8f03f48af692657d3060c19588038c7220e9af9/experiments/robot/libero/run_libero_eval.py), [environment helper](https://github.com/openvla/openvla/blob/c8f03f48af692657d3060c19588038c7220e9af9/experiments/robot/libero/libero_utils.py) | Pinned numerical horizons, environment seed, and early stopping |
 
 The comparison table transcribes published numerical means; these policies were not rerun in this task.
 Source-reported averages are preserved, and available standard errors remain in the source-data JSON.

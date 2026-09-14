@@ -43,6 +43,7 @@ External benchmark success is recorded separately from policy execution.}
 }
 
 \begin{document}
+\bstctlcite{reference_style}
 \maketitle
 \thispagestyle{empty}
 \pagestyle{empty}
@@ -600,7 +601,8 @@ training, not to perception pretraining or manual skill development.}
 Table~\ref{tab:published} places these requirements alongside published
 LIBERO success rates. External rows retain the source papers' reported means
 and averages; \method{} is the only system evaluated in this study.
-The OpenVLA study uses filtered demonstrations~\cite{openvla}.
+The OpenVLA study uses filtered demonstrations and reports averages over
+three random seeds, with 500 trials per suite and seed~\cite{openvla}.
 SmolVLA trains across all 40 tasks and evaluates ten trials per
 task~\cite{smolvla}; OpenVLA-OFT uses filtered demonstrations and evaluates
 500 trials per suite in the selected setting~\cite{openvlaoft}.
@@ -618,8 +620,9 @@ multi-stage tasks in our implementation.
 
 \begin{table*}[t]
 \caption{LIBERO success rates (\%). Published rows contain the reported
-means from OpenVLA Table~12~\cite{openvla}, SmolVLA Table~2~\cite{smolvla},
-and OpenVLA-OFT Table~I~\cite{openvlaoft}; they are not reruns by us.
+means from OpenVLA v3, Table~12~\cite{openvla}, SmolVLA v1,
+Table~2~\cite{smolvla}, and OpenVLA-OFT v2, Table~I~\cite{openvlaoft}
+(arXiv versions); they are not reruns by us.
 OpenVLA-OFT uses its full setting. The final row is measured in this work.
 \ifTaskRefresh
 It combines \ReusedCount{} historical episodes and \FreshCount{} targeted
@@ -778,8 +781,6 @@ count and weight-file size quantify the detector, but do not quantify total
 engineering cost, peak memory, or end-to-end latency. Debugging effort was
 not compared with that of a learned policy.
 
-% Balance the final-page columns without changing the template margins.
-\enlargethispage{-2.5cm}
 \paragraph{Evaluation scope}
 The study covers known assets and instruction forms in one simulated
 embodiment. It does not test unseen assets, unrestricted language, perturbed

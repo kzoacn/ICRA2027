@@ -9,6 +9,7 @@ the frozen source and records.
 - [Paper PDF](main.pdf)
 - [LaTeX source](main.tex)
 - [References](references.bib)
+- [Reference-by-reference citation audit](CITATION_AUDIT.md)
 - [Projected episode records](data/episodes.jsonl)
 - [Complete raw records and geometric traces](data/raw_episodes.jsonl.gz)
 - [Statistics](data/statistics.json)
