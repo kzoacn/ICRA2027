@@ -5,7 +5,7 @@ resources/
 .cache/
 
 # Generated evaluation state, logs, and artifacts.
-# Selected server job scripts/configurations are explicitly tracked.
+# Historical server job files are retained under archive/jobs/.
 runtime/
 outputs/
 logs/

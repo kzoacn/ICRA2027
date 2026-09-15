@@ -25,7 +25,7 @@
 \node[small,text=anchorBlue,font=\sffamily\bfseries\fontsize{7}{8}\selectfont,
       anchor=west] at (.20,5.035) {INSTRUCTION};
 \node[anchor=west] at (2.18,5.035)
-  {``Pick up the alphabet soup and place it in the basket.''};
+  {``\RolloutSuccessInstruction.''};
 \draw[flow,anchorBlue] (11.14,5.035) -- (11.85,5.035);
 \node[small,anchor=west,text=anchorBlue] at (12.03,5.035)
   {Compile \& check};
@@ -42,12 +42,12 @@
   \fill[\col] (\x,3.65) rectangle +(4.04,.17);
 }
 \node[heading,text=white,anchor=west] at (.18,3.98) {01\quad Ground the scene};
-\node[heading,text=white,anchor=west] at (4.70,3.98) {02\quad Track geometry};
+\node[heading,text=white,anchor=west] at (4.70,3.98) {02\quad Maintain geometry};
 \node[heading,text=white,anchor=west] at (9.22,3.98) {03\quad Compose skills};
 \node[heading,text=white,anchor=west] at (13.74,3.98) {04\quad Act \& observe};
 
 % Grounding: an upright camera image and the declared prior information.
-\node at (1.10,2.46) {\includegraphics[width=1.82cm]{figures/recorded/object_task00_init00_frame000.png}};
+\node at (1.10,2.46) {\includegraphics[width=1.82cm]{\OverviewBeforeImage}};
 \node[small,anchor=west,align=left,text=anchorBlue] at (2.18,3.12)
   {Two RGB-D views\\+ calibration};
 \node[small,anchor=west,align=left] at (2.18,2.43)
@@ -90,7 +90,7 @@
 \node[small] at (11.06,1.03) {Local guards \& recovery};
 
 % Physical interaction and the independent benchmark readout.
-\node at (15.58,2.49) {\includegraphics[width=1.88cm]{figures/recorded/object_task00_init00_frame045.png}};
+\node at (15.58,2.49) {\includegraphics[width=1.88cm]{\OverviewAfterImage}};
 \node[small] at (15.58,1.41) {Bounded pose + gripper commands};
 \node[small,text=anchorMuted] at (15.58,1.00) {Robot + environment};
 \foreach \x in {4.04,8.56,13.08}{

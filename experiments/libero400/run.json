@@ -1,0 +1,18 @@
+{
+  "label": "full400_local_20260914T153307Z",
+  "pid": 48386,
+  "command": [
+    "python3",
+    "/mnt/d/work/ICRA2027/experiments/route_b_90/run_batch.py",
+    "--label",
+    "full400_local_20260914T153307Z",
+    "--all",
+    "--workers",
+    "4",
+    "--deployed-root",
+    "/home/kzoacn/.local/share/anchor-icra2027"
+  ],
+  "batch_dir": "/mnt/d/work/ICRA2027/runtime/route_b_90/full400_local_20260914T153307Z",
+  "launcher_log": "/mnt/d/work/ICRA2027/runtime/local_evaluation/full400_local_20260914T153307Z.launcher.log",
+  "environment_file": "/mnt/d/work/ICRA2027/runtime/local_evaluation/environment.json"
+}

@@ -1,0 +1,65 @@
+{
+  "episodes": 400,
+  "successes": 374,
+  "rate": 93.5,
+  "evaluation_kind": "task_replacement",
+  "per_suite": [
+    {
+      "suite": "libero_spatial",
+      "label": "Spatial",
+      "n": 100,
+      "successes": 93,
+      "rate": 93.0,
+      "mean_steps": 147.07,
+      "median_elapsed_s": 68.05149636301212,
+      "all_success_tasks": 6
+    },
+    {
+      "suite": "libero_object",
+      "label": "Object",
+      "n": 100,
+      "successes": 98,
+      "rate": 98.0,
+      "mean_steps": 195.3,
+      "median_elapsed_s": 59.480422721477225,
+      "all_success_tasks": 8
+    },
+    {
+      "suite": "libero_goal",
+      "label": "Goal",
+      "n": 100,
+      "successes": 97,
+      "rate": 97.0,
+      "mean_steps": 179.93,
+      "median_elapsed_s": 66.23868568369653,
+      "all_success_tasks": 8
+    },
+    {
+      "suite": "libero_10",
+      "label": "Long",
+      "n": 100,
+      "successes": 86,
+      "rate": 86.0,
+      "mean_steps": 324.47,
+      "median_elapsed_s": 93.36835241736844,
+      "all_success_tasks": 2
+    }
+  ],
+  "policy_external_disagreement": {
+    "controller_completed_external_failed": 7,
+    "external_success_without_controller_completion": 37
+  },
+  "failure_groups": {
+    "Phase timeout": 13,
+    "Controller completion / external failure": 7,
+    "Sensor verification rejection": 1,
+    "Grasp / retention rejection": 3,
+    "Other controller failure": 2
+  },
+  "new_episodes": 20,
+  "reused_episodes": 380,
+  "new_successes": 17,
+  "reused_successes": 357,
+  "new_median_elapsed_s": 69.56407636450604,
+  "new_total_episode_elapsed_s": 1423.7784750442952
+}

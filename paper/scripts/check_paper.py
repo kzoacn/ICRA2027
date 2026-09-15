@@ -19,6 +19,14 @@ def main():
     assert meta["validation"]["coverage_passed"]
     assert not meta["validation"]["issues"]
     assert hashlib.sha256(data).hexdigest() == meta["episodes_projection_sha256"]
+    if environment_file := meta.get("environment_file"):
+        environment_data = (PAPER / "data" / environment_file).read_bytes()
+        assert hashlib.sha256(environment_data).hexdigest() == meta["environment_sha256"]
+        environment = json.loads(environment_data)
+        assert environment["campaign_label"] == meta["run_name"]
+        assert environment["controller_source_sha256"] == meta["controller_source_sha256"]
+        assert all(row["controller_source_sha256"] == meta["controller_source_sha256"]
+                   and row["source_campaign"] == meta["run_name"] for row in rows)
     assert len(rows) == len({r["episode_id"] for r in rows}) == 400
     if archive := meta.get("raw_episode_archive"):
         compressed = (PAPER / "data" / archive["file"]).read_bytes()
@@ -100,9 +108,77 @@ def main():
         assert int(macros[name]) == expected
         assert "\\" + name in (PAPER / "main.tex").read_text()
     assert int(macros["SuccessCount"]) == sum(r["success"] for r in rows)
+    assert macros["SuccessRate"] == f"{100 * sum(r['success'] for r in rows) / len(rows):.1f}"
+    completed = [r for r in rows if r["policy_status"] == "succeeded"]
+    failures = [r for r in rows if not r["success"]]
+    timeouts = [r for r in rows if r["policy_status"] == "timeout"]
+    expected_stopping = {
+        "ControllerCompleteCount": len(completed),
+        "CompletedExternalSuccessCount": sum(r["success"] for r in completed),
+        "EarlyFailureCount": sum(r["steps"] < caps[r["suite"]] for r in failures),
+        "FailureMinUnusedSteps": min((caps[r["suite"]] - r["steps"] for r in failures), default=0),
+        "GlobalTimeoutCount": len(timeouts),
+        "GlobalTimeoutSuccessCount": sum(r["success"] for r in timeouts),
+        "LongFailureCount": sum(r["suite"] == "libero_10" for r in failures),
+    }
+    for key, value in expected_stopping.items():
+        assert int(macros[key]) == value, f"Stopping statistic does not match records: {key}"
+    assert macros["CompletionAgreementRate"] == f"{100 * sum(r['success'] for r in completed) / len(completed) if completed else 0:.1f}"
+    assert macros["LongFailureShare"] == f"{100 * expected_stopping['LongFailureCount'] / len(failures) if failures else 0:.1f}"
+    assert expected_stopping["EarlyFailureCount"] == len(failures), "Review the manuscript's all-failures-before-cap statement."
+    assert expected_stopping["GlobalTimeoutSuccessCount"] == len(timeouts), "Review the manuscript's global-timeout outcome statement."
     assert int(macros["ReusedCount"]) == sum(r["reused"] for r in rows)
+    if meta.get("environment_file") and (PAPER / "generated/rollout_metadata.tex").exists():
+        records = {row["episode_id"]: row for row in rows}
+        figures = json.loads((PAPER / "data/figure_provenance.json").read_text())
+        rollout_macros = dict(re.findall(r"\\newcommand\{\\(\w+)\}\{([^}]+)\}",
+                                       (PAPER / "generated/rollout_metadata.tex").read_text()))
+        assert len(figures) == 2 and [item["success"] for item in figures] == [True, False]
+        for item in figures:
+            record = records[item["episode_id"]]
+            assert item["source_record_sha256"] == record["source_record_sha256"]
+            assert item["success"] is record["success"]
+            assert item["policy_status"] == record["policy_status"]
+            assert item["instruction"] == record["instruction"]
+            assert item["steps"] == record["steps"]
+            transitions = actual[item["episode_id"]][0]["route_trace"]["phase_transitions"]
+            assert item["phase_transitions"] == transitions
+            assert item["video_stride"] == 2
+            assert item["action_budget"] == caps[record["suite"]]
+            assert item["total_recorded_frames"] == record["steps"] // 2 + 1
+            for frame in item["display_frames"]:
+                assert hashlib.sha256((PAPER / frame["file"]).read_bytes()).hexdigest() == frame["sha256"]
+                assert frame["action_step"] == 2 * frame["index"]
+                preceding = [entry for entry in transitions if entry["step"] <= frame["action_step"]]
+                assert frame["logged_phase"] == (preceding[-1]["phase"] if preceding else "initial")
+            if not item["success"]:
+                active = [entry for entry in transitions if entry["step"] < record["steps"]]
+                last = active[-1] if active else {"step": 0, "phase": "initial"}
+                interval = item["final_active_phase_interval"]
+                assert interval == {"phase": last["phase"], "start": last["step"],
+                    "stop": record["steps"], "actions": record["steps"] - last["step"],
+                    "unused_actions": caps[record["suite"]] - record["steps"]}
+                for macro, key in [("RolloutFailurePhaseStart", "start"),
+                                   ("RolloutFailurePhaseSteps", "actions"),
+                                   ("RolloutFailureUnusedSteps", "unused_actions")]:
+                    assert int(rollout_macros[macro]) == interval[key]
     assert (r"\AllFreshtrue" in numbers) == (not any(r["reused"] for r in rows))
     assert (r"\TaskRefreshtrue" in numbers) == task_refresh
+    if task_refresh:
+        # Both evidence sets must remain visible in the suite table.
+        suite_table = (PAPER / "generated/suite_table.tex").read_text()
+        assert "Suite & Full run & Combined" in suite_table
+        for suite, label in [("libero_spatial", "Spatial"), ("libero_object", "Object"),
+                             ("libero_goal", "Goal"), ("libero_10", "Long")]:
+            original = [r for r in reference_rows.values() if r["suite"] == suite]
+            combined = [r for r in rows if r["suite"] == suite]
+            expected = (f"{label} & {sum(r['success'] for r in original)}/{len(original)} & "
+                        f"{sum(r['success'] for r in combined)}/{len(combined)} & ")
+            assert expected in suite_table
+        original_successes = sum(r["success"] for r in reference_rows.values())
+        assert original_successes == int(macros["BaselineSuccessCount"])
+        assert (f"Overall & {original_successes}/400 & {sum(r['success'] for r in rows)}/400 & "
+                in suite_table)
     tex = (PAPER / "main.tex").read_text()
     subprocess.run(["python3", str(PAPER / "scripts/build_comparison_table.py"), "--check"],
                    check=True)

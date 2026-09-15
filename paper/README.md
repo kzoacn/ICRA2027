@@ -1,235 +1,131 @@
-# ICRA 2027 anonymous manuscript draft
+# ICRA 2027 anonymous manuscript
 
-Title: **ANCHOR: Asset-Informed Geometric Skills for Language-Conditioned Manipulation**
+**ANCHOR: Asset-Informed Geometric Skills for Language-Conditioned Manipulation**
 
-ANCHOR is the method's manuscript name. Implementation directories and historical
-experiments retain the Route B identifiers to preserve their correspondence with
-the frozen source and records.
+The current manuscript uses the completed local full evaluation:
+**376/400 (94%)**, with one frozen controller and 400 new episodes.
+Spatial: 93/100 / Object: 98/100 / Goal: 98/100 / Long: 87/100.
+The four suites contain ten tasks each, evaluated on official initial-state
+indices 0-9 with seed 7 and action budgets 220/280/300/520.
+The score is external ever-success; the controller does not receive the benchmark
+predicate for selecting actions or deciding when to stop.
 
 - [Paper PDF](main.pdf)
 - [LaTeX source](main.tex)
-- [References](references.bib)
-- [Reference-by-reference citation audit](CITATION_AUDIT.md)
-- [Projected episode records](data/episodes.jsonl)
-- [Complete raw records and geometric traces](data/raw_episodes.jsonl.gz)
-- [Statistics](data/statistics.json)
-- [Published comparison data and original sources](data/published_comparisons.json)
-- [Deployed model parameter audit](data/model_audit.json)
-- [Data provenance and integrity](data/provenance.json)
-- [Evidence map](EVIDENCE.md)
-- [Writing references and revision notes (Chinese)](WRITING_NOTES.md)
+- [References](references.bib) and [citation audit](../docs/paper/citation-audit.md)
+- [Local full-run acceptance](../experiments/libero400/accepted_result.json)
+- [Environment](data/environment.json) and [data provenance](data/provenance.json)
+- [Projected records](data/episodes.jsonl) and [complete raw records](data/raw_episodes.jsonl.gz)
+- [Statistics](data/statistics.json) and [model audit](data/model_audit.json)
+- [Figure provenance](data/figure_provenance.json)
+- [Evidence map](../docs/paper/evidence.md) and [review notes](../docs/paper/review.md)
 - [Local artifact validation](data/artifact_validation.json)
 
-This anonymous English draft is based on the current code and measured results.
-It has not been submitted to PaperPlaza. The original complete evaluation records
-**360/400 (90.0%)** with one frozen controller. Complete targeted retests
-improve Long 09 from **0/10 to 8/10**, then Goal 03 from **3/10 to 9/10**.
-The combined statistics use those twenty episodes and 380 retained historical
-episodes, for **374/400 (93.5%)** across three controller versions.
-This is not a full-suite evaluation of the latest controller.
-The paper emphasizes three properties: a frozen 172M-parameter perception model,
-no robot-demonstration training of an action policy, and execution steps that
-can be inspected and revised. Its Long 09 and Goal 03 cases document targeted
-skill revisions without changing detector weights. The system uses asset priors,
-explicit geometry, and manually designed skills.
-The comparison table cites published results and identifies their input, training,
-and evaluation conditions; this project's row comes from actual evaluation records.
-Authors and affiliations are provisionally represented by Anonymous Authors.
-The PDF contains no project GitHub account or repository link.
+The host is an RTX 3090 under Ubuntu 24.04/WSL2, with Python 3.12.14,
+PyTorch 2.11.0+cu130, MuJoCo 3.3.2, robosuite 1.4.0, and hf-libero 0.1.4.
+The dispatcher starts with four workers and then uses six. The source snapshot
+is `7bdcb97a7b847debeb0bd47c951455934701f81d7b561ad097fe5b41269de256`. All 585 asset files and eight detector
+files pass the pinned resource hashes. The [local run record](../experiments/libero400/README.md)
+preserves environment, scheduling, source and acceptance details. The exact evaluated
+source is archived in [full400-source.zip](../archive/evaluated-source/full400-source.zip);
+the [repository guide](../docs/repository.md) maps it to the current `src/anchor/` layout.
 
-## Building the paper
+## Building
 
-Run from this directory:
+From this directory:
 
     make
     make check
 
-Required tools are GNU Make 4.3 or later, PDFLaTeX, BibTeX, latexmk, and Poppler utilities. On Ubuntu:
+Building uses committed figures and tables and requires no simulator or GPU.
+Required tools include PDFLaTeX, BibTeX, latexmk and Poppler. The unmodified
+official IEEE class and bibliography style are included.
 
-    sudo apt-get install texlive-latex-base texlive-latex-recommended \
-      texlive-fonts-recommended texlive-pictures latexmk poppler-utils
-
-The official `ieeeconf.cls` and `IEEEtran.bst` files are included; building does not
-require downloading the template. Figures, tables, and numerical macros are also
-committed, so compiling the PDF does not require the simulator environment or a GPU.
-The published comparison and model-size tables are generated by a Python
-standard-library script; `make` updates them when their evidence or script changes.
-
-## Regenerating results from records
-
-The frozen `data/episodes.jsonl` is sufficient to rebuild the numerical results,
-tables, and per-task figure. The required Python packages are NumPy and Matplotlib:
+To rebuild numerical tables and the task plot from the committed records:
 
     python3 -m pip install -r requirements-figures.txt
-    python3 scripts/analyze_results.py
-    make
-    make check
-
-To reproduce the historical baseline results from the original server:
-
-    python3 scripts/capture_results.py --source-root /path/to/route-b-v170-cloud
-    python3 scripts/analyze_results.py
-    make
-    make check
-
-By default, `capture_results.py` requires a completed evaluation that passes
-validation, preventing unfinished results from being treated as final scores.
-The drafting-only `--allow-partial` option marks the data as incomplete and displays
-that status explicitly in the compiled manuscript. Such a draft cannot pass `make check`.
-
-Import the original controller's fresh full evaluation from its batch directory:
-
-    python3 scripts/capture_results.py --batch-dir ../runtime/route_b_90/full400_candidate_01
-    python3 scripts/analyze_results.py
-    python3 scripts/make_rollout_figure.py --batch-dir ../runtime/route_b_90/full400_candidate_01
-    make check
-
-This import also produces `data/raw_episodes.jsonl.gz`, preserving all original
-episode records and geometric traces. The validation script checks the SHA256 of
-the compressed file, decompressed content, and each original record. It compares
-success flags, initial states, step counts, and internal states against the paper's
-projected records. Small development batches cannot be imported as final paper data.
-
-To reproduce the task-specific update used in the current manuscript:
-
-    python3 scripts/update_task_results.py \
-      --baseline-batch ../runtime/route_b_90/full400_candidate_01 \
-      --task-batch ../runtime/route_b_90/long09_final_02 \
-      --task-batch ../runtime/route_b_90/goal03_final_02
     make figures
     make check
 
-Each repeated `--task-batch` requires a complete retest of all ten official
-initial states under the original seed, budget, and scoring rule. Both task
-updates must be supplied to retain both results. It replaces whole tasks, including
-failures, and retains the original complete dataset under
-`data/full400_reference/`. Every projected row records its source campaign and
-controller checksum. The original JSONL lines remain unchanged in the compressed
-archive. Validation also checks that the other 380 records match the historical
-reference. See the [Long 09](../experiments/long09/README.md) and
-[Goal 03](../experiments/goal03/README.md) evaluation records.
+## Reproducing the full evaluation
 
-The rollout figure uses ImageIO, imageio-ffmpeg, NumPy, and Matplotlib and can be
-regenerated in the deployed virtual environment:
+Prepare a deployment with `.venv` and pinned `resources` using the
+[setup guide](../docs/setup.md), then run from the repository root:
 
-    python3 scripts/make_rollout_figure.py --source-root /path/to/route-b-v170-cloud
+    python3 scripts/run_batch.py --label full400_reproduction --all --workers 6 --deployed-root /path/to/deployment
 
-Images come from actual simulator recordings. The fixed-camera half of each original
-dual-view frame is extracted and flipped vertically to correct its display orientation;
-left/right and scene content are preserved. Selected episodes, frame indices, and
-SHA256 hashes of the original videos and exported PNG files are recorded in
-`data/figure_provenance.json`. Eight upright frames are saved in `figures/recorded/`
-for the insets in Fig. 1 and the sequences in Fig. 3. Regenerating the rollout figure
-requires the original server videos; ordinary builds use the committed `figures/rollouts.pdf`.
+The runner freezes the controller before starting and retains all outcomes,
+configuration, source manifests, raw traces and videos. Runtime failures or
+incomplete coverage cannot pass final import validation.
 
-The editable vector source for the first-page Fig. 1 is `figures/architecture.tex`.
-It depicts language compilation, scene grounding, carried-object geometry, skill
-execution, and observation feedback. The geometry drawing is schematic; the camera
-insets come from the actual recordings described above. `main.tex` uses the template's
-after-title content hook to place Fig. 1 below the title on page 1 while retaining
-its figure number and cross-references.
+To import the recorded local batch from the repository root (its frozen runtime
+directory retains the original name):
 
-## Model size and action-policy training
+    python3 paper/scripts/capture_results.py --batch-dir runtime/route_b_90/full400_local_20260914T153307Z --environment experiments/libero400/environment.json
+    python3 paper/scripts/make_rollout_figure.py --batch-dir runtime/route_b_90/full400_local_20260914T153307Z
+    make -C paper figures
+    make -C paper check
 
-The deployed `IDEA-Research/grounding-dino-tiny` checkpoint contains exactly
-**172,249,090 unique parameters**, including its vision and text encoders.
-All parameters are frozen. Its FP32 `model.safetensors` file is
-**689,359,096 bytes**, approximately 689 MB in decimal units.
-One detector instance serves both cameras within each evaluation process.
-The language compiler, asset gallery, and geometric skills add no neural model
-parameters. The system requires no robot demonstrations for action-policy
-training; the detector's general pretraining and manual skill development remain
-part of its prior knowledge.
+The importer validates coverage and immutable source hashes, preserves each
+original JSONL line in the compressed archive, and records each episode's
+campaign and controller hash. Environment metadata is copied with its SHA256.
+New reproduction runs need their own measured environment record and batch name.
 
-[The model audit](data/model_audit.json) records the checkpoint revision, verified
-resource hashes, detector implementation hash, software versions, unique parameter
-count, dtype, and weight-file size. To repeat the count in the deployed Python
-environment, without running robot tasks:
+## Figures and model audit
 
-    python3 scripts/audit_model.py --model-dir /path/to/resources/grounding-dino-tiny
-    python3 scripts/build_comparison_table.py
-    make check
+Rollout images come from this local full run. The generator selects the first
+external success in Object 00 and the first external failure in Goal 03 when
+available, with a deterministic task/index fallback. All outcomes remain in
+the numerical results. Four uniformly spaced recorder indices are extracted
+from each selected video; the fixed-camera half is flipped vertically for
+upright display. There is no retouching or synthetic scene content.
 
-The audit verifies every local checkpoint file against `resources.lock.json`,
-loads the actual deployment detector on CPU, and sums `model.parameters()`.
-Shared parameter objects are counted once. CPU loading is used only to count
-weights; it is not a CPU inference-performance measurement.
+`data/figure_provenance.json` stores episode and source-record identities,
+video hashes, frame indices, logged phases and exported image hashes. Frame
+index times recording stride gives the executed action count; phase labels
+use the last recorded transition at or before that count. The failure timeline
+separates earlier actions, the final active phase and unused global budget.
+These are controller trace labels, not physical states inferred from the images.
+The generated `rollout_metadata.tex` supplies task, instruction, action-count,
+phase-duration and image-path macros. `figures/architecture.tex` remains an
+editable vector schematic with actual camera insets.
 
-The model-size table compares this count with the source-reported sizes of
-SmolVLA 0.45B and the 7B OpenVLA/OpenVLA-OFT model class. These correspond to
-approximately 2.6 and 40.6 times the ANCHOR count; they do not measure latency
-or memory ratios. VLA values are rounded descriptions from the cited papers,
-not local counts of their adapted checkpoints. The selected SmolVLA simulation
-row has no robotics pretraining, but still uses robot demonstrations to train
-its action policy. The size and training fields are stored with their source
-locations in `data/published_comparisons.json`.
+`statistics.json` also reports conditional completion agreement, failure
+concentration by suite, and stopping relative to the global action caps.
+These quantities are derived from the same frozen 400 records, and `make check`
+checks the numerical macros, frame alignment and phase intervals against them.
 
-## Comparison with published results
+The deployed frozen detector has **172,249,090 unique parameters**, including
+vision and text encoders. Its FP32 weight file contains 689,359,096 bytes.
+One detector serves both cameras in each evaluation process. Geometric skills,
+the grammar and asset gallery add no neural parameters. No robot demonstrations
+train an action policy; perception pretraining and manual skill development
+remain prior requirements. The local parameter audit loads the deployed class
+on CPU to count weights; it is not a CPU inference benchmark. From the repository root:
 
-The table lists success rates for the four LIBERO suites and their reported averages.
-External results come from the following original papers:
+    python3 paper/scripts/audit_model.py --model-dir /path/to/resources/grounding-dino-tiny
+    python3 paper/scripts/build_comparison_table.py
 
-- Diffusion Policy, Octo, and OpenVLA: [OpenVLA v3, Table 12](https://arxiv.org/html/2406.09246v3).
-  All three were evaluated by that paper's authors. The table uses their reported
-  means; the original standard errors are preserved in the data file.
-- SmolVLA 0.45B: [SmolVLA v1, Table 2](https://arxiv.org/html/2506.01844v1).
-  Simulation results use VLM initialization and training across tasks.
-- OpenVLA-OFT: [OpenVLA-OFT v2, Table I](https://arxiv.org/html/2502.19645v2).
-  Results use the full model with an additional wrist camera, robot state,
-  and filtered training demonstrations.
+## Published comparisons and evidence scope
 
-`data/published_comparisons.json` stores source versions, table numbers, PDF page
-numbers, PDF SHA256 hashes, values, and setting descriptions. Source PDFs were used
-for verification and are not redistributed in this repository. Published averages
-are preserved as reported, rather than recomputed from rounded suite scores.
-These rows are literature results; this project did not rerun those policies.
+The five external comparison rows retain the published values and source
+versions in `data/published_comparisons.json`: OpenVLA v3 Table 12,
+SmolVLA v1 Table 2, and OpenVLA-OFT v2 Table I. Those policies were not rerun
+here. Their sensing, policy training and evaluation protocols differ from
+ANCHOR's calibrated RGB-D, known assets, manual skills and stopping rule.
+The ANCHOR row is computed from this local full evaluation.
 
-This project's comparison row is generated from the same 400 records as the main
-text statistics:
+The evaluation covers known assets and supported instruction forms, including
+initial states used during development. It does not establish held-out
+generalization or isolate component effects through ablations. First-success
+time and separate final-state success are not recorded; the outcome measures
+whether the official predicate was reached at any point before stopping.
+The manuscript and references remain an anonymous draft and have not been submitted.
 
-    python3 scripts/build_comparison_table.py
-    python3 scripts/build_comparison_table.py --check
-
-## Data and scope of the conclusions
-
-The combined dataset covers four suites of ten tasks, with official initial-state
-indices 0–9 per task and seed=7. Its 380 retained episodes come from the original
-full evaluation; ten Long 09 and ten Goal 03 episodes come from their respective
-targeted controller snapshots. All failed episodes are retained. The remaining
-38 tasks have not been fully retested with the latest controller; a separate
-two-episode Long 03 regression check is documented in `experiments/goal03/`.
-`data/statistics.json` and generated tables report the combined counts and
-identify the twenty retest episodes. Spatial / Object / Goal / Long have
-**93 / 98 / 97 / 86** successes, respectively, out of 100 records each.
-
-The original run used an RTX 5090. Targeted retests use an RTX 4090 with the same
-pinned software environment; see `experiments/long09/environment.json` and
-`experiments/goal03/environment.json`. Suite timings pool source-run records
-and reflect their hardware and scheduling. The reported targeted dispatcher
-time is the sum of the two ten-episode batch durations.
-
-The paper uses external ever-success scoring: an episode succeeds if the official
-predicate is satisfied at any point. The controller continues until it requests
-stopping or reaches its budget. The paper therefore also reports a cross-tabulation
-of internal completion and external success. This scoring rule cannot be substituted
-for final-state success and is not equivalent to the full OpenVLA evaluation protocol.
-
-The data projection preserves original values and the SHA256 of each original JSONL
-line. `data/raw_episodes.jsonl.gz` contains all 400 original records and geometric
-traces; complete logs and videos remain on the evaluation server. Source-file and
-archive checksums and field mappings are documented in `provenance.json`.
-The historical 2,000-episode summary lacks complete original episode records in this
-package and is not used as an experimental result in the paper.
-
-## Author review
-
-Before submission, the actual authors need to review the manuscript and references,
-clarify the original contributions and scope of development-data use, and approve
-the title, abstract, and conclusions. The published comparison table preserves each
-method's experimental conditions and does not establish superiority under identical
-conditions. The conclusions apply to the evaluated assets, language forms, and
-calibration settings. Records do not separately store first-success time or final-state
-success; the main text explains the precise meaning of the scoring rule.
+Earlier data remain preserved under `data/full400_reference/` and
+`data/task_updates_reference/`, with the corresponding development records in
+[archive/experiments/](../archive/experiments/).
+They are historical references; they do not supply episodes to the current result.
 
 ## Submission format sources
 

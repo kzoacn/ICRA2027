@@ -5,8 +5,11 @@ import collections
 import hashlib
 import json
 from pathlib import Path
+import sys
 
 PAPER = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(PAPER.parent / "scripts"))
+from source_archive import read_audited_source
 SUITES = ("libero_spatial", "libero_object", "libero_goal", "libero_10")
 
 
@@ -16,11 +19,9 @@ def tex_escape(value):
     return "".join(replacements.get(char, char) for char in value)
 
 
-def render_table():
-    published = json.loads((PAPER / "data/published_comparisons.json").read_text())
-    assert published["column_order"] == ["Spatial", "Object", "Goal", "Long", "Average"]
-    data = (PAPER / "data/episodes.jsonl").read_bytes()
-    provenance = json.loads((PAPER / "data/provenance.json").read_text())
+def load_complete_evaluation(directory):
+    data = (directory / "episodes.jsonl").read_bytes()
+    provenance = json.loads((directory / "provenance.json").read_text())
     assert hashlib.sha256(data).hexdigest() == provenance["episodes_projection_sha256"]
     assert provenance["complete"]
     episodes = [json.loads(line) for line in data.splitlines()]
@@ -29,9 +30,25 @@ def render_table():
     assert set(coverage) == {(suite, task) for suite in SUITES for task in range(10)}
     assert set(coverage.values()) == {10}
     assert all(type(r["success"]) is bool for r in episodes)
+    assert all({r["init_id"] for r in episodes
+                if (r["suite"], r["task_id"]) == key} == set(range(10))
+               for key in coverage)
+    return episodes, provenance
+
+
+def success_rates(episodes):
+    rates = [100 * sum(r["success"] for r in episodes if r["suite"] == suite)
+             / sum(r["suite"] == suite for r in episodes) for suite in SUITES]
+    return rates + [100 * sum(r["success"] for r in episodes) / len(episodes)]
+
+
+def render_table():
+    published = json.loads((PAPER / "data/published_comparisons.json").read_text())
+    assert published["column_order"] == ["Spatial", "Object", "Goal", "Long", "Average"]
+    episodes, provenance = load_complete_evaluation(PAPER / "data")
     lines = [
-        "% Generated from published_comparisons.json and episodes.jsonl; do not edit.",
-        r"\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}lp{.36\textwidth}rrrrr@{}}",
+        "% Generated from published comparisons and hashed evaluation records; do not edit.",
+        r"\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}lp{.33\textwidth}rrrrr@{}}",
         r"\toprule",
         r"Method & Sensing and action-policy setup & Spatial & Object & Goal & Long & Average \\",
         r"\midrule",
@@ -46,11 +63,17 @@ def render_table():
         label = tex_escape(row["method"]) + r"~\cite{" + row["source"] + "}"
         lines.append(f"{label} & {tex_escape(row['setup'])} & {means}" + r" \\")
     lines += [r"\midrule", r"\multicolumn{7}{@{}l}{\emph{Measured in this work}} \\"]
-    rates = [100 * sum(r["success"] for r in episodes if r["suite"] == suite)
-             / sum(r["suite"] == suite for r in episodes) for suite in SUITES]
-    rates.append(100 * sum(r["success"] for r in episodes) / len(episodes))
-    lines.append(r"\method{} & Two RGB-D views + state; asset priors, geometric skills & "
-                 + " & ".join(f"{value:.1f}" for value in rates) + r" \\")
+    setup = "Two RGB-D/state; asset priors, geometric skills"
+    measured = [(r"\method{}", episodes)]
+    if provenance.get("evaluation_kind") == "task_replacement":
+        baseline, baseline_meta = load_complete_evaluation(PAPER / "data/full400_reference")
+        assert baseline_meta["controller_source_sha256"]
+        assert sum(r["success"] for r in baseline) == provenance["baseline_total_successes"]
+        measured = [(r"\method{} (frozen)", baseline),
+                    (r"\method{} (combined)", episodes)]
+    for label, records in measured:
+        lines.append(f"{label} & {setup} & "
+                     + " & ".join(f"{value:.1f}" for value in success_rates(records)) + r" \\")
     lines += [r"\bottomrule", r"\end{tabular*}"]
     return "\n".join(lines) + "\n"
 
@@ -58,11 +81,10 @@ def render_table():
 def render_model_artifacts():
     published = json.loads((PAPER / "data/published_comparisons.json").read_text())
     audit = json.loads((PAPER / "data/model_audit.json").read_text())
-    implementation = PAPER.parent / "route-b-v170-cloud"
-    lock = json.loads((implementation / "resources.lock.json").read_text())["model"]
+    lock = json.loads((PAPER.parent / "configs/resources.lock.json").read_text())["model"]
     assert audit["schema"] == 1 and audit["checkpoint"] == lock
-    source = PAPER.parent / audit["implementation"]["file"]
-    assert hashlib.sha256(source.read_bytes()).hexdigest() == audit["implementation"]["sha256"]
+    source = read_audited_source(audit["implementation"]["file"])
+    assert hashlib.sha256(source).hexdigest() == audit["implementation"]["sha256"]
     count = audit["parameters"]
     assert count > 0 and audit["runtime_trainable_parameters"] == 0
     assert audit["parameter_elements_by_dtype"] == {"torch.float32": count}
@@ -109,7 +131,7 @@ def main():
         path = PAPER / "generated" / name
         if args.check:
             assert path.read_text() == rendered, f"Generated artifact is stale: {name}"
-        else:
+        elif not path.exists() or path.read_text() != rendered:
             path.write_text(rendered)
             print(f"Wrote {path.relative_to(PAPER)}")
     if args.check:

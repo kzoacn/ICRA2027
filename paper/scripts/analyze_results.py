@@ -11,10 +11,12 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import numpy as np
+from build_comparison_table import load_complete_evaluation
 
 PAPER = Path(__file__).resolve().parents[1]
 SUITES = [("libero_spatial", "Spatial"), ("libero_object", "Object"),
           ("libero_goal", "Goal"), ("libero_10", "Long")]
+CAPS = {"libero_spatial": 220, "libero_object": 280, "libero_goal": 300, "libero_10": 520}
 plt.rcParams.update({"font.family": "DejaVu Sans", "font.size": 8,
                      "pdf.fonttype": 42, "ps.fonttype": 42,
                      "axes.spines.top": False, "axes.spines.right": False})
@@ -62,6 +64,22 @@ def main():
     successes = sum(r["success"] for r in rows)
     completed_false = sum(r["policy_status"] == "succeeded" and not r["success"] for r in rows)
     stopped_true = sum(r["policy_status"] != "succeeded" and r["success"] for r in rows)
+    externally_failed = [r for r in rows if not r["success"]]
+    completed = [r for r in rows if r["policy_status"] == "succeeded"]
+    completed_true = sum(r["success"] for r in completed)
+    timeouts = [r for r in rows if r["policy_status"] == "timeout"]
+    long_failed = sum(r["suite"] == "libero_10" for r in externally_failed)
+    stopping = {
+        "controller_completed": len(completed),
+        "external_success_given_completion_count": completed_true,
+        "external_success_given_completion_percent": 100 * completed_true / len(completed) if completed else 0,
+        "external_failures_before_global_cap": sum(r["steps"] < CAPS[r["suite"]] for r in externally_failed),
+        "minimum_unused_actions_in_external_failures": min((CAPS[r["suite"]] - r["steps"] for r in externally_failed), default=0),
+        "global_timeouts": len(timeouts),
+        "global_timeouts_with_external_success": sum(r["success"] for r in timeouts),
+        "long_external_failures": long_failed,
+        "long_share_of_external_failures_percent": 100 * long_failed / len(externally_failed) if externally_failed else 0,
+    }
     fresh = [r for r in rows if not r["reused"]]
     summaries = []
     for suite, label in SUITES:
@@ -81,6 +99,7 @@ def main():
             "controller_completed_external_failed": completed_false,
             "external_success_without_controller_completion": stopped_true},
         "failure_groups": dict(failures),
+        "stopping_analysis": stopping,
         "new_episodes": len(fresh), "reused_episodes": n - len(fresh),
         "new_successes": sum(r["success"] for r in fresh),
         "reused_successes": sum(r["success"] for r in rows if r["reused"]),
@@ -92,6 +111,15 @@ def main():
         "FailureCount": n-successes, "ControllerFalsePositive": completed_false,
         "ControllerMissedSuccess": stopped_true, "DisagreementCount": completed_false+stopped_true,
         "DisagreementRate": f"{100*(completed_false+stopped_true)/n:.1f}",
+        "ControllerCompleteCount": len(completed),
+        "CompletedExternalSuccessCount": completed_true,
+        "CompletionAgreementRate": f"{stopping['external_success_given_completion_percent']:.1f}",
+        "EarlyFailureCount": stopping["external_failures_before_global_cap"],
+        "FailureMinUnusedSteps": stopping["minimum_unused_actions_in_external_failures"],
+        "GlobalTimeoutCount": len(timeouts),
+        "GlobalTimeoutSuccessCount": stopping["global_timeouts_with_external_success"],
+        "LongFailureCount": long_failed,
+        "LongFailureShare": f"{stopping['long_share_of_external_failures_percent']:.1f}",
         "FreshCount": len(fresh), "FreshSuccessCount": sum(r["success"] for r in fresh),
         "ReusedCount": n-len(fresh),
         "FreshSuccessRate": f"{100*sum(r['success'] for r in fresh)/len(fresh):.1f}",
@@ -124,13 +152,25 @@ def main():
         + r"\newif\ifTaskRefresh" + "\n"
         + (r"\TaskRefreshtrue" if task_refresh else r"\TaskRefreshfalse") + "\n"
         + "".join(r"\newcommand{\%s}{%s}" % (key,value) + "\n" for key,value in macros.items()))
-    lines = [r"\begin{tabular}{lrrrr}", r"\toprule",
-             r"Suite & Success & SR (\%) & Mean steps & Median s$^\dagger$ \\",
+    baseline = None
+    if task_refresh:
+        baseline, _ = load_complete_evaluation(PAPER / "data/full400_reference")
+        assert sum(r["success"] for r in baseline) == macros["BaselineSuccessCount"]
+    header = (r"Suite & Full run & Combined & Mean steps & Median s$^\dagger$ \\" if task_refresh
+              else r"Suite & Success & SR (\%) & Mean steps & Median s$^\dagger$ \\")
+    lines = [r"\begin{tabular}{lrrrr}", r"\toprule", header,
              r"\midrule"]
     for s in summaries:
-        lines.append(f"{s['label']} & {s['successes']}/{s['n']} & {s['rate']:.1f} & "
+        if task_refresh:
+            original = [r for r in baseline if r["suite"] == s["suite"]]
+            counts = f"{sum(r['success'] for r in original)}/{len(original)} & {s['successes']}/{s['n']}"
+        else:
+            counts = f"{s['successes']}/{s['n']} & {s['rate']:.1f}"
+        lines.append(f"{s['label']} & {counts} & "
                      f"{s['mean_steps']:.1f} & {s['median_elapsed_s']:.1f}" + r" \\")
-    lines += [r"\midrule", f"Overall & {successes}/{n} & {100*successes/n:.1f} & "
+    counts = (f"{sum(r['success'] for r in baseline)}/{len(baseline)} & {successes}/{n}" if task_refresh
+              else f"{successes}/{n} & {100*successes/n:.1f}")
+    lines += [r"\midrule", f"Overall & {counts} & "
               f"{statistics.mean(r['steps'] for r in rows):.1f} & "
               f"{statistics.median(r['elapsed_s'] for r in (rows if task_refresh else fresh)):.1f}" + r" \\",
               r"\bottomrule", r"\end{tabular}"]
@@ -166,11 +206,13 @@ def main():
             if group: values[i,t]=sum(r["success"] for r in group)/len(group)
     fig,ax=plt.subplots(figsize=(6.8,1.95),layout="constrained")
     ax.imshow(values,cmap="Blues",vmin=0,vmax=1,aspect="auto")
+    refreshed_tasks = {(r["suite"], r["task_id"]) for r in rows if task_refresh and not r["reused"]}
     for i in range(4):
         for t in range(10):
             group=[r for r in rows if r["suite"]==SUITES[i][0] and r["task_id"]==t]
             if group:
-                ax.text(t,i,f"{sum(r['success'] for r in group)}/{len(group)}",
+                marker = "*" if (SUITES[i][0], t) in refreshed_tasks else ""
+                ax.text(t,i,f"{sum(r['success'] for r in group)}/{len(group)}{marker}",
                         ha="center",va="center",color="white" if values[i,t]>.65 else "#132d43")
     ax.set_xticks(range(10),[f"{i:02d}" for i in range(10)])
     ax.set_yticks(range(4),[label for _,label in SUITES])

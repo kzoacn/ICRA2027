@@ -1,0 +1,13 @@
+[
+  {
+    "workers": 4,
+    "at": "2026-09-14T15:33:14+00:00",
+    "reason": "Initial local concurrency"
+  },
+  {
+    "workers": 6,
+    "at": "2026-09-14T15:35:05.791938+00:00",
+    "completed_episodes": 8,
+    "reason": "Four workers stable; GPU 12.5 GB / 24.6 GB and 15 GiB host memory available."
+  }
+]

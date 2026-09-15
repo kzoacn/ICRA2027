@@ -1,5 +1,5 @@
-% Generated from published_comparisons.json and episodes.jsonl; do not edit.
-\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}lp{.36\textwidth}rrrrr@{}}
+% Generated from published comparisons and hashed evaluation records; do not edit.
+\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}lp{.33\textwidth}rrrrr@{}}
 \toprule
 Method & Sensing and action-policy setup & Spatial & Object & Goal & Long & Average \\
 \midrule
@@ -11,6 +11,6 @@ SmolVLA (0.45B)~\cite{smolvla} & RGB/state; VLM-initialized policy trained acros
 OpenVLA-OFT~\cite{openvlaoft} & Two RGB views + state; policy fine-tuned per suite & 97.6 & 98.4 & 97.9 & 94.5 & 97.1 \\
 \midrule
 \multicolumn{7}{@{}l}{\emph{Measured in this work}} \\
-\method{} & Two RGB-D views + state; asset priors, geometric skills & 93.0 & 98.0 & 97.0 & 86.0 & 93.5 \\
+\method{} & Two RGB-D/state; asset priors, geometric skills & 93.0 & 98.0 & 98.0 & 87.0 & 94.0 \\
 \bottomrule
 \end{tabular*}

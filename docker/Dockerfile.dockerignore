@@ -1,0 +1,14 @@
+.git
+.venv
+runtime
+resources
+outputs
+paper
+archive
+experiments
+docs
+tests
+**/__pycache__
+**/*.pyc
+.env
+.env.*

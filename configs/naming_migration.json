@@ -1,0 +1,324 @@
+{
+  "schema": 1,
+  "global_replacements": [
+    [
+      "libero_system.route_b",
+      "anchor.manipulation"
+    ],
+    [
+      "libero_system.route_c",
+      "anchor.planning"
+    ],
+    [
+      "libero_system.goal_skills",
+      "anchor.contact"
+    ],
+    [
+      "libero_system/route_b/",
+      "anchor/manipulation/"
+    ],
+    [
+      "libero_system/route_c/",
+      "anchor/planning/"
+    ],
+    [
+      "libero_system/goal_skills/",
+      "anchor/contact/"
+    ],
+    [
+      ".route_b.",
+      ".manipulation."
+    ],
+    [
+      ".route_b import",
+      ".manipulation import"
+    ],
+    [
+      ".route_c.",
+      ".planning."
+    ],
+    [
+      ".route_c import",
+      ".planning import"
+    ],
+    [
+      ".goal_skills.",
+      ".contact."
+    ],
+    [
+      ".goal_skills import",
+      ".contact import"
+    ],
+    [
+      "formal_route_c_process",
+      "planning_process"
+    ],
+    [
+      "route_b_policy_runtime",
+      "anchor_policy_runtime"
+    ],
+    [
+      "route_c_policy_runtime",
+      "planning_policy_runtime"
+    ],
+    [
+      "libero_system",
+      "anchor"
+    ],
+    [
+      "libero-system",
+      "anchor"
+    ],
+    [
+      "ROUTE_B",
+      "ANCHOR"
+    ],
+    [
+      "RouteB",
+      "Anchor"
+    ],
+    [
+      "Route B",
+      "ANCHOR"
+    ],
+    [
+      "route_b",
+      "anchor"
+    ],
+    [
+      "route-b",
+      "anchor"
+    ],
+    [
+      "ROUTE_C",
+      "PLANNING"
+    ],
+    [
+      "RouteC",
+      "Planning"
+    ],
+    [
+      "Route C",
+      "Planning"
+    ],
+    [
+      "route_c",
+      "planning"
+    ],
+    [
+      "route-c",
+      "planning"
+    ],
+    [
+      "Route-B",
+      "ANCHOR"
+    ],
+    [
+      "route-B",
+      "ANCHOR"
+    ],
+    [
+      "route B",
+      "ANCHOR"
+    ],
+    [
+      "Route-C",
+      "Planning"
+    ],
+    [
+      "route-C",
+      "planning"
+    ],
+    [
+      "route C",
+      "planning"
+    ],
+    [
+      "ANCHOR/C",
+      "ANCHOR/planning"
+    ]
+  ],
+  "file_replacements": {
+    "src/anchor/common/env_adapter.py": [
+      [
+        "workspace = Path(__file__).resolve().parents[2]",
+        "workspace = Path(__file__).resolve().parents[3]"
+      ],
+      [
+        "workspace / \".local\" / \"libero\"",
+        "workspace / \"runtime\" / \"libero\""
+      ]
+    ],
+    "src/anchor/perception/gallery.py": [
+      [
+        "Path(__file__).resolve().parents[2] / \"resources\"",
+        "Path(__file__).resolve().parents[3] / \"resources\""
+      ]
+    ],
+    "src/anchor/perception/grounding_dino.py": [
+      [
+        "Path(__file__).resolve().parents[2] / \"resources\"",
+        "Path(__file__).resolve().parents[3] / \"resources\""
+      ]
+    ],
+    "src/anchor/integration/config.py": [
+      [
+        "def parse_task_ids(value: str) -> tuple[int, ...]:",
+        "def normalize_route(value: str) -> str:\n    \"\"\"Use descriptive CLI names while retaining recorded b/c wire identifiers.\"\"\"\n    aliases = {\"anchor\": \"b\", \"planning\": \"c\", \"b\": \"b\", \"c\": \"c\"}\n    try:\n        return aliases[value.strip().lower()]\n    except KeyError as exc:\n        raise argparse.ArgumentTypeError(\"method must be anchor or planning\") from exc\n\n\ndef parse_task_ids(value: str) -> tuple[int, ...]:"
+      ],
+      [
+        "parser.add_argument(\"--route\", choices=(\"b\", \"c\"), required=True)",
+        "parser.add_argument(\"--route\", type=normalize_route, metavar=\"{anchor,planning}\", default=\"b\")"
+      ]
+    ],
+    "src/anchor/integration/evaluator.py": [
+      [
+        "    name = f\"route-{key.route}_{key.suite}_task-{key.task_id:02d}_ep-{key.episode_index:04d}.mp4\"",
+        "    method = \"anchor\" if key.route == \"b\" else \"planning\"\n    name = f\"{method}_{key.suite}_task-{key.task_id:02d}_ep-{key.episode_index:04d}.mp4\""
+      ]
+    ]
+  },
+  "paths": {
+    "route-b-v170-cloud/libero_system/__init__.py": "src/anchor/__init__.py",
+    "route-b-v170-cloud/libero_system/common/__init__.py": "src/anchor/common/__init__.py",
+    "route-b-v170-cloud/libero_system/common/camera_geometry.py": "src/anchor/common/camera_geometry.py",
+    "route-b-v170-cloud/libero_system/common/env_adapter.py": "src/anchor/common/env_adapter.py",
+    "route-b-v170-cloud/libero_system/common/grasp_journal.py": "src/anchor/common/grasp_journal.py",
+    "route-b-v170-cloud/libero_system/common/observation.py": "src/anchor/common/observation.py",
+    "route-b-v170-cloud/libero_system/common/pan_affordance.py": "src/anchor/common/pan_affordance.py",
+    "route-b-v170-cloud/libero_system/common/panda_kinematics.py": "src/anchor/common/panda_kinematics.py",
+    "route-b-v170-cloud/libero_system/common/policy.py": "src/anchor/common/policy.py",
+    "route-b-v170-cloud/libero_system/common/runner.py": "src/anchor/common/runner.py",
+    "route-b-v170-cloud/libero_system/common/smoke.py": "src/anchor/common/smoke.py",
+    "route-b-v170-cloud/libero_system/goal_skills/__init__.py": "src/anchor/contact/__init__.py",
+    "route-b-v170-cloud/libero_system/goal_skills/compiler.py": "src/anchor/contact/compiler.py",
+    "route-b-v170-cloud/libero_system/goal_skills/controller.py": "src/anchor/contact/controller.py",
+    "route-b-v170-cloud/libero_system/goal_skills/detectors.py": "src/anchor/contact/detectors.py",
+    "route-b-v170-cloud/libero_system/goal_skills/schema.py": "src/anchor/contact/schema.py",
+    "route-b-v170-cloud/libero_system/goal_skills/smoke.py": "src/anchor/contact/smoke.py",
+    "route-b-v170-cloud/libero_system/integration/__init__.py": "src/anchor/integration/__init__.py",
+    "route-b-v170-cloud/libero_system/integration/__main__.py": "src/anchor/integration/__main__.py",
+    "route-b-v170-cloud/libero_system/integration/adapters.py": "src/anchor/integration/adapters.py",
+    "route-b-v170-cloud/libero_system/integration/campaign_manifest.py": "src/anchor/integration/campaign_manifest.py",
+    "route-b-v170-cloud/libero_system/integration/campaign_plan.py": "src/anchor/integration/campaign_plan.py",
+    "route-b-v170-cloud/libero_system/integration/cavity.py": "src/anchor/integration/cavity.py",
+    "route-b-v170-cloud/libero_system/integration/cli.py": "src/anchor/integration/cli.py",
+    "route-b-v170-cloud/libero_system/integration/components.py": "src/anchor/integration/components.py",
+    "route-b-v170-cloud/libero_system/integration/config.py": "src/anchor/integration/config.py",
+    "route-b-v170-cloud/libero_system/integration/evaluator.py": "src/anchor/integration/evaluator.py",
+    "route-b-v170-cloud/libero_system/integration/formal_process_sandbox.py": "src/anchor/integration/formal_process_sandbox.py",
+    "route-b-v170-cloud/libero_system/integration/formal_process_transport.py": "src/anchor/integration/formal_process_transport.py",
+    "route-b-v170-cloud/libero_system/integration/formal_provenance.py": "src/anchor/integration/formal_provenance.py",
+    "route-b-v170-cloud/libero_system/integration/formal_route_c_process.py": "src/anchor/integration/planning_process.py",
+    "route-b-v170-cloud/libero_system/integration/grasp_audit.py": "src/anchor/integration/grasp_audit.py",
+    "route-b-v170-cloud/libero_system/integration/grasp_cloud.py": "src/anchor/integration/grasp_cloud.py",
+    "route-b-v170-cloud/libero_system/integration/policy_boundary_audit.py": "src/anchor/integration/policy_boundary_audit.py",
+    "route-b-v170-cloud/libero_system/integration/policy_ipc.py": "src/anchor/integration/policy_ipc.py",
+    "route-b-v170-cloud/libero_system/integration/policy_result.py": "src/anchor/integration/policy_result.py",
+    "route-b-v170-cloud/libero_system/integration/results.py": "src/anchor/integration/results.py",
+    "route-b-v170-cloud/libero_system/integration/route_b_policy_runtime.py": "src/anchor/integration/anchor_policy_runtime.py",
+    "route-b-v170-cloud/libero_system/integration/route_c_policy_runtime.py": "src/anchor/integration/planning_policy_runtime.py",
+    "route-b-v170-cloud/libero_system/integration/video.py": "src/anchor/integration/video.py",
+    "route-b-v170-cloud/libero_system/integration/video_audit.py": "src/anchor/integration/video_audit.py",
+    "route-b-v170-cloud/libero_system/perception/__init__.py": "src/anchor/perception/__init__.py",
+    "route-b-v170-cloud/libero_system/perception/adapters.py": "src/anchor/perception/adapters.py",
+    "route-b-v170-cloud/libero_system/perception/carried_flat.py": "src/anchor/perception/carried_flat.py",
+    "route-b-v170-cloud/libero_system/perception/carried_mug.py": "src/anchor/perception/carried_mug.py",
+    "route-b-v170-cloud/libero_system/perception/flat_mesh.py": "src/anchor/perception/flat_mesh.py",
+    "route-b-v170-cloud/libero_system/perception/fusion.py": "src/anchor/perception/fusion.py",
+    "route-b-v170-cloud/libero_system/perception/gallery.py": "src/anchor/perception/gallery.py",
+    "route-b-v170-cloud/libero_system/perception/geometry.py": "src/anchor/perception/geometry.py",
+    "route-b-v170-cloud/libero_system/perception/grounding_dino.py": "src/anchor/perception/grounding_dino.py",
+    "route-b-v170-cloud/libero_system/perception/mesh_depth.py": "src/anchor/perception/mesh_depth.py",
+    "route-b-v170-cloud/libero_system/perception/mug_mesh.py": "src/anchor/perception/mug_mesh.py",
+    "route-b-v170-cloud/libero_system/perception/object_identity.py": "src/anchor/perception/object_identity.py",
+    "route-b-v170-cloud/libero_system/perception/object_top_completion.py": "src/anchor/perception/object_top_completion.py",
+    "route-b-v170-cloud/libero_system/perception/panda_visual_mask.py": "src/anchor/perception/panda_visual_mask.py",
+    "route-b-v170-cloud/libero_system/perception/pipeline.py": "src/anchor/perception/pipeline.py",
+    "route-b-v170-cloud/libero_system/perception/prior_consistency.py": "src/anchor/perception/prior_consistency.py",
+    "route-b-v170-cloud/libero_system/perception/schema.py": "src/anchor/perception/schema.py",
+    "route-b-v170-cloud/libero_system/route_b/__init__.py": "src/anchor/manipulation/__init__.py",
+    "route-b-v170-cloud/libero_system/route_b/anchored_rim.py": "src/anchor/manipulation/anchored_rim.py",
+    "route-b-v170-cloud/libero_system/route_b/carried_rim.py": "src/anchor/manipulation/carried_rim.py",
+    "route-b-v170-cloud/libero_system/route_b/controller.py": "src/anchor/manipulation/controller.py",
+    "route-b-v170-cloud/libero_system/route_b/drawer_floor.py": "src/anchor/manipulation/drawer_floor.py",
+    "route-b-v170-cloud/libero_system/route_b/drawer_interior.py": "src/anchor/manipulation/drawer_interior.py",
+    "route-b-v170-cloud/libero_system/route_b/drawer_landing.py": "src/anchor/manipulation/drawer_landing.py",
+    "route-b-v170-cloud/libero_system/route_b/drawer_transfer.py": "src/anchor/manipulation/drawer_transfer.py",
+    "route-b-v170-cloud/libero_system/route_b/fitting_orientation.py": "src/anchor/manipulation/fitting_orientation.py",
+    "route-b-v170-cloud/libero_system/route_b/fixture_surfaces.py": "src/anchor/manipulation/fixture_surfaces.py",
+    "route-b-v170-cloud/libero_system/route_b/flat_transfer.py": "src/anchor/manipulation/flat_transfer.py",
+    "route-b-v170-cloud/libero_system/route_b/gripper_clearance.py": "src/anchor/manipulation/gripper_clearance.py",
+    "route-b-v170-cloud/libero_system/route_b/microwave_close.py": "src/anchor/manipulation/microwave_close.py",
+    "route-b-v170-cloud/libero_system/route_b/microwave_interior.py": "src/anchor/manipulation/microwave_interior.py",
+    "route-b-v170-cloud/libero_system/route_b/models.py": "src/anchor/manipulation/models.py",
+    "route-b-v170-cloud/libero_system/route_b/partial_shelf.py": "src/anchor/manipulation/partial_shelf.py",
+    "route-b-v170-cloud/libero_system/route_b/perception.py": "src/anchor/manipulation/perception.py",
+    "route-b-v170-cloud/libero_system/route_b/release_geometry.py": "src/anchor/manipulation/release_geometry.py",
+    "route-b-v170-cloud/libero_system/route_b/rigid_shape.py": "src/anchor/manipulation/rigid_shape.py",
+    "route-b-v170-cloud/libero_system/route_b/rim_geometry.py": "src/anchor/manipulation/rim_geometry.py",
+    "route-b-v170-cloud/libero_system/route_b/rim_transfer_frame.py": "src/anchor/manipulation/rim_transfer_frame.py",
+    "route-b-v170-cloud/libero_system/route_b/slatted_rack.py": "src/anchor/manipulation/slatted_rack.py",
+    "route-b-v170-cloud/libero_system/route_b/stove_support.py": "src/anchor/manipulation/stove_support.py",
+    "route-b-v170-cloud/libero_system/route_b/task_compiler.py": "src/anchor/manipulation/task_compiler.py",
+    "route-b-v170-cloud/libero_system/route_c/__init__.py": "src/anchor/planning/__init__.py",
+    "route-b-v170-cloud/libero_system/route_c/compiler.py": "src/anchor/planning/compiler.py",
+    "route-b-v170-cloud/libero_system/route_c/controller.py": "src/anchor/planning/controller.py",
+    "route-b-v170-cloud/libero_system/route_c/demo.py": "src/anchor/planning/demo.py",
+    "route-b-v170-cloud/libero_system/route_c/grasp.py": "src/anchor/planning/grasp.py",
+    "route-b-v170-cloud/libero_system/route_c/optimizer.py": "src/anchor/planning/optimizer.py",
+    "route-b-v170-cloud/libero_system/route_c/perception.py": "src/anchor/planning/perception.py",
+    "route-b-v170-cloud/libero_system/route_c/schema.py": "src/anchor/planning/schema.py",
+    "route-b-v170-cloud/libero_system/route_c/sdf.py": "src/anchor/planning/sdf.py",
+    "route-b-v170-cloud/libero_system/route_c/sequential.py": "src/anchor/planning/sequential.py",
+    "route-b-v170-cloud/libero_system/route_c/task_planner.py": "src/anchor/planning/task_planner.py",
+    "DEPLOYMENT.md": "docs/history/server-deployment.md",
+    "FULL_TEST.md": "docs/history/evaluation-2000.md",
+    "RUN_400_PARALLEL.md": "docs/history/evaluation-400.md",
+    "LIBERO_EVALUATION_PROTOCOLS.md": "docs/evaluation-protocol.md",
+    "paper/EVIDENCE.md": "docs/paper/evidence.md",
+    "paper/CITATION_AUDIT.md": "docs/paper/citation-audit.md",
+    "paper/WRITING_NOTES.md": "archive/paper/writing-notes.md",
+    "experiments/goal03": "archive/experiments/drawer",
+    "experiments/long09": "archive/experiments/microwave",
+    "experiments/route_b_90": "archive/experiments/baseline",
+    "experiments/local400": "experiments/libero400",
+    "route-b-v170-cloud/provenance": "archive/deployment/provenance",
+    "route-b-v170-cloud/runtime/jobs": "archive/jobs",
+    "route-b-v170-cloud/SHA256SUMS": "archive/deployment/SHA256SUMS",
+    "route-b-v170-cloud/SHA256SUMS.current": "archive/deployment/SHA256SUMS.current",
+    "route-b-v170-cloud/SHA256SUMS.deployed": "archive/deployment/SHA256SUMS.deployed",
+    "route-b-v170-cloud/README.md": "archive/deployment/README.original.md",
+    "route-b-v170-cloud/resources.lock.json": "configs/resources.lock.json",
+    "route-b-v170-cloud/requirements.txt": "configs/requirements.txt",
+    "route-b-v170-cloud/requirements-simulator.txt": "configs/requirements-simulator.txt",
+    "route-b-v170-cloud/Dockerfile": "docker/Dockerfile",
+    "route-b-v170-cloud/.dockerignore": "archive/deployment/dockerignore.original",
+    "route-b-v170-cloud/.gitignore": "archive/deployment/gitignore.original",
+    "route-b-v170-cloud/run.sh": "scripts/run.sh",
+    "route-b-v170-cloud/setup.sh": "scripts/setup.sh",
+    "route-b-v170-cloud/scripts/install.sh": "scripts/install.sh",
+    "route-b-v170-cloud/cloud.py": "src/anchor/cli.py",
+    "route-b-v170-cloud/libero_system/route_b": "src/anchor/manipulation",
+    "route-b-v170-cloud/libero_system/route_c": "src/anchor/planning",
+    "route-b-v170-cloud/libero_system/goal_skills": "src/anchor/contact",
+    "route-b-v170-cloud/libero_system": "src/anchor",
+    "route-b-v170-cloud/scripts": "scripts",
+    "route-b-v170-cloud": ".",
+    "paper/figures/recorded/goal_task03_init02_frame000.png": "archive/paper/recorded/goal_task03_init02_frame000.png",
+    "paper/figures/recorded/goal_task03_init02_frame050.png": "archive/paper/recorded/goal_task03_init02_frame050.png",
+    "paper/figures/recorded/goal_task03_init02_frame100.png": "archive/paper/recorded/goal_task03_init02_frame100.png",
+    "paper/figures/recorded/goal_task03_init02_frame150.png": "archive/paper/recorded/goal_task03_init02_frame150.png",
+    "paper/scripts/update_task_results.py": "archive/paper/update_task_results.py"
+  },
+  "evaluated_archive": "archive/evaluated-source/manifest.json",
+  "new_entrypoint_files": [
+    "src/anchor/cli.py",
+    "src/anchor/__main__.py"
+  ],
+  "note": "Historical result and source-audit JSON/JSONL bytes are unchanged. Wire route identifiers b/c remain compatible.",
+  "identifier_prefix_replacements": [
+    "route_b",
+    "route_c"
+  ]
+}

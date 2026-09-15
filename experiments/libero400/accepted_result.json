@@ -1,0 +1,208 @@
+{
+  "schema": 1,
+  "run_name": "full400_local_20260914T153307Z",
+  "state": "completed",
+  "recorded_at": "2026-09-14T16:38:47.215318+00:00",
+  "episodes": 400,
+  "successes": 376,
+  "success_rate_percent": 94.0,
+  "fresh_episodes": 400,
+  "reused_episodes": 0,
+  "controller_versions": 1,
+  "controller_source_sha256": "7bdcb97a7b847debeb0bd47c951455934701f81d7b561ad097fe5b41269de256",
+  "manifest_sha256": "3ec8b354c9e6605bfcc315f1fe3d0ef73a3c5a92ac455d077673182de11d0d1e",
+  "environment_sha256": "f38c99b3107781f22387c2644408e95af9bc9894c77a4fc0b10f9bb1afe524dc",
+  "per_suite": {
+    "Spatial": {
+      "episodes": 100,
+      "successes": 93
+    },
+    "Object": {
+      "episodes": 100,
+      "successes": 98
+    },
+    "Goal": {
+      "episodes": 100,
+      "successes": 98
+    },
+    "Long": {
+      "episodes": 100,
+      "successes": 87
+    }
+  },
+  "per_task": {
+    "spatial_task00": {
+      "episodes": 10,
+      "successes": 10
+    },
+    "spatial_task01": {
+      "episodes": 10,
+      "successes": 8
+    },
+    "spatial_task02": {
+      "episodes": 10,
+      "successes": 10
+    },
+    "spatial_task03": {
+      "episodes": 10,
+      "successes": 9
+    },
+    "spatial_task04": {
+      "episodes": 10,
+      "successes": 7
+    },
+    "spatial_task05": {
+      "episodes": 10,
+      "successes": 9
+    },
+    "spatial_task06": {
+      "episodes": 10,
+      "successes": 10
+    },
+    "spatial_task07": {
+      "episodes": 10,
+      "successes": 10
+    },
+    "spatial_task08": {
+      "episodes": 10,
+      "successes": 10
+    },
+    "spatial_task09": {
+      "episodes": 10,
+      "successes": 10
+    },
+    "object_task00": {
+      "episodes": 10,
+      "successes": 10
+    },
+    "object_task01": {
+      "episodes": 10,
+      "successes": 9
+    },
+    "object_task02": {
+      "episodes": 10,
+      "successes": 10
+    },
+    "object_task03": {
+      "episodes": 10,
+      "successes": 10
+    },
+    "object_task04": {
+      "episodes": 10,
+      "successes": 9
+    },
+    "object_task05": {
+      "episodes": 10,
+      "successes": 10
+    },
+    "object_task06": {
+      "episodes": 10,
+      "successes": 10
+    },
+    "object_task07": {
+      "episodes": 10,
+      "successes": 10
+    },
+    "object_task08": {
+      "episodes": 10,
+      "successes": 10
+    },
+    "object_task09": {
+      "episodes": 10,
+      "successes": 10
+    },
+    "goal_task00": {
+      "episodes": 10,
+      "successes": 10
+    },
+    "goal_task01": {
+      "episodes": 10,
+      "successes": 10
+    },
+    "goal_task02": {
+      "episodes": 10,
+      "successes": 10
+    },
+    "goal_task03": {
+      "episodes": 10,
+      "successes": 9
+    },
+    "goal_task04": {
+      "episodes": 10,
+      "successes": 10
+    },
+    "goal_task05": {
+      "episodes": 10,
+      "successes": 10
+    },
+    "goal_task06": {
+      "episodes": 10,
+      "successes": 9
+    },
+    "goal_task07": {
+      "episodes": 10,
+      "successes": 10
+    },
+    "goal_task08": {
+      "episodes": 10,
+      "successes": 10
+    },
+    "goal_task09": {
+      "episodes": 10,
+      "successes": 10
+    },
+    "long_task00": {
+      "episodes": 10,
+      "successes": 10
+    },
+    "long_task01": {
+      "episodes": 10,
+      "successes": 9
+    },
+    "long_task02": {
+      "episodes": 10,
+      "successes": 9
+    },
+    "long_task03": {
+      "episodes": 10,
+      "successes": 7
+    },
+    "long_task04": {
+      "episodes": 10,
+      "successes": 7
+    },
+    "long_task05": {
+      "episodes": 10,
+      "successes": 10
+    },
+    "long_task06": {
+      "episodes": 10,
+      "successes": 9
+    },
+    "long_task07": {
+      "episodes": 10,
+      "successes": 10
+    },
+    "long_task08": {
+      "episodes": 10,
+      "successes": 8
+    },
+    "long_task09": {
+      "episodes": 10,
+      "successes": 8
+    }
+  },
+  "elapsed_wall_s": 3760.618748896,
+  "runtime_exceptions": 0,
+  "validation": {
+    "coverage_passed": true,
+    "issues": [],
+    "episodes": 400,
+    "source_tree_sha256": "7bdcb97a7b847debeb0bd47c951455934701f81d7b561ad097fe5b41269de256",
+    "episodes_jsonl_sha256": "8e320e434f1f82088d21da8a9d9f2146fb4f41b1cadc15520f8d92d80e8a4ffb",
+    "validated_at": "2026-09-14T16:35:56+00:00"
+  },
+  "all_video_files_present": true,
+  "paper_validation": "paper/data/artifact_validation.json",
+  "paper_pdf_sha256": "3337fe9a2769f3593ab162246127f3c2c9d1876e319631f24f4b3f2620cf7dc8"
+}

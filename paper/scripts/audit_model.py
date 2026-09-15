@@ -9,7 +9,7 @@ import platform
 import sys
 
 PAPER = Path(__file__).resolve().parents[1]
-IMPLEMENTATION = PAPER.parent / "route-b-v170-cloud"
+IMPLEMENTATION = PAPER.parent / "src"
 
 
 def sha256(path):
@@ -23,7 +23,7 @@ def main():
                         help="Local grounding-dino-tiny directory from resources.lock.json.")
     parser.add_argument("--output", type=Path, default=PAPER / "data/model_audit.json")
     args = parser.parse_args()
-    checkpoint = json.loads((IMPLEMENTATION / "resources.lock.json").read_text())["model"]
+    checkpoint = json.loads((PAPER.parent / "configs/resources.lock.json").read_text())["model"]
     for expected in checkpoint["files"]:
         path = args.model_dir / expected["path"]
         if path.stat().st_size != expected["size"] or sha256(path) != expected["sha256"]:
@@ -32,7 +32,7 @@ def main():
     sys.path.insert(0, str(IMPLEMENTATION))
     import torch
     import transformers
-    from libero_system.perception.grounding_dino import GroundingDINOBoxDetector
+    from anchor.perception.grounding_dino import GroundingDINOBoxDetector
 
     detector = GroundingDINOBoxDetector(args.model_dir, device="cpu", local_files_only=True)
     # Module.parameters() removes shared Parameter objects by default.
@@ -43,7 +43,7 @@ def main():
     trainable = sum(parameter.numel() for parameter in parameters if parameter.requires_grad)
     if trainable or detector.model.training:
         raise ValueError("The deployed detector must remain frozen in evaluation mode.")
-    implementation_file = IMPLEMENTATION / "libero_system/perception/grounding_dino.py"
+    implementation_file = IMPLEMENTATION / "anchor/perception/grounding_dino.py"
     weight_file = next(item for item in checkpoint["files"]
                        if item["path"] == "model.safetensors")
     result = {

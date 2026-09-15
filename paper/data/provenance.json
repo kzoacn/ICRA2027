@@ -1,9 +1,9 @@
 {
-  "run_name": "full400_reference_plus_targeted_retests",
+  "run_name": "full400_local_20260914T153307Z",
   "state": "completed",
   "complete": true,
-  "evaluation_kind": "task_replacement",
-  "status_updated_at": "2026-09-14T09:02:27+00:00",
+  "evaluation_kind": "full_campaign",
+  "status_updated_at": "2026-09-14T16:35:54+00:00",
   "recorded_episodes": 400,
   "expected_episodes": 400,
   "protocol": {
@@ -30,299 +30,270 @@
     },
     "scoring": "external_sticky_any_success",
     "expected_episodes": 400,
-    "new_episodes": 20,
-    "reused_episodes": 380
+    "new_episodes": 400,
+    "reused_episodes": 0
   },
-  "controller_source_sha256": null,
-  "controller_sources": [
+  "controller_source_sha256": "7bdcb97a7b847debeb0bd47c951455934701f81d7b561ad097fe5b41269de256",
+  "source_manifest_sha256": "3ec8b354c9e6605bfcc315f1fe3d0ef73a3c5a92ac455d077673182de11d0d1e",
+  "episodes_projection_sha256": "ed96ca625d5e3e004dd8fe4a28244d297fb6eaff8ef8c9102ac967e08bd45cd5",
+  "source_files": [
     {
-      "run_names": [
-        "full400_candidate_01"
-      ],
-      "source_tree_sha256": "c954f817fb7dd2b046a961a13a9acc9f7f2f0ad87da97eba1f6c0da995eff4e6",
-      "included_episodes": 380
+      "path": "shards/spatial_task00/episodes.jsonl",
+      "sha256": "ea04495d473a337af02b29971e590dab6a5894499c90fe725f281215ab8f1125",
+      "task": "spatial_task00",
+      "reused": false
     },
     {
-      "run_names": [
-        "long09_final_02"
-      ],
-      "source_tree_sha256": "da1e0b8603977522e81cd9b4fd51837c10345a11566f89744018bb689230618a",
-      "included_episodes": 10
+      "path": "shards/spatial_task01/episodes.jsonl",
+      "sha256": "ddde3381f65cc6adee779f22020610e997d6980641b5284671c40898ce791ac1",
+      "task": "spatial_task01",
+      "reused": false
     },
     {
-      "run_names": [
-        "goal03_final_02"
-      ],
-      "source_tree_sha256": "7bdcb97a7b847debeb0bd47c951455934701f81d7b561ad097fe5b41269de256",
-      "included_episodes": 10
+      "path": "shards/spatial_task02/episodes.jsonl",
+      "sha256": "12e51fa635f3027a91039c7c9b04cf3211e65bd361afdbcd75b87ccac447c68c",
+      "task": "spatial_task02",
+      "reused": false
+    },
+    {
+      "path": "shards/spatial_task03/episodes.jsonl",
+      "sha256": "5aaa8824fc6f3ac195c949a67d07dc142feb33fad95aedaa7eac93a0a90e9c7f",
+      "task": "spatial_task03",
+      "reused": false
+    },
+    {
+      "path": "shards/spatial_task04/episodes.jsonl",
+      "sha256": "aa02ed34c6a34771d0fbb754eca1d51449b5eac606d32fa3373550ba2c54eb54",
+      "task": "spatial_task04",
+      "reused": false
+    },
+    {
+      "path": "shards/spatial_task05/episodes.jsonl",
+      "sha256": "14e11f24c1c2a26ac37e25c64d3f761a94b46b1696ca128288daa2889e65a534",
+      "task": "spatial_task05",
+      "reused": false
+    },
+    {
+      "path": "shards/spatial_task06/episodes.jsonl",
+      "sha256": "7f1d54e5ee675a4e1da3ca49ff51b63b7a010a95aa37c056eeceb35e3a733c6b",
+      "task": "spatial_task06",
+      "reused": false
+    },
+    {
+      "path": "shards/spatial_task07/episodes.jsonl",
+      "sha256": "6d9d9056fbe265466abb5b57a2f27128c3827c94becde896acb0f5a2067c2bf5",
+      "task": "spatial_task07",
+      "reused": false
+    },
+    {
+      "path": "shards/spatial_task08/episodes.jsonl",
+      "sha256": "2ad3533d065f50fdcaf16f0b948a9d4cd5466dfb678e324fdb2282330701a4a4",
+      "task": "spatial_task08",
+      "reused": false
+    },
+    {
+      "path": "shards/spatial_task09/episodes.jsonl",
+      "sha256": "fb2fba5d176089dc701172848823f7f9ca1b262d7921e0a7e1fda66f4aacf9eb",
+      "task": "spatial_task09",
+      "reused": false
+    },
+    {
+      "path": "shards/object_task00/episodes.jsonl",
+      "sha256": "c7657a72bb5c5d7b5ad4c14d1cdbee184a9b278ec02593ca0c5d342ae02b851c",
+      "task": "object_task00",
+      "reused": false
+    },
+    {
+      "path": "shards/object_task01/episodes.jsonl",
+      "sha256": "431a8e706d103c7cb7fec5709b0a8c06c7eaac628bc58c2a6e94cc82378613d5",
+      "task": "object_task01",
+      "reused": false
+    },
+    {
+      "path": "shards/object_task02/episodes.jsonl",
+      "sha256": "a854b85f1dccc4ca3a3a9ce99e74ed38efc6fa6c126699969cd1305109be2f34",
+      "task": "object_task02",
+      "reused": false
+    },
+    {
+      "path": "shards/object_task03/episodes.jsonl",
+      "sha256": "42cf673f080cec3f66d06fceccd21b7e5f4935f175c5a362d66eb319c65ca19f",
+      "task": "object_task03",
+      "reused": false
+    },
+    {
+      "path": "shards/object_task04/episodes.jsonl",
+      "sha256": "56e570899ee333fb1dadce3b94dd6eff609d209e2ae01613e856fa0b29de9ffc",
+      "task": "object_task04",
+      "reused": false
+    },
+    {
+      "path": "shards/object_task05/episodes.jsonl",
+      "sha256": "0ecf61f21f386d73dc0dcf619ef24d14fbf48a68df805f5e520cc20ad48629ac",
+      "task": "object_task05",
+      "reused": false
+    },
+    {
+      "path": "shards/object_task06/episodes.jsonl",
+      "sha256": "53b0a91cb81b2a363c0f197594bdba3894223ed51954ff9149ad5fe98ca5dbce",
+      "task": "object_task06",
+      "reused": false
+    },
+    {
+      "path": "shards/object_task07/episodes.jsonl",
+      "sha256": "963a5602dcafc62bf9bfe4ff6b47f45ac0c99ffbf0a71f044b029f56b5cff0fd",
+      "task": "object_task07",
+      "reused": false
+    },
+    {
+      "path": "shards/object_task08/episodes.jsonl",
+      "sha256": "5ef8647f1ee4db71a42f20f52d1061d651d548726f7b85645998fb0564a4d1d7",
+      "task": "object_task08",
+      "reused": false
+    },
+    {
+      "path": "shards/object_task09/episodes.jsonl",
+      "sha256": "3c2817284675255b4d7cf51c44eb640cb7bb186bc0aa9c5012bc16423ddf7c13",
+      "task": "object_task09",
+      "reused": false
+    },
+    {
+      "path": "shards/goal_task00/episodes.jsonl",
+      "sha256": "9a03e1d66e5606857543348e59c865553ca1c5c6498d0af241add0d339e057ba",
+      "task": "goal_task00",
+      "reused": false
+    },
+    {
+      "path": "shards/goal_task01/episodes.jsonl",
+      "sha256": "281b0538df4b5f229e8b714881857df1041341caf9bcb2123bb1dbd645ebbc9b",
+      "task": "goal_task01",
+      "reused": false
+    },
+    {
+      "path": "shards/goal_task02/episodes.jsonl",
+      "sha256": "01412b3559ee2f80179c74e2f6ebdd95e9f1791775985c79bd645d16c775425f",
+      "task": "goal_task02",
+      "reused": false
+    },
+    {
+      "path": "shards/goal_task03/episodes.jsonl",
+      "sha256": "e52d73c98acca828df451bacd4f82611402aa826cb0c67f5550504e458c7d37b",
+      "task": "goal_task03",
+      "reused": false
+    },
+    {
+      "path": "shards/goal_task04/episodes.jsonl",
+      "sha256": "89d98d2de0f7a2c9b4a66a1face7ae2c2623fc6afa6c7433b0857fbab834ddf1",
+      "task": "goal_task04",
+      "reused": false
+    },
+    {
+      "path": "shards/goal_task05/episodes.jsonl",
+      "sha256": "c5890373c9321c3f02823020ba2ece51d70af02a954b2586de7647e4c662461d",
+      "task": "goal_task05",
+      "reused": false
+    },
+    {
+      "path": "shards/goal_task06/episodes.jsonl",
+      "sha256": "4cc1b043a0a26a012f9ad7013d48eb251d60ba4f741794f69f164577d543ee4b",
+      "task": "goal_task06",
+      "reused": false
+    },
+    {
+      "path": "shards/goal_task07/episodes.jsonl",
+      "sha256": "e5acaf64f443d9590ab2bb164ec504e27b998255a1e9e4b4fa99edddce43cc34",
+      "task": "goal_task07",
+      "reused": false
+    },
+    {
+      "path": "shards/goal_task08/episodes.jsonl",
+      "sha256": "b5a150b37e85cdddd1b94f24b4c41b166e05fe55a256dabf0944f5ed4bb8d424",
+      "task": "goal_task08",
+      "reused": false
+    },
+    {
+      "path": "shards/goal_task09/episodes.jsonl",
+      "sha256": "bded8953d4b2232398bd145f3c11be1e567b92e5785bcd2353b6b92360baad24",
+      "task": "goal_task09",
+      "reused": false
+    },
+    {
+      "path": "shards/long_task00/episodes.jsonl",
+      "sha256": "447fe38de44f192217a98ac5f476108ca472b94a9c1bc2ec143656c60a9ac860",
+      "task": "long_task00",
+      "reused": false
+    },
+    {
+      "path": "shards/long_task01/episodes.jsonl",
+      "sha256": "56addf70b310467d0adecbe3f7181c081d3190fc0a86a51e5908e1421ec17d35",
+      "task": "long_task01",
+      "reused": false
+    },
+    {
+      "path": "shards/long_task02/episodes.jsonl",
+      "sha256": "dc88cabb078c0b75b31bb1014428967beff667242d7270bbc5502919bed5dc81",
+      "task": "long_task02",
+      "reused": false
+    },
+    {
+      "path": "shards/long_task03/episodes.jsonl",
+      "sha256": "de02917a86a728b8231f5952cf2fc2ed37e3901290a02fa03def0e46d8f55851",
+      "task": "long_task03",
+      "reused": false
+    },
+    {
+      "path": "shards/long_task04/episodes.jsonl",
+      "sha256": "e304912e55badc7ccb3cad4c77324c6cb3348fc22fe271802cf022068eae197a",
+      "task": "long_task04",
+      "reused": false
+    },
+    {
+      "path": "shards/long_task05/episodes.jsonl",
+      "sha256": "51c2d07e6a59dd3235d430acd7aafed84b47b245afa7b3c2eb9be455d1ce725c",
+      "task": "long_task05",
+      "reused": false
+    },
+    {
+      "path": "shards/long_task06/episodes.jsonl",
+      "sha256": "aa3580d028d13dba833753143bc513e678acc9470460eb2228685bafed275852",
+      "task": "long_task06",
+      "reused": false
+    },
+    {
+      "path": "shards/long_task07/episodes.jsonl",
+      "sha256": "f5a6147826c02f3156bb621025c8c44ae04e8b186e9205b3cd30637de3ef1cc7",
+      "task": "long_task07",
+      "reused": false
+    },
+    {
+      "path": "shards/long_task08/episodes.jsonl",
+      "sha256": "5cc8d0840dd008cdd30ba8c199aee58d9e5e26151179acf1411c6feaf774082b",
+      "task": "long_task08",
+      "reused": false
+    },
+    {
+      "path": "shards/long_task09/episodes.jsonl",
+      "sha256": "1a6c87078a50e7001e74263c09eb21569ce5ed3e36377ec5ce143e3a80f37d29",
+      "task": "long_task09",
+      "reused": false
     }
   ],
-  "baseline_total_successes": 360,
-  "baseline_wall_elapsed_s": 4624.822450214997,
-  "task_replacements": [
-    {
-      "suite": "libero_10",
-      "task_id": 9,
-      "episodes": 10,
-      "successes": 8,
-      "batch_manifest": {
-        "run_name": "long09_final_02",
-        "created_at": "2026-09-14T07:23:21+00:00",
-        "kind": "development",
-        "git_base": "ed1342dff1af98a33f6a4d4a4a1bcab982944780",
-        "source_tree_sha256": "da1e0b8603977522e81cd9b4fd51837c10345a11566f89744018bb689230618a",
-        "source_snapshot": "/root/autodl-tmp/ICRA2027/runtime/route_b_90/long09_final_02/source",
-        "tasks": [
-          {
-            "id": "long_task09",
-            "suite": "libero_10",
-            "task_id": 9,
-            "command": [
-              "/root/autodl-tmp/ICRA2027/runtime/route_b_90/long09_final_02/source/run.sh",
-              "run",
-              "--suite",
-              "long",
-              "--task-ids",
-              "9",
-              "--episodes-per-task",
-              "10",
-              "--init-start",
-              "0",
-              "--device",
-              "cuda",
-              "--seed",
-              "7",
-              "--run-name",
-              "long_task09",
-              "--output-dir",
-              "/root/autodl-tmp/ICRA2027/runtime/route_b_90/long09_final_02/shards"
-            ],
-            "reused": false,
-            "episodes": [
-              "b:libero_10:task09:ep0000",
-              "b:libero_10:task09:ep0001",
-              "b:libero_10:task09:ep0002",
-              "b:libero_10:task09:ep0003",
-              "b:libero_10:task09:ep0004",
-              "b:libero_10:task09:ep0005",
-              "b:libero_10:task09:ep0006",
-              "b:libero_10:task09:ep0007",
-              "b:libero_10:task09:ep0008",
-              "b:libero_10:task09:ep0009"
-            ],
-            "jsonl": "/root/autodl-tmp/ICRA2027/runtime/route_b_90/long09_final_02/shards/long_task09/episodes.jsonl",
-            "summary": "/root/autodl-tmp/ICRA2027/runtime/route_b_90/long09_final_02/shards/long_task09/summary.json",
-            "config": {
-              "route": "b",
-              "suite": "libero_10",
-              "task_ids": [
-                9
-              ],
-              "episodes_per_task": 10,
-              "output_dir": "/root/autodl-tmp/ICRA2027/runtime/route_b_90/long09_final_02/shards",
-              "run_name": "long_task09",
-              "device": "cuda",
-              "perception_backend": "grounding-dino",
-              "perception_model": "/root/autodl-tmp/route-b-v170-cloud/resources/grounding-dino-tiny",
-              "perception_factory": null,
-              "libero_config_path": "/root/autodl-tmp/ICRA2027/runtime/route_b_90/long09_final_02/source/runtime/libero",
-              "max_steps": 520,
-              "image_size": 256,
-              "seed": 7,
-              "resume": false,
-              "record_video": true,
-              "video_fps": 20,
-              "video_stride": 2,
-              "render_backend": "osmesa",
-              "init_state_start": 0,
-              "formal_provenance_path": null,
-              "formal_provenance_sha256": null,
-              "total_episodes": 10,
-              "source_tree_sha256": "da1e0b8603977522e81cd9b4fd51837c10345a11566f89744018bb689230618a"
-            }
-          }
-        ],
-        "protocol": {
-          "tasks": 1,
-          "episodes_per_task": 10,
-          "official_init_ids": [
-            0,
-            1,
-            2,
-            3,
-            4,
-            5,
-            6,
-            7,
-            8,
-            9
-          ],
-          "seed": 7,
-          "step_caps": {
-            "spatial": 220,
-            "object": 280,
-            "goal": 300,
-            "long": 520
-          },
-          "scoring": "external_sticky_any_success",
-          "expected_episodes": 10,
-          "new_episodes": 10,
-          "reused_episodes": 0
-        }
-      },
-      "batch_validation": {
-        "coverage_passed": true,
-        "issues": [],
-        "episodes": 10,
-        "source_tree_sha256": "da1e0b8603977522e81cd9b4fd51837c10345a11566f89744018bb689230618a",
-        "episodes_jsonl_sha256": "5e99b101a91a04e97fc430d059f2862499ca27d6e3de03724fc9befe0ffc2be2",
-        "validated_at": "2026-09-14T07:36:12+00:00"
-      },
-      "batch_manifest_sha256": "fe0caf9b3e19807e3866c015e8d4ca2fb0c6f60d6a88869ecbc0a1aa215d0f82",
-      "batch_elapsed_wall_s": 771.4525477662683,
-      "baseline_reference": "full400_reference/provenance.json",
-      "baseline_successes": 0
-    },
-    {
-      "suite": "libero_goal",
-      "task_id": 3,
-      "episodes": 10,
-      "successes": 9,
-      "batch_manifest": {
-        "run_name": "goal03_final_02",
-        "created_at": "2026-09-14T08:50:50+00:00",
-        "kind": "development",
-        "git_base": "c37e75777c7ef516799d2cba8ddbb95872f4dcb8",
-        "source_tree_sha256": "7bdcb97a7b847debeb0bd47c951455934701f81d7b561ad097fe5b41269de256",
-        "source_snapshot": "/root/autodl-tmp/ICRA2027/runtime/route_b_90/goal03_final_02/source",
-        "tasks": [
-          {
-            "id": "goal_task03",
-            "suite": "libero_goal",
-            "task_id": 3,
-            "command": [
-              "/root/autodl-tmp/ICRA2027/runtime/route_b_90/goal03_final_02/source/run.sh",
-              "run",
-              "--suite",
-              "goal",
-              "--task-ids",
-              "3",
-              "--episodes-per-task",
-              "10",
-              "--init-start",
-              "0",
-              "--device",
-              "cuda",
-              "--seed",
-              "7",
-              "--run-name",
-              "goal_task03",
-              "--output-dir",
-              "/root/autodl-tmp/ICRA2027/runtime/route_b_90/goal03_final_02/shards"
-            ],
-            "reused": false,
-            "episodes": [
-              "b:libero_goal:task03:ep0000",
-              "b:libero_goal:task03:ep0001",
-              "b:libero_goal:task03:ep0002",
-              "b:libero_goal:task03:ep0003",
-              "b:libero_goal:task03:ep0004",
-              "b:libero_goal:task03:ep0005",
-              "b:libero_goal:task03:ep0006",
-              "b:libero_goal:task03:ep0007",
-              "b:libero_goal:task03:ep0008",
-              "b:libero_goal:task03:ep0009"
-            ],
-            "jsonl": "/root/autodl-tmp/ICRA2027/runtime/route_b_90/goal03_final_02/shards/goal_task03/episodes.jsonl",
-            "summary": "/root/autodl-tmp/ICRA2027/runtime/route_b_90/goal03_final_02/shards/goal_task03/summary.json",
-            "config": {
-              "route": "b",
-              "suite": "libero_goal",
-              "task_ids": [
-                3
-              ],
-              "episodes_per_task": 10,
-              "output_dir": "/root/autodl-tmp/ICRA2027/runtime/route_b_90/goal03_final_02/shards",
-              "run_name": "goal_task03",
-              "device": "cuda",
-              "perception_backend": "grounding-dino",
-              "perception_model": "/root/autodl-tmp/route-b-v170-cloud/resources/grounding-dino-tiny",
-              "perception_factory": null,
-              "libero_config_path": "/root/autodl-tmp/ICRA2027/runtime/route_b_90/goal03_final_02/source/runtime/libero",
-              "max_steps": 300,
-              "image_size": 256,
-              "seed": 7,
-              "resume": false,
-              "record_video": true,
-              "video_fps": 20,
-              "video_stride": 2,
-              "render_backend": "osmesa",
-              "init_state_start": 0,
-              "formal_provenance_path": null,
-              "formal_provenance_sha256": null,
-              "total_episodes": 10,
-              "source_tree_sha256": "7bdcb97a7b847debeb0bd47c951455934701f81d7b561ad097fe5b41269de256"
-            }
-          }
-        ],
-        "protocol": {
-          "tasks": 1,
-          "episodes_per_task": 10,
-          "official_init_ids": [
-            0,
-            1,
-            2,
-            3,
-            4,
-            5,
-            6,
-            7,
-            8,
-            9
-          ],
-          "seed": 7,
-          "step_caps": {
-            "spatial": 220,
-            "object": 280,
-            "goal": 300,
-            "long": 520
-          },
-          "scoring": "external_sticky_any_success",
-          "expected_episodes": 10,
-          "new_episodes": 10,
-          "reused_episodes": 0
-        }
-      },
-      "batch_validation": {
-        "coverage_passed": true,
-        "issues": [],
-        "episodes": 10,
-        "source_tree_sha256": "7bdcb97a7b847debeb0bd47c951455934701f81d7b561ad097fe5b41269de256",
-        "episodes_jsonl_sha256": "358143b752f4f27404f675b124119102ce70ab35736796c3de2ae6d2dc9c83e7",
-        "validated_at": "2026-09-14T09:02:27+00:00"
-      },
-      "batch_manifest_sha256": "3b469e3b6fd0ffd7f5ea73b1e6e81c665bcdbf61a1496f91d0b0a5cf23d90eb7",
-      "batch_elapsed_wall_s": 696.7321261605248,
-      "baseline_reference": "full400_reference/provenance.json",
-      "baseline_successes": 3
-    }
-  ],
-  "episodes_projection_sha256": "e6113074edcedefb0a0dc0c4d6d9e4e61afe5b1c784bc28985404dab0cc39b14",
   "raw_episode_archive": {
     "file": "raw_episodes.jsonl.gz",
-    "sha256": "d0cbfd4c59a5641dbd123a4241aab8f99a12cb11d938e8db8b3bc663581693aa",
-    "uncompressed_sha256": "e725111621b353e4bb750d2f8b082ce697cf3d8f7ddac830c12c088ac2648c81",
+    "sha256": "75e80cb8ea1015115704f88b72a3b14a0ab863e2eacc49c1cc70aa2a17f5dff3",
+    "uncompressed_sha256": "8e320e434f1f82088d21da8a9d9f2146fb4f41b1cadc15520f8d92d80e8a4ffb",
     "records": 400
   },
-  "projection_note": "Combined task records: 380 historical episodes from the original frozen full campaign and 20 targeted retest episodes. The records contain 3 controller versions. This is not a fresh full-400 evaluation of the updated controller. Each record identifies its source campaign, controller checksum and original JSONL-line hash.",
+  "environment_file": "environment.json",
+  "environment_sha256": "f38c99b3107781f22387c2644408e95af9bc9894c77a4fc0b10f9bb1afe524dc",
+  "projection_note": "Numerical fields are copied from original records; trace counts are derived. Each source_record_sha256 hashes its original JSONL line without the newline. Complete original records, including geometry traces, are included in the compressed archive; videos remain in the source campaign directory.",
   "validation": {
     "coverage_passed": true,
     "issues": [],
     "episodes": 400,
-    "episodes_jsonl_sha256": "e725111621b353e4bb750d2f8b082ce697cf3d8f7ddac830c12c088ac2648c81",
-    "validated_at": "2026-09-14T09:02:27+00:00",
-    "scope": "Combined coverage and source-record integrity; 3 controller versions."
+    "source_tree_sha256": "7bdcb97a7b847debeb0bd47c951455934701f81d7b561ad097fe5b41269de256",
+    "episodes_jsonl_sha256": "8e320e434f1f82088d21da8a9d9f2146fb4f41b1cadc15520f8d92d80e8a4ffb",
+    "validated_at": "2026-09-14T16:35:56+00:00"
   },
-  "wall_elapsed_s": 1468.184673926793,
-  "wall_elapsed_scope": "Sum of the targeted retest dispatcher durations; historical campaign excluded."
+  "wall_elapsed_s": 3760.618748896
 }

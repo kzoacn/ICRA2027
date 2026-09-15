@@ -25,6 +25,8 @@ def main():
     source.add_argument("--source-root", type=Path, help="Original deployed campaign root")
     source.add_argument("--batch-dir", type=Path, help="Immutable fresh full_400 campaign")
     parser.add_argument("--output-dir", type=Path, default=PAPER / "data")
+    parser.add_argument("--environment", type=Path,
+                        help="Measured runtime environment to preserve with the imported campaign.")
     parser.add_argument("--allow-partial", action="store_true")
     args = parser.parse_args()
     root = args.source_root.resolve() if args.source_root else args.batch_dir.resolve()
@@ -34,7 +36,7 @@ def main():
         assert manifest.get("kind") == "full_400", "Development batches cannot update the paper result."
         assert manifest["protocol"]["new_episodes"] == 400
         assert manifest["protocol"]["reused_episodes"] == 0
-        snapshot = Path(manifest["source_snapshot"]) / "libero_system"
+        snapshot = Path(manifest["source_snapshot"]) / manifest.get("source_package", "libero_system")
         frozen = json.loads((job / "source_files.json").read_text())
         current = {str(p.relative_to(snapshot)): sha(p.read_bytes())
                    for p in sorted(snapshot.rglob("*"))
@@ -93,6 +95,8 @@ def main():
                 "placement_attempts": len(trace.get("placement_target_attempts", [])),
                 "scoring": trace["evaluator_isolation"]["scoring"],
                 "source_record_sha256": sha(line),
+                "source_campaign": manifest.get("run_name", RUN),
+                "controller_source_sha256": manifest["source_tree_sha256"],
             })
     assert len(expected) == 400
     if complete:
@@ -114,8 +118,18 @@ def main():
     (out / "episodes.jsonl").write_text(payload)
     if archive is not None:
         (out / archive["file"]).write_bytes(archive_data)
+    environment = {}
+    if args.environment:
+        environment_data = args.environment.read_bytes()
+        runtime = json.loads(environment_data)
+        assert runtime["controller_source_sha256"] == manifest["source_tree_sha256"]
+        assert runtime["campaign_label"] == manifest["run_name"]
+        (out / "environment.json").write_bytes(environment_data)
+        environment = {"environment_file": "environment.json",
+                       "environment_sha256": sha(environment_data)}
     dump(out / "provenance.json", {
         "run_name": manifest.get("run_name", RUN), "state": status["state"], "complete": complete,
+        "evaluation_kind": "full_campaign",
         "status_updated_at": status["updated_at"],
         "recorded_episodes": len(rows), "expected_episodes": 400,
         "protocol": manifest["protocol"],
@@ -124,11 +138,12 @@ def main():
         "episodes_projection_sha256": sha(payload.encode()),
         "source_files": sources,
         **({"raw_episode_archive": archive} if archive else {}),
+        **environment,
         "projection_note": "Numerical fields are copied from original records; trace counts are derived. "
             "Each source_record_sha256 hashes its original JSONL line without the newline. "
             + ("Complete original records, including geometry traces, are included in the compressed archive; "
-               "videos remain on the evaluation server." if archive else
-               "Original traces and videos remain on the evaluation server."),
+               "videos remain in the source campaign directory." if archive else
+               "Original traces and videos remain in the source campaign directory."),
         "validation": validation,
         "wall_elapsed_s": status.get("elapsed_wall_s"),
     })

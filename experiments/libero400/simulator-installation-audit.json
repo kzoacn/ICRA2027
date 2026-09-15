@@ -1,0 +1,22 @@
+{
+  "hf-libero": {
+    "version": "0.1.4",
+    "checked": 469,
+    "issues": []
+  },
+  "robosuite": {
+    "version": "1.4.0",
+    "checked": 1011,
+    "issues": []
+  },
+  "bddl": {
+    "version": "1.0.1",
+    "checked": 120,
+    "issues": []
+  },
+  "mujoco": {
+    "version": "3.3.2",
+    "checked": 86,
+    "issues": []
+  }
+}

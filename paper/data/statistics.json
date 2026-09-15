@@ -1,8 +1,8 @@
 {
   "episodes": 400,
-  "successes": 374,
-  "rate": 93.5,
-  "evaluation_kind": "task_replacement",
+  "successes": 376,
+  "rate": 94.0,
+  "evaluation_kind": "full_campaign",
   "per_suite": [
     {
       "suite": "libero_spatial",
@@ -10,8 +10,8 @@
       "n": 100,
       "successes": 93,
       "rate": 93.0,
-      "mean_steps": 147.07,
-      "median_elapsed_s": 68.05149636301212,
+      "mean_steps": 147.25,
+      "median_elapsed_s": 39.61199371700013,
       "all_success_tasks": 6
     },
     {
@@ -20,46 +20,57 @@
       "n": 100,
       "successes": 98,
       "rate": 98.0,
-      "mean_steps": 195.3,
-      "median_elapsed_s": 59.480422721477225,
+      "mean_steps": 195.42,
+      "median_elapsed_s": 32.50175939150017,
       "all_success_tasks": 8
     },
     {
       "suite": "libero_goal",
       "label": "Goal",
       "n": 100,
-      "successes": 97,
-      "rate": 97.0,
-      "mean_steps": 179.93,
-      "median_elapsed_s": 66.23868568369653,
+      "successes": 98,
+      "rate": 98.0,
+      "mean_steps": 179.92,
+      "median_elapsed_s": 41.33305291550005,
       "all_success_tasks": 8
     },
     {
       "suite": "libero_10",
       "label": "Long",
       "n": 100,
-      "successes": 86,
-      "rate": 86.0,
-      "mean_steps": 324.47,
-      "median_elapsed_s": 93.36835241736844,
-      "all_success_tasks": 2
+      "successes": 87,
+      "rate": 87.0,
+      "mean_steps": 323.61,
+      "median_elapsed_s": 58.65050991850012,
+      "all_success_tasks": 3
     }
   ],
   "policy_external_disagreement": {
-    "controller_completed_external_failed": 7,
-    "external_success_without_controller_completion": 37
+    "controller_completed_external_failed": 6,
+    "external_success_without_controller_completion": 35
   },
   "failure_groups": {
     "Phase timeout": 13,
-    "Controller completion / external failure": 7,
+    "Controller completion / external failure": 6,
     "Sensor verification rejection": 1,
-    "Grasp / retention rejection": 3,
+    "Grasp / retention rejection": 2,
     "Other controller failure": 2
   },
-  "new_episodes": 20,
-  "reused_episodes": 380,
-  "new_successes": 17,
-  "reused_successes": 357,
-  "new_median_elapsed_s": 69.56407636450604,
-  "new_total_episode_elapsed_s": 1423.7784750442952
+  "stopping_analysis": {
+    "controller_completed": 347,
+    "external_success_given_completion_count": 341,
+    "external_success_given_completion_percent": 98.27089337175792,
+    "external_failures_before_global_cap": 24,
+    "minimum_unused_actions_in_external_failures": 13,
+    "global_timeouts": 11,
+    "global_timeouts_with_external_success": 11,
+    "long_external_failures": 13,
+    "long_share_of_external_failures_percent": 54.166666666666664
+  },
+  "new_episodes": 400,
+  "reused_episodes": 0,
+  "new_successes": 376,
+  "reused_successes": 0,
+  "new_median_elapsed_s": 39.85401605199968,
+  "new_total_episode_elapsed_s": 18723.82430854299
 }
