@@ -22,6 +22,11 @@ to six after memory and GPU usage were checked. This changes scheduling only.
 - [Concurrency history](concurrency.json)
 - [Simulator installation hash checks](simulator-installation-audit.json)
 - [Local detector parameter audit](model_audit.json)
+- [Episode projection](episodes.jsonl)
+- [Compressed original records and geometric traces](raw_episodes.jsonl.gz)
+- [Data provenance and checksums](provenance.json)
+- [Statistics](statistics.json)
+- [Per-task results](per_task.csv)
 - [Launch record](run.json)
 - [Recorded completion status](../../runtime/route_b_90/full400_local_20260914T153307Z/status.json)
 - [Frozen source and task manifest](../../runtime/route_b_90/full400_local_20260914T153307Z/manifest.json)
@@ -40,14 +45,11 @@ The original Conda environment was read and verified; the OpenCV version needed
 by this project was installed in the separate deployment environment. Model
 weights and assets were copied to the deployment's own resource directory.
 
-To reproduce the validated import, write it into a staging directory:
-
-    python3 paper/scripts/capture_results.py --batch-dir runtime/route_b_90/full400_local_20260914T153307Z --environment experiments/libero400/environment.json --output-dir runtime/local_evaluation/paper-stage/data
-
-The rollout generator chooses the first externally successful Object 00 episode
-and the first externally unsuccessful Goal 03 episode when available. If a
-preferred task has no matching outcome, it uses sorted task/initial-state order.
-This rule selects illustrations only; all 400 records determine the reported score.
+The committed episode projection, compressed original records, provenance,
+statistics and per-task results were moved here without changing their contents.
+The original records retain every success and failure; all 400 episodes determine
+the reported score. Provenance records the SHA256 of the projection, compressed
+archive, decompressed data and each original episode line.
 
 The exact evaluated source is preserved in [full400-source.zip](../../archive/evaluated-source/full400-source.zip).
 Current code lives in `src/anchor/`; see the [name and path mapping](../../docs/repository.md).

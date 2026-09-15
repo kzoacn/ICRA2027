@@ -19,7 +19,7 @@ environment, launch and acceptance records are in
 The official predicate is checked externally and is not supplied to the controller.
 All unsuccessful episodes remain in the aggregate.
 
-## Execute and import
+## Execute and validate
 
 After [setup](setup.md), run from the repository root:
 
@@ -30,21 +30,11 @@ python3 scripts/run_batch.py --all --label libero400 --workers 4
 The runner copies `src/anchor/` into an immutable per-run snapshot and launches
 one process per task. Initial states remain in order within each task. Records,
 configuration, source manifests and videos are retained in
-`runtime/evaluations/libero400/`. Incomplete coverage and runtime failures are
-rejected by final import validation.
-
-To generate paper data from a completed full run:
-
-```bash
-python3 paper/scripts/capture_results.py --batch-dir runtime/evaluations/libero400 --environment /path/to/measured-environment.json
-make -C paper figures
-make -C paper check
-```
-
-Supply an environment record measured for that run and source snapshot. Regenerate
-rollout figures from the same batch when updating the manuscript; see the
-[paper build guide](../paper/README.md). The importer supports both the current
-source layout and archived full-run layouts.
+`runtime/evaluations/libero400/`. The runner merges the task records into
+`episodes.jsonl` and writes `final-validation.json`, checking coverage,
+configuration, source consistency and runtime failures. Inspect this validation
+and `status.json` before treating a run as complete. Retain an environment record
+measured for that run and source snapshot alongside the results.
 
 ## Records
 
@@ -53,6 +43,12 @@ source layout and archived full-run layouts.
 - [Source and data conventions](repository.md)
 - [Earlier development records](../archive/experiments/)
 
-The paper retains earlier data under `paper/data/full400_reference/` and
-`paper/data/task_updates_reference/`. The current score is computed from the
-400 new episodes in `paper/data/episodes.jsonl`.
+The current score is computed from the 400 new episodes in
+[experiments/libero400/episodes.jsonl](../experiments/libero400/episodes.jsonl).
+[Compressed original records](../experiments/libero400/raw_episodes.jsonl.gz),
+[provenance](../experiments/libero400/provenance.json),
+[statistics](../experiments/libero400/statistics.json) and
+[per-task results](../experiments/libero400/per_task.csv) accompany that projection.
+Earlier data are retained in
+[full400-reference/](../archive/experiments/full400-reference/) and
+[task-updates-reference/](../archive/experiments/task-updates-reference/).

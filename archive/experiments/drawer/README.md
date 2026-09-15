@@ -30,11 +30,12 @@ The revision repairs 7 previous failures and regresses
 1 previous success. Every final-run outcome is retained.
 Median pregrasp-stage actions change from 113 to 43.5 across all ten episodes, including timed-out stages. The two related Long 03
 regression episodes remain externally successful (2/2); they are not a full
-task reevaluation and are not substituted into the paper.
+task reevaluation and are not substituted into the combined dataset.
 
-The paper combines **374/400 (93.5%)** from 380 original records, the ten
+The historical combined dataset contains **374/400 (93.5%)** from 380 original records, the ten
 Long 09 retest records, and the ten Goal 03 retest records. These span three
-controller versions. The original full campaign remains preserved.
+controller versions. The [combined dataset](../task-updates-reference/) and
+[original full campaign](../full400-reference/) remain preserved separately.
 
 | Initial state | Original success | Updated success | Updated actions |
 | --- | --- | --- | --- |

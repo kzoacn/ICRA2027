@@ -3,8 +3,8 @@
 The root contains this project's README, Git configuration and directories.
 Current code and commands use the name **ANCHOR**. Put installation and technical
 notes in `docs/`, current measured results in `experiments/`, and superseded
-material in `archive/`. Keep generated runs, resources and virtual environments
-out of Git.
+material in `archive/`. Keep generated runs, resources, virtual environments
+and manuscript directories out of Git.
 
 ## Source modules
 
@@ -57,11 +57,20 @@ python3 scripts/source_archive.py
 
 This migration check describes the reorganization, and should be revised when
 future controller changes intentionally diverge from the evaluated source.
-The paper's model audit resolves its recorded original source path through this
-archive. Historical JSON/JSONL records, manifests and checksum files retain their
-original identifiers and paths. Absolute host paths describe their original run.
+The [model audit](../experiments/libero400/model_audit.json) resolves its recorded
+original source path through this archive. Historical JSON/JSONL records,
+manifests and checksum files retain their original identifiers and paths,
+including references to publication files that have since been removed.
+Absolute host paths describe their original run.
 Existing frozen directories under `runtime/` remain in place so recorded video
 paths still resolve; new batches use `runtime/evaluations/`.
+
+The current episode records, compressed original records, provenance and
+statistics are stored in [experiments/libero400/](../experiments/libero400/).
+Earlier complete and combined record sets are in
+[full400-reference/](../archive/experiments/full400-reference/) and
+[task-updates-reference/](../archive/experiments/task-updates-reference/).
+Their contents and checksums are unchanged by the directory cleanup.
 
 ## Checks
 
@@ -71,9 +80,8 @@ From the repository root:
 python3 scripts/check_repo.py
 LIBERO_ASSET_ROOT=/path/to/resources/assets .venv/bin/python tests/check_scene_geometry.py
 LIBERO_ASSET_ROOT=/path/to/resources/assets .venv/bin/python tests/check_drawer_geometry.py
-make -C paper check
 ```
 
-The repository check validates layout, Python syntax, local documentation links
-and the evaluated source archive. Geometry checks require the installed simulator
-and resources. The paper check validates the PDF and its numerical evidence.
+The repository check validates layout, Python syntax, local documentation links,
+the model audit and the evaluated source archive. Geometry checks require the
+installed simulator and resources.

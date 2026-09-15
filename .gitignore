@@ -16,6 +16,12 @@ __pycache__/
 *.tar.gz
 *.tar.gz.sha256
 
+# Manuscripts and publication-only material are excluded from this project.
+/paper/
+/manuscript/
+/docs/paper/
+/archive/paper/
+
 # Local credentials and editor state.
 .env
 .env.*

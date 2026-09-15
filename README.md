@@ -8,7 +8,8 @@ No robot demonstrations are used to train an action policy.
 
 The complete local LIBERO evaluation achieves **376/400 (94.0%)**:
 Spatial **93%**, Object **98%**, Goal **98%**, Long **87%**.
-See the [paper](paper/main.pdf) and [evaluation record](experiments/libero400/README.md).
+See the [evaluation record](experiments/libero400/README.md) for the protocol,
+original episode records and validation evidence.
 
 ## Run
 
@@ -26,15 +27,6 @@ Run the full 400-episode evaluation:
 python3 scripts/run_batch.py --all --label libero400 --workers 4
 ```
 
-## Paper
-
-```bash
-make -C paper
-make -C paper check
-```
-
-See [paper/README.md](paper/README.md) for data, figure generation and build requirements.
-
 ## Repository
 
 | Directory | Contents |
@@ -44,10 +36,9 @@ See [paper/README.md](paper/README.md) for data, figure generation and build req
 | [configs/](configs/) | Dependency pins and resource checksums |
 | [docker/](docker/) | Container build files |
 | [tests/](tests/) | Geometry regression checks and fixtures |
-| [paper/](paper/) | Manuscript, figures and measured data |
-| [experiments/](experiments/) | Current evaluation record |
+| [experiments/](experiments/) | Current evaluation records, statistics and original episode data |
 | [docs/](docs/) | Setup, evaluation and technical documentation |
 | [archive/](archive/) | Earlier experiments and original source snapshots |
 
-Local environments, resources and generated runs are excluded from Git.
+Local environments, resources, generated runs and manuscript directories are excluded from Git.
 See [repository conventions](docs/repository.md) for module names and archived records.

@@ -10,8 +10,8 @@ from urllib.parse import unquote, urlsplit
 from source_archive import read_audited_source, verify_evaluated_source
 
 ROOT = Path(__file__).resolve().parents[1]
-ACTIVE = ("src", "scripts", "tests", "paper")
-DIRECTORIES = ("src/anchor", "scripts", "configs", "docker", "tests", "paper",
+ACTIVE = ("src", "scripts", "tests")
+DIRECTORIES = ("src/anchor", "scripts", "configs", "docker", "tests",
                "experiments", "docs", "archive")
 LEGACY_NAME = re.compile(
     r"libero_system|Route[BC][A-Z]|ROUTE_[BC]\b|route_[bc]_|\broute[-_ ][bc]\b|\bRoute[- ][BC]\b"
@@ -21,7 +21,7 @@ LINK = re.compile(r"\[[^\]\n]*\]\((?:<([^>]+)>|([^\s)]+))(?:\s+\"[^\"]*\")?\)")
 
 def documentation_links():
     documents = [ROOT / "README.md"]
-    for name in ("docs", "paper", "experiments", "archive"):
+    for name in ("docs", "experiments", "archive"):
         documents.extend(sorted((ROOT / name).rglob("*.md")))
     checked, local_runtime = 0, 0
     failures = []
@@ -66,7 +66,7 @@ def main():
                 assert (ROOT / source).exists(), f"Missing Docker COPY source: {source}"
 
     evaluated_hash = verify_evaluated_source()
-    audit = json.loads((ROOT / "paper/data/model_audit.json").read_text())
+    audit = json.loads((ROOT / "experiments/libero400/model_audit.json").read_text())
     detector = audit["implementation"]
     source_hash = hashlib.sha256(read_audited_source(detector["file"])).hexdigest()
     assert source_hash == detector["sha256"], "Model audit source mismatch"

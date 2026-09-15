@@ -1,4 +1,0 @@
-numpy==2.2.6
-matplotlib==3.11.1
-imageio==2.37.4
-imageio-ffmpeg==0.6.0

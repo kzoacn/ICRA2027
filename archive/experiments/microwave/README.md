@@ -21,17 +21,15 @@ The original full-400 result remains 360/400, including Long 09 at 0/10. An upda
 
 The combined record count is **368/400 (92.0%)**: Spatial 93/100, Object 98/100,
 Goal 91/100, and Long 86/100. The other 39 tasks were not rerun. The original
-400-episode record set is preserved under `paper/data/full400_reference/`.
+400-episode record set is preserved in [full400-reference/](../full400-reference/).
 The targeted initializations also informed development, so this follow-up is not held out.
 
 Development uses immutable snapshots under `runtime/route_b_90/long09_*`, with complete raw records, videos, manifests, source hashes, and validation reports. The close skill fits the visible door panel in a measured appliance hinge frame and uses a compact top-down face pusher. Mug release requires a measured 78-mm jaw opening and a settling dwell before withdrawing from the cavity. Its inputs are calibrated RGB-D and robot measurements; it does not receive task predicates or simulator object/door joint states.
 
 Run `python3 experiments/long09/update_record.py` to refresh the complete development index. Each candidate's outcomes remain separate; unsuccessful attempts are retained. The first complete targeted retest, `long09_final_01`, achieved 6/10 before the mug-release repair.
 
-To import a completed single-task retest after review:
-
-    python3 paper/scripts/update_task_results.py \
-      --baseline-batch runtime/route_b_90/full400_candidate_01 \
-      --task-batch runtime/route_b_90/long09_final_02
-
-The importer preserves the original complete evaluation under `paper/data/full400_reference/` and validates complete task replacement, unchanged historical records, controller checksums, configuration, and raw record hashes.
+The original full evaluation remains preserved separately from task retests.
+The later 374/400 combined record set, incorporating both this microwave retest
+and the drawer retest, is retained in
+[task-updates-reference/](../task-updates-reference/) with its original records
+and provenance.

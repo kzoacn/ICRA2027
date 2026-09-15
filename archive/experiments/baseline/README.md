@@ -19,7 +19,7 @@ original episode records and validation result. Modifying the working copy
 during a batch cannot affect the already frozen candidate.
 
 Final acceptance uses --all --workers 8, with all 400 episodes freshly evaluated
-against one source snapshot. Only validated measured outcomes update the paper.
+against one source snapshot. Only validated measured outcomes are accepted.
 
 ## Diagnostic observations
 
@@ -84,7 +84,7 @@ scores into an acceptance claim.
 
 `full400_candidate_01` completed 400 new episodes with one frozen policy source:
 `c954f817fb7dd2b046a961a13a9acc9f7f2f0ad87da97eba1f6c0da995eff4e6`.
-Its policy files match commit `5705b19`; later manuscript or runner edits do
+Its policy files match commit `5705b19`; later documentation or runner edits do
 not enter the snapshot. All 400 episodes are new, with the protocol above.
 The dispatcher started with two workers while development jobs finished,
 then increased to eight. Priority affects task scheduling only; every task
@@ -107,13 +107,9 @@ See [accepted_result.json](accepted_result.json) for the exact comparison.
 
 Other task outcomes are unchanged. Microwave Long 09 is 0/10 in this complete replay.
 The subsequent [Long 09 follow-up](../microwave/README.md) updates that task only;
-the current manuscript distinguishes its new records from the historical 390.
-This original full evaluation is preserved in `paper/data/full400_reference/`;
-all development snapshots, logs and videos remain preserved on the server.
-
-To reproduce the original full-run paper data, import it with `paper/scripts/capture_results.py
---batch-dir runtime/route_b_90/full400_candidate_01`. Regenerate numerical
-artifacts with `make -C paper figures`. Extract its actual rollout frames
-with `paper/scripts/make_rollout_figure.py --batch-dir ...` using a Python
-environment with imageio and matplotlib, then run `make -C paper check`.
-The capture script rejects a development batch as a final paper dataset.
+its new records are distinct from the historical 390.
+This original full evaluation is preserved in
+[full400-reference/](../full400-reference/), including the episode projection,
+compressed original records and provenance. The later combined task-retest
+records are preserved in [task-updates-reference/](../task-updates-reference/).
+Development snapshots, logs and videos retain their original server locations.
